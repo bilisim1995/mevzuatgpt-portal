@@ -1,0 +1,40 @@
+// Merkezi ikon bileşenleri - dinamik import ile optimize edildi
+import dynamic from 'next/dynamic';
+
+// Dinamik import ile sadece gerekli ikonları yükle
+export const Search = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Search })), { ssr: false });
+export const Building = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Building })), { ssr: false });
+export const Calendar = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Calendar })), { ssr: false });
+export const Download = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Download })), { ssr: false });
+export const Eye = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Eye })), { ssr: false });
+export const FileText = dynamic(() => import('lucide-react').then(mod => ({ default: mod.FileText })), { ssr: false });
+export const ArrowRight = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ArrowRight })), { ssr: false });
+export const ArrowLeft = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ArrowLeft })), { ssr: false });
+export const ChevronDown = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ChevronDown })), { ssr: false });
+export const ChevronLeft = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ChevronLeft })), { ssr: false });
+export const ChevronRight = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ChevronRight })), { ssr: false });
+export const Menu = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Menu })), { ssr: false });
+export const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { ssr: false });
+export const Sun = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Sun })), { ssr: false });
+export const Moon = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Moon })), { ssr: false });
+export const Loader2 = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Loader2 })), { ssr: false });
+export const Clock = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Clock })), { ssr: false });
+export const Check = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Check })), { ssr: false });
+export const BrainCircuit = dynamic(() => import('lucide-react').then(mod => ({ default: mod.BrainCircuit })), { ssr: false });
+export const HelpCircle = dynamic(() => import('lucide-react').then(mod => ({ default: mod.HelpCircle })), { ssr: false });
+export const MessageSquare = dynamic(() => import('lucide-react').then(mod => ({ default: mod.MessageSquare })), { ssr: false });
+export const Mail = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Mail })), { ssr: false });
+export const Phone = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Phone })), { ssr: false });
+export const MapPin = dynamic(() => import('lucide-react').then(mod => ({ default: mod.MapPin })), { ssr: false });
+export const Send = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Send })), { ssr: false });
+export const Target = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Target })), { ssr: false });
+export const Users = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Users })), { ssr: false });
+export const Shield = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Shield })), { ssr: false });
+export const Zap = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Zap })), { ssr: false });
+export const Globe = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Globe })), { ssr: false });
+export const Code = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Code })), { ssr: false });
+export const Database = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Database })), { ssr: false });
+export const Key = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Key })), { ssr: false });
+export const Link2 = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Link2 })), { ssr: false });
+export const File = dynamic(() => import('lucide-react').then(mod => ({ default: mod.File })), { ssr: false });
+export const HardDrive = dynamic(() => import('lucide-react').then(mod => ({ default: mod.HardDrive })), { ssr: false });
