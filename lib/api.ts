@@ -271,7 +271,7 @@ export async function fetchGlobalSearch(
   options: {
     limit?: number;
     offset?: number;
-    kurum?: string;
+    kurum_id?: string;
   } = {}
 ): Promise<{ results: ApiSearchResult[]; totalCount: number }> {
   const params = new URLSearchParams({
@@ -307,7 +307,7 @@ export async function fetchAutocomplete(
   query: string,
   options: {
     limit?: number;
-    kurum?: string;
+    kurum_id?: string;
   } = {}
 ): Promise<ApiAutocompleteSuggestion[]> {
   if (!query || query.length < 2) {

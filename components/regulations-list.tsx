@@ -148,10 +148,10 @@ export function RegulationsList({ institutionId }: Props) {
         
         const kurumAdi = institution?.name;
         
-        console.log('Autocomplete isteği gönderiliyor:', { searchQuery, kurumAdi });
+        console.log('Autocomplete isteği gönderiliyor:', { searchQuery, kurumId: institutionId, kurumAdi });
         const suggestionResults = await fetchAutocomplete(searchQuery, {
           limit: 8,
-          kurum: kurumAdi
+          kurum_id: institutionId
         });
         console.log('Autocomplete yanıtı:', suggestionResults);
         
@@ -199,7 +199,7 @@ export function RegulationsList({ institutionId }: Props) {
       const response = await searchRegulations(query, {
         limit: SEARCH_ITEMS_PER_PAGE,
         offset: offset,
-        kurum: kurumAdi
+        kurum_id: institutionId
       });
       // Sadece içerikte eşleşen sonuçları filtrele
       const contentMatches = response.results.filter(result => 

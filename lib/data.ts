@@ -112,7 +112,7 @@ export async function searchRegulations(
   options: {
     limit?: number;
     offset?: number;
-    kurum?: string;
+    kurum_id?: string;
   } = {}
 ): Promise<SearchResponse> {
   try {
