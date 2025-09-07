@@ -138,14 +138,15 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
-                            <div className="w-8 h-8 flex items-center justify-center">
+                            <div className="w-14 h-14 flex items-center justify-center">
+                          
                               {institution.logo && institution.logo.trim() !== '' ? (
                                 <Image
                                   src={institution.logo}
                                   alt={`${institution.name} logosu`}
                                   width={32}
                                   height={32}
-                                  className="w-8 h-8 object-contain rounded"
+                                  className="w-16 h-16 object-contain rounded"
                                   loading="lazy"
                                   unoptimized={true}
                                   onError={(e) => {
@@ -157,7 +158,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                                       parent.innerHTML = `<span class="text-2xl text-gray-600 dark:text-gray-300">${institution.category === 'ministry' ? '🏛️' : '🏢'}</span>`;
                                     }
                                   }}
-                                />
+                                />    
                               ) : (
                                 <span className="text-2xl text-gray-600 dark:text-gray-300">
                                   {institution.category === 'ministry' ? '🏛️' : '🏢'}
