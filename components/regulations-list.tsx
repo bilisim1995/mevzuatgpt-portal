@@ -150,7 +150,7 @@ export function RegulationsList({ institutionId }: Props) {
         
         console.log('Autocomplete isteği gönderiliyor:', { searchQuery, kurumId: institutionId, kurumAdi });
         const suggestionResults = await fetchAutocomplete(searchQuery, {
-          limit: 8,
+          limit: 10,
           kurum_id: institutionId
         });
         console.log('Autocomplete yanıtı:', suggestionResults);

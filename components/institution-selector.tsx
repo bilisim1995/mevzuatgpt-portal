@@ -169,11 +169,11 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                               <div className="flex items-center space-x-2">
                                 <span className="font-medium text-gray-900 dark:text-gray-100">{institution.name}</span>
                                 <Badge className={cn("text-xs", categoryColors[institution.category])}>
-                                  {categoryLabels[institution.category]}
+                                  {institution.documentCount} Adet
                                 </Badge>
                               </div>
                               <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                {institution.documentCount} belge • {institution.shortName}
+                                {institution.aciklama}
                               </div>
                             </div>
                           </div>

@@ -12,6 +12,7 @@ export interface ApiInstitution {
   kurum_id: string;
   kurum_adi: string;
   kurum_logo: string;
+  kurum_aciklama: string;
   count: number;
 }
 
@@ -284,6 +285,8 @@ export async function fetchGlobalSearch(
   });
   
   const endpoint = `/api/v1/search?${params.toString()}`;
+
+
   
   // apiFetch kullanılarak hem header'lar hem de json gövdesi alınır.
   const response = await apiFetch(endpoint);

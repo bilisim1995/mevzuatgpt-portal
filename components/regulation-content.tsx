@@ -256,7 +256,7 @@ export function RegulationContent({ regulationId, initialData }: Props) {
             <Link href={`/kurum/${regulation.institutionId}`}>
               <Button variant="outline" className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-md hover:shadow-lg">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                {regulation.institutionName} Mevzuatlarına Dön
+                {regulation.institutionName} Sayfasına Dön
               </Button>
             </Link>
           )}
@@ -369,8 +369,8 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                   <div className="flex items-center space-x-2">
                     <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                     <div className="text-sm">
-                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Belge No</div>
-                      <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.documentNumber}</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">{regulation.documentNumber}</div>
+                    
                     </div>
                   </div>
                   
@@ -488,12 +488,11 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       </div>
                       
                       <div className="flex items-center space-x-2">
-                        <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                        <div className="text-sm">
-                          <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Belge No</div>
-                          <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.documentNumber}</div>
-                        </div>
-                      </div>
+                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">{regulation.documentNumber}</div>
+                    </div>
+                  </div>
                       
                       {regulation.pageCount && (
                         <div className="flex items-center space-x-2">
