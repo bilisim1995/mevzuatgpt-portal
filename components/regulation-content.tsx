@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 // Lazy load UI components
@@ -303,10 +304,14 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                   <div className="relative">
                     {regulation.institutionLogo && regulation.institutionLogo.trim() !== '' ? (
                       <div className="w-9 h-9 bg-white rounded-lg border border-gray-200 dark:border-gray-600 p-1">
-                        <img
+                      
+                        
+                        <Image
                           src={regulation.institutionLogo}
                           alt={`${regulation.institutionName} logosu`}
                           className="w-full h-full object-contain"
+                          width={36}
+                          height={36}
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.style.display = 'none';

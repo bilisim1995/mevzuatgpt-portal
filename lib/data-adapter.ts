@@ -20,7 +20,7 @@ export function adaptApiInstitutionToInstitution(apiInst: ApiInstitution): Insti
     id: id,
     name: apiInst.kurum_adi,
     shortName: shortName,
-    aciklama: apiInst.kurum_aciklama,
+    kurum_aciklama: apiInst.kurum_aciklama,
     description: `${apiInst.kurum_adi} mevzuat metinleri`,
     documentCount: apiInst.count,
     category: category,

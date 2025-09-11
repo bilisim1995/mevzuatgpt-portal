@@ -14,7 +14,7 @@ import {
 } from './data-adapter';
 
 export interface Institution {
-  aciklama: string,
+  kurum_aciklama: string,
   id: string;
   name: string;
   shortName: string;

@@ -6,6 +6,7 @@ import { InstitutionSelector } from '@/components/institution-selector';
 import { getInstitutions } from '@/lib/data';
 
 interface Institution {
+  kurum_aciklama: string;
   id: string;
   name: string;
   shortName: string;

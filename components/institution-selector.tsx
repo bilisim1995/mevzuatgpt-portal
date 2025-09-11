@@ -173,7 +173,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                                 </Badge>
                               </div>
                               <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                {institution.aciklama}
+                                {institution.kurum_aciklama}
                               </div>
                             </div>
                           </div>
