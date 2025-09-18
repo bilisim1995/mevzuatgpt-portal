@@ -13,9 +13,6 @@ const CardTitle = dynamic(() => import('@/components/ui/card').then(mod => ({ de
 const Badge = dynamic(() => import('@/components/ui/badge').then(mod => ({ default: mod.Badge })), { ssr: false });
 const Button = dynamic(() => import('@/components/ui/button').then(mod => ({ default: mod.Button })), { ssr: false });
 const Separator = dynamic(() => import('@/components/ui/separator').then(mod => ({ default: mod.Separator })), { ssr: false });
-const Collapsible = dynamic(() => import('@/components/ui/collapsible').then(mod => ({ default: mod.Collapsible })), { ssr: false });
-const CollapsibleContent = dynamic(() => import('@/components/ui/collapsible').then(mod => ({ default: mod.CollapsibleContent })), { ssr: false });
-const CollapsibleTrigger = dynamic(() => import('@/components/ui/collapsible').then(mod => ({ default: mod.CollapsibleTrigger })), { ssr: false });
 
 // Lazy load icons
 const Calendar = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Calendar })), { ssr: false });
@@ -31,15 +28,27 @@ const ArrowRight = dynamic(() => import('lucide-react').then(mod => ({ default: 
 const BrainCircuit = dynamic(() => import('lucide-react').then(mod => ({ default: mod.BrainCircuit })), { ssr: false });
 const ChevronDown = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ChevronDown })), { ssr: false });
 const Info = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Info })), { ssr: false });
-const Send = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Send })), { ssr: false });
-const Heart = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Heart })), { ssr: false });
-const Users = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Users })), { ssr: false });
-const MessageSquare = dynamic(() => import('lucide-react').then(mod => ({ default: mod.MessageSquare })), { ssr: false });
+// Social Media Icons from react-icons
+const TwitterIcon = dynamic(() => import('react-icons/fa').then(mod => ({ default: mod.FaTwitter })), { ssr: false });
+const FacebookIcon = dynamic(() => import('react-icons/fa').then(mod => ({ default: mod.FaFacebook })), { ssr: false });
+const LinkedinIcon = dynamic(() => import('react-icons/fa').then(mod => ({ default: mod.FaLinkedin })), { ssr: false });
+const WhatsAppIcon = dynamic(() => import('react-icons/fa').then(mod => ({ default: mod.FaWhatsapp })), { ssr: false });
 const Copy = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Copy })), { ssr: false });
 
-// Lazy load heavy components
+// Lazy load heavy components - İçerik dinamik, cache'lenmez
 const ReactMarkdown = dynamic(() => import('react-markdown'), {
-  ssr: false
+  ssr: false,
+  loading: () => (
+    <div className="max-h-96 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
+      <div className="animate-pulse space-y-4">
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/5"></div>
+      </div>
+    </div>
+  )
 });
 
 // Types
@@ -337,27 +346,30 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       size="sm"
                       variant="outline"
                       onClick={shareToTwitter}
-                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                      className="h-10 w-10 rounded-full bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/20 dark:hover:bg-sky-900/30 border-sky-200 dark:border-sky-800 text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300 transition-all duration-200 hover:scale-105"
+                      title="Twitter'da paylaş"
                     >
-                      <Send className="h-5 w-5" />
+                      <TwitterIcon className="h-5 w-5" />
                     </Button>
                     
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={shareToFacebook}
-                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                      title="Facebook'ta paylaş"
                     >
-                      <Heart className="h-5 w-5" />
+                      <FacebookIcon className="h-5 w-5" />
                     </Button>
                     
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={shareToLinkedIn}
-                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-800 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                      title="LinkedIn'de paylaş"
                     >
-                      <Users className="h-5 w-5" />
+                      <LinkedinIcon className="h-5 w-5" />
                     </Button>
                     
                     <Button
@@ -365,8 +377,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       variant="outline"
                       onClick={shareToWhatsApp}
                       className="h-10 w-10 rounded-full bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-105"
+                      title="WhatsApp'ta paylaş"
                     >
-                      <MessageSquare className="h-5 w-5" />
+                      <WhatsAppIcon className="h-5 w-5" />
                     </Button>
                     
                     <Button
@@ -374,6 +387,7 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       variant="outline"
                       onClick={copyToClipboard}
                       className="h-10 w-10 rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-all duration-200 hover:scale-105"
+                      title="Linki kopyala"
                     >
                       <Copy className="h-5 w-5" />
                     </Button>
@@ -517,37 +531,95 @@ export function RegulationContent({ regulationId, initialData }: Props) {
               )}
             </div>
 
-            {/* Mobile Collapsible Meta Information */}
+            {/* Mobile Collapsible Meta Information - Optimized */}
             <div className="sm:hidden mb-6">
-              <Collapsible open={isMetaOpen} onOpenChange={setIsMetaOpen}>
-                <CollapsibleTrigger asChild>
-                  <Button 
-                    variant="outline" 
-                    className="w-full justify-between bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <Info className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Belge Bilgileri
-                      </span>
-                    </div>
-                    <ChevronDown className={`h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
-                      isMetaOpen ? 'rotate-180' : ''
-                    }`} />
-                  </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="mt-3">
+              <Button 
+                variant="outline" 
+                className="w-full justify-between bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                onClick={() => setIsMetaOpen(!isMetaOpen)}
+              >
+                <div className="flex items-center space-x-2">
+                  <Info className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Belge Bilgileri
+                  </span>
+                </div>
+                <ChevronDown className={`h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+                  isMetaOpen ? 'rotate-180' : ''
+                }`} />
+              </Button>
+              
+              {/* Smooth Animation Container */}
+              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                isMetaOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0 mt-0'
+              }`}>
+                <div className="mt-3">
                   {loading ? (
-                    <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg border border-gray-200 dark:border-gray-600">
-                      {Array.from({ length: 4 }).map((_, i) => (
-                        <div key={i} className="flex items-center space-x-2">
+                    <div className="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg border border-gray-200 dark:border-gray-600">
+                      {/* Belge Bilgileri Loading Skeleton */}
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Belge Türü Skeleton */}
+                        <div className="flex items-center space-x-2 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
                           <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-                          <div className="space-y-1 flex-1">
-                            <SkeletonLine width="60%" />
-                            <SkeletonLine width="80%" />
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/3"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-2/3"></div>
                           </div>
                         </div>
-                      ))}
+                        
+                        {/* Durum Skeleton */}
+                        <div className="flex items-center space-x-2 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                          <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/4"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/2"></div>
+                          </div>
+                        </div>
+                        
+                        {/* Yayın Tarihi Skeleton */}
+                        <div className="flex items-center space-x-2 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                          <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/3"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                          </div>
+                        </div>
+                        
+                        {/* Belge No Skeleton */}
+                        <div className="flex items-center space-x-2 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                          <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/2"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
+                          </div>
+                        </div>
+                        
+                        {/* Sayfa Sayısı Skeleton */}
+                        <div className="flex items-center space-x-2 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                          <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/3"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/4"></div>
+                          </div>
+                        </div>
+                        
+                        {/* Dosya Boyutu Skeleton */}
+                        <div className="flex items-center space-x-2 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                          <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/2"></div>
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/3"></div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Loading Indicator */}
+                      <div className="flex items-center justify-center mt-4 space-x-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <span className="ml-3 text-xs text-gray-600 dark:text-gray-400">Belge bilgileri yükleniyor...</span>
+                      </div>
                     </div>
                   ) : regulation && (
                     <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg border border-gray-200 dark:border-gray-600">
@@ -611,8 +683,8 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       )}
                     </div>
                   )}
-                </CollapsibleContent>
-              </Collapsible>
+                </div>
+              </div>
             </div>
 
             {/* Scroll Down Animation - Mobile Only */}
@@ -724,19 +796,55 @@ export function RegulationContent({ regulationId, initialData }: Props) {
           </CardHeader>
           <CardContent>
             {loading || !contentLoaded ? (
-              <div className="flex flex-col items-center justify-center py-16 space-y-4">
-                <div className="relative">
-                  <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-                  <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-purple-600 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+              <div className="max-h-96 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
+                {/* Mevzuat İçerik Loading Skeleton */}
+                <div className="space-y-6">
+                  {/* Başlık Skeleton */}
+                  <div className="space-y-3">
+                    <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/2"></div>
+                  </div>
+                  
+                  {/* Paragraf Skeleton */}
+                  <div className="space-y-3">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-5/6"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-4/5"></div>
+                  </div>
+                  
+                  {/* Alt Başlık Skeleton */}
+                  <div className="space-y-3">
+                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-2/3"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                  </div>
+                  
+                  {/* Liste Skeleton */}
+                  <div className="space-y-2 ml-6">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-4/5"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-5/6"></div>
+                  </div>
+                  
+                  {/* Son Paragraf Skeleton */}
+                  <div className="space-y-3">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-full"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-2/3"></div>
+                  </div>
                 </div>
-                <div className="text-center space-y-2">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">İçerik Yükleniyor</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Mevzuat metni hazırlanıyor...</p>
+                
+                {/* Loading Indicator */}
+                <div className="flex items-center justify-center mt-8 space-x-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <span className="ml-3 text-sm text-gray-600 dark:text-gray-400">Mevzuat içeriği yükleniyor...</span>
                 </div>
               </div>
             ) : regulation && (
             <div 
               className="max-h-96 overflow-y-auto prose prose-lg dark:prose-invert max-w-none bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600" 
+              key={`content-${regulation.id}-${Date.now()}`} // Cache-busting için unique key
             >
               <ReactMarkdown 
                 remarkPlugins={[]}

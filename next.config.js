@@ -75,7 +75,6 @@ const nextConfig = {
     optimizeCss: true,
     optimizePackageImports: ['@radix-ui/react-icons'],
     esmExternals: 'loose',
-    // CSS chunking optimizasyonu
     cssChunking: 'strict'
   },
   // Modern tarayıcılar için optimize et

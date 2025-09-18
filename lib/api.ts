@@ -131,6 +131,7 @@ async function apiFetch(endpoint: string, options?: RequestInit): Promise<Respon
           ...options?.headers,
         },
         signal: AbortSignal.timeout(15000), // 15 saniye timeout
+        cache: 'no-store', // Cache'i devre dışı bırak
         ...options,
       });
 

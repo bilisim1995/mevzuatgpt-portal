@@ -3,10 +3,15 @@ import type { Metadata } from 'next';
 import { Footer } from '@/components/footer';
 import { RegulationContent } from '@/components/regulation-content';
 import { getRegulationById, getInstitutionById, getInstitutions, getRegulationsByInstitutionSlug } from '@/lib/data';
-import dynamic from 'next/dynamic';
+import dynamicImport from 'next/dynamic';
+
+// Büyük veriler için cache'i devre dışı bırak
+export const revalidate = 0; // Cache devre dışı
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 // Optimize component loading
-const OptimizedRegulationContent = dynamic(() => 
+const OptimizedRegulationContent = dynamicImport(() => 
   import('@/components/regulation-content').then(mod => ({ default: mod.RegulationContent })), {
   loading: () => (
     <div className="min-h-screen flex items-center justify-center">
@@ -16,7 +21,7 @@ const OptimizedRegulationContent = dynamic(() =>
   ssr: true
 });
 
-const Header = dynamic(() => import('@/components/header').then(mod => ({ default: mod.Header })), {
+const Header = dynamicImport(() => import('@/components/header').then(mod => ({ default: mod.Header })), {
   ssr: false
 });
 
