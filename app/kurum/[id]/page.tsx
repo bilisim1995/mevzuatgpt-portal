@@ -90,6 +90,47 @@ export default async function InstitutionPage({ params }: Props) {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Structured Data - Organization Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": institution.name,
+            "description": institution.description,
+            "url": `https://portal.mevzuatgpt.org/kurum/${params.id}`,
+            "logo": institution.logo ? {
+              "@type": "ImageObject",
+              "url": institution.logo,
+              "width": 60,
+              "height": 60
+            } : undefined,
+            "sameAs": [
+              // Kurumun resmi web sitesi varsa buraya eklenebilir
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer service",
+              "url": `https://portal.mevzuatgpt.org/kurum/${params.id}`
+            },
+            "knowsAbout": [
+              "Mevzuat",
+              "Genelge", 
+              "Yönetmelik",
+              "Hukuki Düzenlemeler",
+              "Resmi Gazete"
+            ],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": `${institution.name} Mevzuat Kataloğu`,
+              "description": `${institution.name} tarafından yayınlanan tüm mevzuat metinleri`,
+              "numberOfItems": institution.documentCount
+            }
+          })
+        }}
+      />
+      
       <Header />
       
       <main className="flex-1">

@@ -158,6 +158,9 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                                       parent.innerHTML = `<span class="text-2xl text-gray-600 dark:text-gray-300">${institution.category === 'ministry' ? '🏛️' : '🏢'}</span>`;
                                     }
                                   }}
+                                  onLoad={() => {
+                                    // Başarılı yükleme durumunda herhangi bir işlem yapma
+                                  }}
                                 />    
                               ) : (
                                 <span className="text-2xl text-gray-600 dark:text-gray-300">

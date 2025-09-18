@@ -1,6 +1,41 @@
 import { Institution, Regulation } from './data';
 import { ApiInstitution, ApiRegulation, ApiRegulationDetail, ApiSearchResult } from './api';
 
+// URL encoding helper function - Sadece problemli URL'leri düzelt
+function encodeLogoUrl(logoUrl: string): string {
+  if (!logoUrl) return '';
+  
+  // Eğer URL zaten düzgün görünüyorsa, olduğu gibi döndür
+  if (!logoUrl.includes('%') && !logoUrl.includes('Türkiye') && !logoUrl.includes('İş')) {
+    return logoUrl;
+  }
+  
+  try {
+    // Sadece Türkçe karakterler varsa encode et
+    if (logoUrl.includes('Türkiye') || logoUrl.includes('İş') || logoUrl.includes('ğ') || 
+        logoUrl.includes('ü') || logoUrl.includes('ş') || logoUrl.includes('ı') || 
+        logoUrl.includes('ö') || logoUrl.includes('ç')) {
+      
+      // URL'yi parse et
+      const url = new URL(logoUrl);
+      const pathParts = url.pathname.split('/');
+      const fileName = pathParts[pathParts.length - 1];
+      
+      // Sadece dosya adını encode et
+      const encodedFileName = encodeURIComponent(fileName);
+      pathParts[pathParts.length - 1] = encodedFileName;
+      url.pathname = pathParts.join('/');
+      
+      return url.toString();
+    }
+    
+    return logoUrl;
+  } catch (error) {
+    // Hata durumunda orijinal URL'yi döndür
+    return logoUrl;
+  }
+}
+
 // API verilerini mevcut interface'lere dönüştürme fonksiyonları
 
 export function adaptApiInstitutionToInstitution(apiInst: ApiInstitution): Institution {
@@ -24,7 +59,7 @@ export function adaptApiInstitutionToInstitution(apiInst: ApiInstitution): Insti
     description: `${apiInst.kurum_adi} mevzuat metinleri`,
     documentCount: apiInst.count,
     category: category,
-    logo: apiInst.kurum_logo
+    logo: encodeLogoUrl(apiInst.kurum_logo)
   };
   return result;
 }
@@ -57,7 +92,7 @@ export function adaptApiRegulationToRegulation(apiReg: ApiRegulation): Regulatio
     content: '', // İçerik detay sayfasında yüklenecek
     institutionId: apiReg.kurum_id,
     institutionName: apiReg.kurum_adi || 'Bilinmeyen Kurum',
-    institutionLogo: apiReg.kurum_logo || '',
+    institutionLogo: encodeLogoUrl(apiReg.kurum_logo || ''),
     publishDate: apiReg.belge_yayin_tarihi,
     effectiveDate: apiReg.belge_yayin_tarihi, // Aynı tarih kullanılıyor
     category: category,
@@ -77,7 +112,7 @@ export function adaptApiRegulationDetailToRegulation(apiDetail: ApiRegulationDet
     ...baseRegulation,
     content: apiDetail.content.icerik || 'İçerik yüklenemedi',
     institutionName: apiDetail.kurum_adi,
-    institutionLogo: apiDetail.kurum_logo,
+    institutionLogo: encodeLogoUrl(apiDetail.kurum_logo),
     institutionId: apiDetail.metadata.kurum_id
   };
 }

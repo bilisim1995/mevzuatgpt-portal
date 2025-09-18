@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 // Lazy load UI components
 const Card = dynamic(() => import('@/components/ui/card').then(mod => ({ default: mod.Card })), { ssr: false });
@@ -81,6 +82,7 @@ const ITEMS_PER_PAGE = 10;
 const SEARCH_ITEMS_PER_PAGE = 10;
 
 export function RegulationsList({ institutionId }: Props) {
+  const router = useRouter();
   const [regulations, setRegulations] = useState<Regulation[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -93,6 +95,7 @@ export function RegulationsList({ institutionId }: Props) {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchTotalCount, setSearchTotalCount] = useState(0);
   const [isSearchMode, setIsSearchMode] = useState(false);
+  const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadRegulations() {
@@ -284,6 +287,17 @@ export function RegulationsList({ institutionId }: Props) {
       case 'institution': return 'Kurum';
       default: return 'Genel';
     }
+  };
+
+  // Hızlı yönlendirme fonksiyonu
+  const handleQuickNavigate = (regulationId: string) => {
+    setNavigatingTo(regulationId);
+    // Prefetch ile sayfayı önceden yükle
+    router.prefetch(`/mevzuat/${regulationId}`);
+    // Hemen yönlendir
+    setTimeout(() => {
+      router.push(`/mevzuat/${regulationId}`);
+    }, 100);
   };
   // Filter regulations
   // Sadece arama modu sonuçları veya tüm mevzuatlar gösterilir
@@ -641,7 +655,7 @@ export function RegulationsList({ institutionId }: Props) {
                                   {regulation.status === 'active' ? 'Yürürlükte' : 'Yürürlükten Kalktı'}
                                 </Badge>
                                 <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                                  <Calendar className="h-3 w-3 mr-1" />
+                                  <Calendar className="h-4 w-4 mr-1" />
                                   <span>{new Date(regulation.publishDate).toLocaleDateString('tr-TR')}</span>
                                 </div>
                                 
@@ -694,18 +708,30 @@ export function RegulationsList({ institutionId }: Props) {
 
                               {/* Action buttons */}
                               <div className="flex gap-2 w-full sm:w-auto">
-                                <Link href={`/mevzuat/${regulation.id}`} className="block w-full">
-                                  <Button size="sm" className="shadow-sm w-full">
-                                    <Eye className="h-4 w-4 mr-2" />
-                                    <span>Görüntüle</span>
-                                  </Button>
-                                </Link>
+                                <Button 
+                                  size="sm" 
+                                  className="shadow-sm w-full text-white dark:text-white"
+                                  onClick={() => handleQuickNavigate(regulation.id)}
+                                  disabled={navigatingTo === regulation.id}
+                                >
+                                  {navigatingTo === regulation.id ? (
+                                    <>
+                                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                                      <span>Yükleniyor...</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Eye className="h-5 w-5 mr-2" />
+                                      <span>Görüntüle</span>
+                                    </>
+                                  )}
+                                </Button>
 
                                 
                                 {regulation.pdfUrl && (
                                    <a href={regulation.pdfUrl} target="_blank" rel="noopener noreferrer">
                                     <Button size="sm" variant="outline" className="shadow-sm w-full">
-                                      <Download className="h-4 w-4 mr-2" />
+                                      <Download className="h-5 w-5 mr-2" />
                                       <span>PDF</span>
                                     </Button>
                                   </a>

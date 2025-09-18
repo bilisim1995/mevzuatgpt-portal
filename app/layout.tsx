@@ -87,15 +87,40 @@ export default function RootLayout({
         {/* Preload critical images - optimized sizes */}
         <link rel="preload" href="/favicon-32x32.png" as="image" type="image/png" crossOrigin="anonymous" />
         
-        {/* Critical CSS inline yükleme */}
+        {/* Critical CSS inline yükleme - Optimized */}
         <style dangerouslySetInnerHTML={{
           __html: `
-            /* Critical CSS - Above the fold */
-            html { scroll-behavior: smooth; }
-            body { font-feature-settings: 'rlig' 1, 'calt' 1; text-rendering: optimizeSpeed; }
-            .hero-section { min-height: 60vh; }
-            .institution-header { min-height: 300px; }
-            .regulations-list { min-height: 400px; }
+            /* Critical CSS - Above the fold - Optimized */
+            html { scroll-behavior: smooth; font-display: swap; }
+            body { 
+              font-feature-settings: 'rlig' 1, 'calt' 1; 
+              text-rendering: optimizeSpeed; 
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+            }
+            .hero-section { 
+              min-height: 60vh; 
+              contain: layout style paint;
+            }
+            .institution-header { 
+              min-height: 300px; 
+              contain: layout style paint;
+            }
+            .regulations-list { 
+              min-height: 400px; 
+              contain: layout style paint;
+            }
+            /* Performance optimizations */
+            .animate-fade-in-up {
+              animation: fadeInUp 0.6s ease-out forwards;
+            }
+            @keyframes fadeInUp {
+              from { opacity: 0; transform: translateY(20px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            /* Reduce layout shifts */
+            img { height: auto; max-width: 100%; }
+            .container { contain: layout; }
           `
         }} />
         
@@ -123,6 +148,83 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
         <meta name="HandheldFriendly" content="true" />
         <meta name="MobileOptimized" content="320" />
+        
+        {/* Structured Data - Schema.org */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": `${baseUrl}/#organization`,
+                  "name": "Mevzuat Portal",
+                  "url": baseUrl,
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": `${baseUrl}/mevzuat-logo-beyaz.png`,
+                    "width": 224,
+                    "height": 40
+                  },
+                  "description": "Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform",
+                  "sameAs": [
+                    "https://twitter.com/mevzuatportal"
+                  ],
+                  "contactPoint": {
+                    "@type": "ContactPoint",
+                    "contactType": "customer service",
+                    "url": `${baseUrl}/iletisim`
+                  }
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": `${baseUrl}/#website`,
+                  "url": baseUrl,
+                  "name": "Mevzuat Portal",
+                  "description": "Türkiye'nin en kapsamlı mevzuat veritabanı - Genelge, yönetmelik ve mevzuat metinleri",
+                  "publisher": {
+                    "@id": `${baseUrl}/#organization`
+                  },
+                  "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": {
+                      "@type": "EntryPoint",
+                      "urlTemplate": `${baseUrl}/mevzuat?q={search_term_string}`
+                    },
+                    "query-input": "required name=search_term_string"
+                  },
+                  "inLanguage": "tr-TR"
+                },
+                {
+                  "@type": "WebPage",
+                  "@id": `${baseUrl}/#webpage`,
+                  "url": baseUrl,
+                  "name": "Mevzuat Portal - Güncel Genelgeler ve Mevzuat Metinleri",
+                  "isPartOf": {
+                    "@id": `${baseUrl}/#website`
+                  },
+                  "about": {
+                    "@id": `${baseUrl}/#organization`
+                  },
+                  "description": "Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform. Hızlı arama, kategorilere göre filtreleme.",
+                  "breadcrumb": {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                      {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Ana Sayfa",
+                        "item": baseUrl
+                      }
+                    ]
+                  },
+                  "inLanguage": "tr-TR"
+                }
+              ]
+            })
+          }}
+        />
       </head>
       <body className="font-sans antialiased">
         <Suspense fallback={null}>

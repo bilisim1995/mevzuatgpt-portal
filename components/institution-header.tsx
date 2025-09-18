@@ -84,6 +84,9 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
                 parent.innerHTML = '<svg class="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/></svg>';
               }
             }}
+            onLoad={() => {
+              // Başarılı yükleme durumunda herhangi bir işlem yapma
+            }}
           />
         ) : (
           <Building className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 text-gray-600" />
@@ -113,11 +116,11 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
          
           
                 <Badge variant="outline" className="text-xs sm:text-sm px-3 py-1 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  <FileText className="h-2 w-2 mr-1" />
+                  <FileText className="h-4 w-4 mr-1" />
                   Yüklü belge sayısı: {institution.documentCount} adet
                 </Badge>
                 <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs sm:text-sm px-3 py-1">
-                  <CheckCircle className="h-2 w-2 mr-1" />
+                  <CheckCircle className="h-4 w-4 mr-1" />
                   Güncel
                 </Badge>
               </div>

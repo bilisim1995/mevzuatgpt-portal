@@ -31,6 +31,11 @@ const ArrowRight = dynamic(() => import('lucide-react').then(mod => ({ default: 
 const BrainCircuit = dynamic(() => import('lucide-react').then(mod => ({ default: mod.BrainCircuit })), { ssr: false });
 const ChevronDown = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ChevronDown })), { ssr: false });
 const Info = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Info })), { ssr: false });
+const Send = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Send })), { ssr: false });
+const Heart = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Heart })), { ssr: false });
+const Users = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Users })), { ssr: false });
+const MessageSquare = dynamic(() => import('lucide-react').then(mod => ({ default: mod.MessageSquare })), { ssr: false });
+const Copy = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Copy })), { ssr: false });
 
 // Lazy load heavy components
 const ReactMarkdown = dynamic(() => import('react-markdown'), {
@@ -166,6 +171,40 @@ export function RegulationContent({ regulationId, initialData }: Props) {
     }
   };
 
+  // Sosyal paylaşım fonksiyonları
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareTitle = regulation?.title || '';
+  const shareText = regulation?.summary || '';
+
+  const shareToTwitter = () => {
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+  };
+
+  const shareToFacebook = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+  };
+
+  const shareToLinkedIn = () => {
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+    window.open(url, '_blank', 'width=600,height=400');
+  };
+
+  const shareToWhatsApp = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(`${shareTitle} - ${shareUrl}`)}`;
+    window.open(url, '_blank');
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      alert('Link kopyalandı!');
+    } catch (err) {
+      console.error('Kopyalama hatası:', err);
+    }
+  };
+
   // Skeleton bileşeni
   const SkeletonLine = ({ width = "100%" }: { width?: string }) => (
     <div className={`h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse`} style={{ width }}></div>
@@ -288,6 +327,58 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed">
                   {regulation.summary}
                 </p>
+              )}
+
+              {/* Sosyal Paylaşım Butonları */}
+              {regulation && (
+                <div className="flex justify-center pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center gap-3">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={shareToTwitter}
+                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                    >
+                      <Send className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={shareToFacebook}
+                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                    >
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={shareToLinkedIn}
+                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-800 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                    >
+                      <Users className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={shareToWhatsApp}
+                      className="h-10 w-10 rounded-full bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-105"
+                    >
+                      <MessageSquare className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={copyToClipboard}
+                      className="h-10 w-10 rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-all duration-200 hover:scale-105"
+                    >
+                      <Copy className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </div>
               )}
 
               {/* Institution Info */}

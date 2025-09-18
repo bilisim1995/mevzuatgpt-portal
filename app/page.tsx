@@ -1,11 +1,24 @@
 import dynamic from 'next/dynamic';
 
-// Lazy load components
-const Footer = dynamic(() => import('@/components/footer').then(mod => ({ default: mod.Footer })), { ssr: false });
-const HeroSection = dynamic(() => import('@/components/hero-section').then(mod => ({ default: mod.HeroSection })), { ssr: false });
-const RecentRegulations = dynamic(() => import('@/components/recent-regulations').then(mod => ({ default: mod.RecentRegulations })), { ssr: false });
+// Optimized lazy loading - Critical components with SSR, non-critical without
 const Header = dynamic(() => import('@/components/header').then(mod => ({ default: mod.Header })), {
-  ssr: false
+  ssr: true, // Header is critical for SEO
+  loading: () => <div className="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800" />
+});
+
+const HeroSection = dynamic(() => import('@/components/hero-section').then(mod => ({ default: mod.HeroSection })), { 
+  ssr: true, // Hero section is critical for SEO
+  loading: () => <div className="min-h-[60vh] bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-black" />
+});
+
+const RecentRegulations = dynamic(() => import('@/components/recent-regulations').then(mod => ({ default: mod.RecentRegulations })), { 
+  ssr: false, // This can be lazy loaded
+  loading: () => <div className="py-16 lg:py-24 bg-white dark:bg-gray-800"><div className="container mx-auto px-4"><div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-64 rounded-lg"></div></div></div>
+});
+
+const Footer = dynamic(() => import('@/components/footer').then(mod => ({ default: mod.Footer })), { 
+  ssr: false, // Footer can be lazy loaded
+  loading: () => <div className="bg-gray-900 text-white py-8"><div className="container mx-auto px-4"><div className="animate-pulse bg-gray-700 h-32 rounded"></div></div></div>
 });
 
 export default function HomePage() {
@@ -17,17 +30,18 @@ export default function HomePage() {
         <HeroSection />
         <RecentRegulations />
         
-        {/* Tanıtım Bölümü */}
+        {/* Tanıtım Bölümü - SEO Optimized */}
         <section className="py-16 lg:py-24 bg-white dark:bg-gray-800">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center space-y-8">
               <div className="space-y-4">
                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100">
-                  Mevzuat Takibini Kolaylaştırıyoruz
+                  Türkiye'nin En Kapsamlı Mevzuat Veritabanı
                 </h2>
                 <p className="text-xl text-gray-800 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-                  Kamu kurumlarının yayınladığı binlerce genelge, yönetmelik ve mevzuat metnine 
-                  tek platformdan ulaşın. Yapay zeka destekli arama ile aradığınızı hızla bulun.
+                  Kamu kurumlarının yayınladığı binlerce <strong>genelge</strong>, <strong>yönetmelik</strong>, 
+                  <strong>tebliğ</strong> ve <strong>mevzuat metni</strong>ne tek platformdan ulaşın. 
+                  Yapay zeka destekli <strong>mevzuat arama</strong> ile aradığınızı hızla bulun.
                 </p>
               </div>
               
@@ -39,10 +53,11 @@ export default function HomePage() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Kapsamlı Arşiv
+                    Kapsamlı Mevzuat Arşivi
                   </h3>
                   <p className="text-gray-800 dark:text-gray-300">
-                    Tüm kamu kurumlarının güncel mevzuat metinleri tek platformda toplanmış durumda.
+                    Tüm kamu kurumlarının güncel <strong>mevzuat metinleri</strong>, <strong>resmi gazete</strong> 
+                    yayınları ve <strong>hukuki düzenlemeler</strong> tek platformda toplanmış durumda.
                   </p>
                 </div>
                 
@@ -53,10 +68,11 @@ export default function HomePage() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Akıllı Arama
+                    Gelişmiş Mevzuat Arama
                   </h3>
                   <p className="text-gray-800 dark:text-gray-300">
-                    Gelişmiş filtreleme ve arama özellikleri ile aradığınız mevzuatı saniyeler içinde bulun.
+                    Gelişmiş filtreleme ve <strong>mevzuat arama</strong> özellikleri ile aradığınız 
+                    <strong>genelge</strong>, <strong>yönetmelik</strong> ve <strong>tebliğ</strong>leri saniyeler içinde bulun.
                   </p>
                 </div>
                 
@@ -67,10 +83,11 @@ export default function HomePage() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                    Yapay Zeka Desteği
+                    Yapay Zeka ile Mevzuat Analizi
                   </h3>
                   <p className="text-gray-800 dark:text-gray-300">
-                    Karmaşık mevzuat metinlerini anlama konusunda yapay zeka asistanımızdan yardım alın.
+                    Karmaşık <strong>mevzuat metinleri</strong>ni anlama konusunda yapay zeka asistanımızdan 
+                    yardım alın. <strong>Hukuki düzenlemeler</strong>i kolayca anlayın.
                   </p>
                 </div>
               </div>
@@ -81,9 +98,56 @@ export default function HomePage() {
                     Neden Mevzuat Portal?
                   </h3>
                   <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
-                    Geleneksel mevzuat takibi zaman alıcı ve karmaşıktır. Mevzuat Portal, 
-                    bu süreci basitleştirerek size zaman kazandırır. Güncel bilgilere hızla 
-                    ulaşın, yapay zeka ile karmaşık metinleri anlayın ve işinizi daha verimli yapın.
+                    Geleneksel <strong>mevzuat takibi</strong> zaman alıcı ve karmaşıktır. Mevzuat Portal, 
+                    bu süreci basitleştirerek size zaman kazandırır. Güncel <strong>genelge</strong>, 
+                    <strong>yönetmelik</strong> ve <strong>mevzuat bilgileri</strong>ne hızla ulaşın, 
+                    yapay zeka ile karmaşık <strong>hukuki metinleri</strong> anlayın ve işinizi daha verimli yapın.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Bölümü - SEO için */}
+        <section className="py-16 lg:py-20 bg-white dark:bg-gray-800">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 text-center mb-12">
+                Sıkça Sorulan Sorular
+              </h2>
+              
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                    Mevzuat Portal nedir?
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Mevzuat Portal, kamu kurumlarının yayınladığı <strong>genelge</strong>, 
+                    <strong>yönetmelik</strong>, <strong>tebliğ</strong> ve diğer <strong>mevzuat metinleri</strong>ni 
+                    tek platformda toplayan Türkiye'nin en kapsamlı <strong>mevzuat veritabanı</strong>dır.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                    Hangi kurumların mevzuatları bulunuyor?
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Bakanlıklar, bağımsız idari otoriteler, belediyeler ve diğer kamu kurumlarının 
+                    <strong>resmi gazete</strong>de yayınlanan tüm <strong>hukuki düzenlemeleri</strong> 
+                    bulunmaktadır.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                    Mevzuat arama nasıl yapılır?
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Gelişmiş <strong>mevzuat arama</strong> özellikleri ile kurum, tarih, konu ve 
+                    anahtar kelime bazında filtreleme yapabilir, yapay zeka destekli arama ile 
+                    <strong>hukuki metinleri</strong> kolayca bulabilirsiniz.
                   </p>
                 </div>
               </div>
