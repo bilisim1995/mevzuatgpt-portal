@@ -20,9 +20,9 @@ export function YandexMetrika() {
       try {
         // Initialize Yandex Metrika
         (window as any).ym = (window as any).ym || function(...args: any[]) {
-          ((window as any).ym.a = (window as any).ym.a || [])).push(args);
+          ((window as any).ym.a = (window as any).ym.a || []).push(args);
         };
-        (window as any).ym.l = 1 * new Date();
+        (window as any).ym.l = Date.now();
 
         // Load Yandex Metrika script
         const script = document.createElement('script');
