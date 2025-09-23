@@ -220,6 +220,8 @@ export async function fetchRegulationsByInstitutionId(
     search?: string;
     belge_turu?: string;
     belge_durumu?: string;
+    sort_by?: string;
+    sort_order?: string;
   } = {}
 ): Promise<ApiRegulation[]> {
   const params = new URLSearchParams(
@@ -232,6 +234,14 @@ export async function fetchRegulationsByInstitutionId(
   
   // kurum_id parametresini ekle
   params.set('kurum_id', kurumId);
+  
+  // Varsayılan sıralama: en yeni tarihli olanlar üstte
+  if (!params.has('sort_by')) {
+    params.set('sort_by', 'belge_yayin_tarihi');
+  }
+  if (!params.has('sort_order')) {
+    params.set('sort_order', 'desc');
+  }
   
   const queryString = params.toString();
   const endpoint = `/api/v1/documents?${queryString}`;

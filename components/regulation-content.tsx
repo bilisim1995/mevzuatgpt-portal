@@ -208,9 +208,26 @@ export function RegulationContent({ regulationId, initialData }: Props) {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
-      alert('Link kopyalandı!');
+      // Modern tarayıcılarda toast bildirimi için
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('Link kopyalandı!', {
+          icon: '/favicon.ico',
+          tag: 'copy-success'
+        });
+      } else {
+        // Fallback olarak alert
+        alert('Link kopyalandı!');
+      }
     } catch (err) {
       console.error('Kopyalama hatası:', err);
+      // Fallback: Eski yöntem
+      const textArea = document.createElement('textarea');
+      textArea.value = shareUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('Link kopyalandı!');
     }
   };
 
@@ -317,6 +334,8 @@ export function RegulationContent({ regulationId, initialData }: Props) {
             <div className="space-y-4">
               {/* Meta Info */}
 
+
+
               {/* Title */}
               {loading ? (
                 <div className="space-y-2">
@@ -324,9 +343,12 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                   <SkeletonLine width="70%" />
                 </div>
               ) : regulation && (
-                <CardTitle className="text-xl lg:text-2xl font-bold leading-tight text-gray-900 dark:text-gray-100">
-                  {regulation.title}
-                </CardTitle>
+                <div className="flex items-start justify-between gap-4">
+                  <CardTitle className="text-xl lg:text-2xl font-bold leading-tight text-gray-900 dark:text-gray-100 flex-1">
+                    {regulation.title}
+                  </CardTitle>
+                  
+                </div>
               )}
 
               {/* Summary */}
@@ -338,62 +360,6 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 </p>
               )}
 
-              {/* Sosyal Paylaşım Butonları */}
-              {regulation && (
-                <div className="flex justify-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center gap-3">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={shareToTwitter}
-                      className="h-10 w-10 rounded-full bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/20 dark:hover:bg-sky-900/30 border-sky-200 dark:border-sky-800 text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300 transition-all duration-200 hover:scale-105"
-                      title="Twitter'da paylaş"
-                    >
-                      <TwitterIcon className="h-5 w-5" />
-                    </Button>
-                    
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={shareToFacebook}
-                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
-                      title="Facebook'ta paylaş"
-                    >
-                      <FacebookIcon className="h-5 w-5" />
-                    </Button>
-                    
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={shareToLinkedIn}
-                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
-                      title="LinkedIn'de paylaş"
-                    >
-                      <LinkedinIcon className="h-5 w-5" />
-                    </Button>
-                    
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={shareToWhatsApp}
-                      className="h-10 w-10 rounded-full bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-105"
-                      title="WhatsApp'ta paylaş"
-                    >
-                      <WhatsAppIcon className="h-5 w-5" />
-                    </Button>
-                    
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={copyToClipboard}
-                      className="h-10 w-10 rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-all duration-200 hover:scale-105"
-                      title="Linki kopyala"
-                    >
-                      <Copy className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-              )}
 
               {/* Institution Info */}
               {loading ? (
@@ -755,6 +721,63 @@ export function RegulationContent({ regulationId, initialData }: Props) {
           )}
 
           <CardHeader>
+            {/* Sosyal Paylaşım Butonları - Mobilde Mevzuat İçeriği yazısının üstünde */}
+            {!loading && regulation && (
+              <div className="flex justify-center lg:hidden mb-4">
+                <div className="flex items-center gap-3">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={shareToTwitter}
+                    className="h-12 w-12 rounded-full bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/20 dark:hover:bg-sky-900/30 border-sky-200 dark:border-sky-800 text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300 transition-all duration-200 hover:scale-105"
+                    title="Twitter'da paylaş"
+                  >
+                    <TwitterIcon className="h-6 w-6" />
+                  </Button>
+                  
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={shareToFacebook}
+                    className="h-12 w-12 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                    title="Facebook'ta paylaş"
+                  >
+                    <FacebookIcon className="h-6 w-6" />
+                  </Button>
+                  
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={shareToLinkedIn}
+                    className="h-12 w-12 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                    title="LinkedIn'de paylaş"
+                  >
+                    <LinkedinIcon className="h-6 w-6" />
+                  </Button>
+                  
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={shareToWhatsApp}
+                    className="h-12 w-12 rounded-full bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-105"
+                    title="WhatsApp'ta paylaş"
+                  >
+                    <WhatsAppIcon className="h-6 w-6" />
+                  </Button>
+                  
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={copyToClipboard}
+                    className="h-12 w-12 rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-all duration-200 hover:scale-105"
+                    title="Linki kopyala"
+                  >
+                    <Copy className="h-6 w-6" />
+                  </Button>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center justify-between">
               {loading ? (
                 <SkeletonLine width="200px" />
@@ -762,7 +785,64 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-gray-100">
                   <FileText className="h-5 w-5" />
                   <span>Mevzuat İçeriği</span>
+                  
+                  {/* Dikey Ayraç */}
+                  <div className="hidden lg:block w-px h-6 bg-gray-300 dark:bg-gray-600 ml-2"></div>
+                  
+                  {/* Sosyal Paylaşım Butonları - Masaüstünde Mevzuat İçeriği yanında */}
+                  <div className="hidden lg:flex items-center gap-2 ml-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={shareToTwitter}
+                      className="h-10 w-10 rounded-full bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/20 dark:hover:bg-sky-900/30 border-sky-200 dark:border-sky-800 text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300 transition-all duration-200 hover:scale-105"
+                      title="Twitter'da paylaş"
+                    >
+                      <TwitterIcon className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={shareToFacebook}
+                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                      title="Facebook'ta paylaş"
+                    >
+                      <FacebookIcon className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={shareToLinkedIn}
+                      className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
+                      title="LinkedIn'de paylaş"
+                    >
+                      <LinkedinIcon className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={shareToWhatsApp}
+                      className="h-10 w-10 rounded-full bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-105"
+                      title="WhatsApp'ta paylaş"
+                    >
+                      <WhatsAppIcon className="h-5 w-5" />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={copyToClipboard}
+                      className="h-10 w-10 rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-all duration-200 hover:scale-105"
+                      title="Linki kopyala"
+                    >
+                      <Copy className="h-5 w-5" />
+                    </Button>
+                  </div>
                 </CardTitle>
+            
               )}
               {/* Desktop Action Buttons - Next to Title */}
               {loading ? (

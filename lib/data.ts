@@ -78,7 +78,9 @@ export async function getRegulationsByInstitutionSlug(kurumId: string, fetchLimi
   try {
     // API'den mevzuatları getir - yeni endpoint kullan
     const apiRegulations = await fetchRegulationsByInstitutionId(kurumId, {
-      limit: fetchLimit || 100 // Sayfa başına maksimum belge sayısı
+      limit: fetchLimit || 100, // Sayfa başına maksimum belge sayısı
+      sort_by: 'belge_yayin_tarihi',
+      sort_order: 'desc'
     });
     
     return apiRegulations
@@ -144,7 +146,9 @@ export async function getRecentRegulations(limit: number = 10): Promise<Regulati
   for (const institution of institutions) {
     try {
       const apiRegulations = await fetchRegulationsByInstitutionId(institution.id, {
-        limit: Math.ceil(limit / institutions.length) + 5 // Her kurumdan biraz fazla al
+        limit: Math.ceil(limit / institutions.length) + 5, // Her kurumdan biraz fazla al
+        sort_by: 'belge_yayin_tarihi',
+        sort_order: 'desc'
       });
       const regulations = apiRegulations
         .map(adaptApiRegulationToRegulation)
