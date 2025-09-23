@@ -462,3 +462,51 @@ picture img {
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
+
+/* Yargıtay Duyuruları Kayan Yazı Animasyonu */
+@keyframes scroll-right {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Kayan yazı container */
+.scroll-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 30px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.scroll-content {
+  display: flex;
+  align-items: flex-end;
+  animation: scroll-right 20s linear infinite;
+  will-change: transform;
+  white-space: nowrap;
+  height: 100%;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding-bottom: 2px;
+}
+
+.scroll-content:hover {
+  animation-play-state: paused;
+}
+
+/* Responsive animasyon hızı */
+@media (max-width: 768px) {
+  .scroll-content {
+    animation-duration: 15s;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-content {
+    animation-duration: 10s;
+  }
+}

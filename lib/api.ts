@@ -357,3 +357,33 @@ export async function fetchAutocomplete(
     return [];
   }
 }
+
+// Kurum duyurularını çek
+export interface KurumDuyuru {
+  baslik: string;
+  link: string;
+  tarih: string;
+}
+
+export interface KurumDuyuruResponse {
+  success: boolean;
+  data: KurumDuyuru[];
+  message: string;
+  count: number;
+}
+
+export async function fetchKurumDuyurular(kurumId: string): Promise<KurumDuyuru[]> {
+  try {
+    const response = await apiFetch(`/api/v1/kurum-duyuru?kurum_id=${kurumId}`);
+    const result: KurumDuyuruResponse = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.message || 'API hatası');
+    }
+
+    return result.data || [];
+  } catch (error) {
+    console.error('Kurum duyuruları çekilemedi:', error);
+    return [];
+  }
+}
