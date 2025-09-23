@@ -1,7 +1,7 @@
 import { fetchSitemapInstitutions } from '@/lib/api';
 
 export async function GET() {
-  const baseUrl = 'https://portal.mevzuatgpt.org';
+  const baseUrl = 'https://mevzuatgpt.org';
 
   try {
     const institutions = await fetchSitemapInstitutions();

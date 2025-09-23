@@ -99,7 +99,7 @@ export default async function InstitutionPage({ params }: Props) {
             "@type": "Organization",
             "name": institution.name,
             "description": institution.description,
-            "url": `https://portal.mevzuatgpt.org/kurum/${params.id}`,
+            "url": `https://mevzuatgpt.org/kurum/${params.id}`,
             "logo": institution.logo ? {
               "@type": "ImageObject",
               "url": institution.logo,
@@ -112,7 +112,7 @@ export default async function InstitutionPage({ params }: Props) {
             "contactPoint": {
               "@type": "ContactPoint",
               "contactType": "customer service",
-              "url": `https://portal.mevzuatgpt.org/kurum/${params.id}`
+              "url": `https://mevzuatgpt.org/kurum/${params.id}`
             },
             "knowsAbout": [
               "Mevzuat",

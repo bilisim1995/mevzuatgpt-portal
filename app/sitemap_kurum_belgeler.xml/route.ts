@@ -3,7 +3,7 @@ import { getInstitutionById } from '@/lib/data';
 import { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  const baseUrl = 'https://portal.mevzuatgpt.org';
+  const baseUrl = 'https://mevzuatgpt.org';
   
   // URL'den kurum_id parametresini al
   const { searchParams } = new URL(request.url);

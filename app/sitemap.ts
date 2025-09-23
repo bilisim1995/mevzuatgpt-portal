@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { fetchSitemapAllDocuments, fetchSitemapInstitutions } from '@/lib/api';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://portal.mevzuatgpt.org';
+  const baseUrl = 'https://mevzuatgpt.org';
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

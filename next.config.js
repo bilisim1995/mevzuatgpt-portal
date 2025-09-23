@@ -65,7 +65,7 @@ const nextConfig = {
   },
   images: { 
     unoptimized: true,
-    domains: ['images.pexels.com', 'portalapi.mevzuatgpt.org', 'portal.mevzuatgpt.org', '27897322-76a4-44ee-9eae-a025f2ec0048-00-5kgsvegbsnnj.kirk.replit.dev', 'cdn.mevzuatgpt.org'],
+    domains: ['images.pexels.com', 'portalapi.mevzuatgpt.org', 'mevzuatgpt.org', '27897322-76a4-44ee-9eae-a025f2ec0048-00-5kgsvegbsnnj.kirk.replit.dev', 'cdn.mevzuatgpt.org'],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
