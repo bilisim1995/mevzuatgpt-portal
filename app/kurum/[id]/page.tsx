@@ -131,6 +131,31 @@ export default async function InstitutionPage({ params }: Props) {
         }}
       />
       
+      {/* Breadcrumb Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Ana Sayfa",
+                "item": "https://mevzuatgpt.org"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": institution.name,
+                "item": `https://mevzuatgpt.org/kurum/${params.id}`
+              }
+            ]
+          })
+        }}
+      />
+      
       <Header />
       
       <main className="flex-1">

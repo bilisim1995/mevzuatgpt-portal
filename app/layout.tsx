@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 const ThemeProvider = dynamic(() => import('@/components/theme-provider').then(mod => ({ default: mod.ThemeProvider })), { ssr: false });
 const Toaster = dynamic(() => import('@/components/ui/sonner').then(mod => ({ default: mod.Toaster })), { ssr: false });
 const GoogleAnalytics = dynamic(() => import('@/components/google-analytics').then(mod => ({ default: mod.GoogleAnalytics })), { ssr: false });
+const YandexMetrika = dynamic(() => import('@/components/yandex-metrika').then(mod => ({ default: mod.YandexMetrika })), { ssr: false });
 const PWAInstallPrompt = dynamic(() => import('@/components/pwa-install-prompt').then(mod => ({ default: mod.PWAInstallPrompt })), { ssr: false });
 const OfflineIndicator = dynamic(() => import('@/components/offline-indicator').then(mod => ({ default: mod.OfflineIndicator })), { ssr: false });
 const CookieBanner = dynamic(() => import('@/components/cookie-banner').then(mod => ({ default: mod.CookieBanner })), { ssr: false });
@@ -72,6 +73,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://portalapi.mevzuatgpt.org" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://mc.yandex.ru" />
         
         {/* PWA Meta Tags */}
         <meta name="application-name" content="Mevzuat Portal" />
@@ -229,6 +231,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <Suspense fallback={null}>
           <GoogleAnalytics />
+          <YandexMetrika />
         </Suspense>
         <ThemeProvider
           attribute="class"
