@@ -21,7 +21,7 @@ export function GoogleAnalytics() {
         // Create script element
         const script = document.createElement('script');
         script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZHJ5Y7BVBF';
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-TPJDF83DSN';
         script.crossOrigin = 'anonymous';
         
         script.onload = () => {
@@ -29,7 +29,7 @@ export function GoogleAnalytics() {
           function gtag(...args: any[]) { (window as any).dataLayer.push(args); }
           (window as any).gtag = gtag;
           gtag('js', new Date());
-          gtag('config', 'G-ZHJ5Y7BVBF', {
+          gtag('config', 'G-TPJDF83DSN', {
             page_title: document.title,
             page_location: window.location.href,
             anonymize_ip: true,
@@ -73,7 +73,7 @@ export function GoogleAnalytics() {
     const trackPageView = () => {
       try {
         if (typeof (window as any).gtag === 'function') {
-          (window as any).gtag('config', 'G-ZHJ5Y7BVBF', {
+          (window as any).gtag('config', 'G-TPJDF83DSN', {
             page_path: pathname + searchParams.toString(),
             page_title: document.title,
             page_location: window.location.href
