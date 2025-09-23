@@ -18,17 +18,19 @@ export function GoogleAnalytics() {
       loaded = true;
       
       try {
-        // Create script element
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-TPJDF83DSN';
-        script.crossOrigin = 'anonymous';
+        // Initialize dataLayer
+        (window as any).dataLayer = (window as any).dataLayer || [];
+        function gtag(...args: any[]) { (window as any).dataLayer.push(args); }
+        (window as any).gtag = gtag;
+        gtag('js', new Date());
+
+        // Load first GA script (G-TPJDF83DSN)
+        const script1 = document.createElement('script');
+        script1.async = true;
+        script1.src = 'https://www.googletagmanager.com/gtag/js?id=G-TPJDF83DSN';
+        script1.crossOrigin = 'anonymous';
         
-        script.onload = () => {
-          (window as any).dataLayer = (window as any).dataLayer || [];
-          function gtag(...args: any[]) { (window as any).dataLayer.push(args); }
-          (window as any).gtag = gtag;
-          gtag('js', new Date());
+        script1.onload = () => {
           gtag('config', 'G-TPJDF83DSN', {
             page_title: document.title,
             page_location: window.location.href,
@@ -37,11 +39,33 @@ export function GoogleAnalytics() {
           });
         };
         
-        script.onerror = () => {
-          console.warn('Google Analytics yüklenemedi');
+        script1.onerror = () => {
+          console.warn('Google Analytics (G-TPJDF83DSN) yüklenemedi');
         };
         
-        document.head.appendChild(script);
+        document.head.appendChild(script1);
+
+        // Load second GA script (GT-KT9NDBKN)
+        const script2 = document.createElement('script');
+        script2.async = true;
+        script2.src = 'https://www.googletagmanager.com/gtag/js?id=GT-KT9NDBKN';
+        script2.crossOrigin = 'anonymous';
+        
+        script2.onload = () => {
+          gtag('config', 'GT-KT9NDBKN', {
+            page_title: document.title,
+            page_location: window.location.href,
+            anonymize_ip: true,
+            cookie_flags: 'SameSite=None;Secure'
+          });
+        };
+        
+        script2.onerror = () => {
+          console.warn('Google Analytics (GT-KT9NDBKN) yüklenemedi');
+        };
+        
+        document.head.appendChild(script2);
+        
       } catch (error) {
         console.warn('Google Analytics yükleme hatası:', error);
       }
@@ -73,7 +97,14 @@ export function GoogleAnalytics() {
     const trackPageView = () => {
       try {
         if (typeof (window as any).gtag === 'function') {
+          // Track for both GA properties
           (window as any).gtag('config', 'G-TPJDF83DSN', {
+            page_path: pathname + searchParams.toString(),
+            page_title: document.title,
+            page_location: window.location.href
+          });
+          
+          (window as any).gtag('config', 'GT-KT9NDBKN', {
             page_path: pathname + searchParams.toString(),
             page_title: document.title,
             page_location: window.location.href
