@@ -6,14 +6,43 @@ export async function GET() {
   try {
     const institutions = await fetchSitemapInstitutions();
     
+    // API'den gelen veriyi kontrol et
+    console.log('Sitemap için kurumlar:', institutions);
+    
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${institutions.map((institution) => `  <url>
-    <loc>${baseUrl}/kurum/${institution.kurum_id}</loc>
+${institutions.map((institution) => {
+  // Önce slug'ı kontrol et, yoksa kurum_adi'yi URL-safe hale getir
+  let kurumSlug = institution.slug;
+  
+  if (!kurumSlug && institution.kurum_adi) {
+    // kurum_adi'yi URL-safe slug'a çevir
+    kurumSlug = institution.kurum_adi
+      .toLowerCase()
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+  }
+  
+  if (!kurumSlug) {
+    console.warn('Kurum slug bulunamadı:', institution);
+    return null; // Bu kurumu atla
+  }
+  
+  return `  <url>
+    <loc>${baseUrl}/kurum/${kurumSlug}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>`).join('\n')}
+  </url>`;
+}).filter(Boolean).join('\n')}
 </urlset>`;
 
     return new Response(sitemap, {
