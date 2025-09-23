@@ -1,0 +1,23 @@
+# WordPress Blog için robots.txt
+# Bu dosyayı WordPress kurulumundan sonra /blog/ klasörüne kopyalayın
+
+User-agent: *
+Allow: /blog/
+Disallow: /blog/wp-admin/
+Disallow: /blog/wp-includes/
+Disallow: /blog/wp-content/plugins/
+Disallow: /blog/wp-content/themes/
+Disallow: /blog/wp-content/uploads/
+Disallow: /blog/wp-json/
+Disallow: /blog/wp-*.php
+Disallow: /blog/readme.html
+Disallow: /blog/license.txt
+
+# WordPress sitemap'i
+Sitemap: https://mevzuatgpt.org/blog/sitemap.xml
+
+# Ana site sitemap'leri
+Sitemap: https://mevzuatgpt.org/sitemap.xml
+Sitemap: https://mevzuatgpt.org/sitemap_kurumlar.xml
+Sitemap: https://mevzuatgpt.org/sitemap_belgeler.xml
+Sitemap: https://mevzuatgpt.org/sitemap_kurum_belgeler.xml
