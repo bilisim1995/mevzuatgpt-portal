@@ -3,19 +3,36 @@
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
+// Global Yandex Metrika loading state
+let yandexLoaded = false;
+let yandexLoading = false;
+let yandexInitialized = false;
+
 export function YandexMetrika() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Only load in production and after user interaction
-    if (process.env.NODE_ENV !== 'production') return;
+    // Check if already initialized
+    if (yandexInitialized) {
+      return;
+    }
     
-    let loaded = false;
+    // Check if already loaded or loading
+    if (yandexLoaded) {
+      return;
+    }
+    
+    if (yandexLoading) {
+      return;
+    }
+    
+    // Mark as initialized to prevent multiple initializations
+    yandexInitialized = true;
     
     const loadYandex = () => {
-      if (loaded) return;
-      loaded = true;
+      if (yandexLoaded || yandexLoading) return;
+      yandexLoading = true;
       
       try {
         // Initialize Yandex Metrika
@@ -31,6 +48,9 @@ export function YandexMetrika() {
         script.crossOrigin = 'anonymous';
         
         script.onload = () => {
+          yandexLoaded = true;
+          yandexLoading = false;
+          
           // Initialize Yandex Metrika
           (window as any).ym(104259542, 'init', {
             ssr: true,
@@ -43,7 +63,7 @@ export function YandexMetrika() {
         };
         
         script.onerror = () => {
-          console.warn('Yandex Metrika yüklenemedi');
+          yandexLoading = false;
         };
         
         document.head.appendChild(script);
@@ -61,40 +81,34 @@ export function YandexMetrika() {
         document.body.appendChild(noscript);
         
       } catch (error) {
-        console.warn('Yandex Metrika yükleme hatası:', error);
+        yandexLoading = false;
       }
     };
     
-    // Load Yandex after user interaction or after 3 seconds
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-    const loadOnInteraction = () => {
+    // Wait 3 seconds before starting Yandex Metrika
+    setTimeout(() => {
       loadYandex();
-      events.forEach(event => document.removeEventListener(event, loadOnInteraction));
-    };
-    
-    events.forEach(event => document.addEventListener(event, loadOnInteraction, { passive: true }));
-    
-    // Fallback: load after 3 seconds
-    const timeout = setTimeout(loadYandex, 3000);
+    }, 3000);
     
     return () => {
-      clearTimeout(timeout);
-      events.forEach(event => document.removeEventListener(event, loadOnInteraction));
+      // Cleanup if needed
     };
   }, []);
 
   // Track page views when route changes
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') return;
+    // Only track if Yandex is loaded
+    if (!yandexLoaded) {
+      return;
+    }
     
-    // Wait for Yandex to be loaded
     const trackPageView = () => {
       try {
         if (typeof (window as any).ym === 'function') {
           (window as any).ym(104259542, 'hit', pathname + searchParams.toString());
         }
       } catch (error) {
-        console.warn('Yandex tracking hatası:', error);
+        // Silent error handling
       }
     };
     

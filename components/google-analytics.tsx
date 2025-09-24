@@ -3,19 +3,36 @@
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
+// Global GA loading state
+let gaLoaded = false;
+let gaLoading = false;
+let gaInitialized = false;
+
 export function GoogleAnalytics() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Only load in production and after user interaction
-    if (process.env.NODE_ENV !== 'production') return;
+    // Check if already initialized
+    if (gaInitialized) {
+      return;
+    }
     
-    let loaded = false;
+    // Check if already loaded or loading
+    if (gaLoaded) {
+      return;
+    }
+    
+    if (gaLoading) {
+      return;
+    }
+    
+    // Mark as initialized to prevent multiple initializations
+    gaInitialized = true;
     
     const loadGA = () => {
-      if (loaded) return;
-      loaded = true;
+      if (gaLoaded || gaLoading) return;
+      gaLoading = true;
       
       try {
         // Initialize dataLayer
@@ -31,48 +48,48 @@ export function GoogleAnalytics() {
         script.crossOrigin = 'anonymous';
         
         script.onload = () => {
-          gtag('config', 'G-1Q3R9L70W0', {
-            page_title: document.title,
-            page_location: window.location.href,
-            anonymize_ip: true,
-            cookie_flags: 'SameSite=None;Secure'
-          });
+          gaLoaded = true;
+          gaLoading = false;
+          
+          // Wait a bit for gtag to be available
+          setTimeout(() => {
+            gtag('config', 'G-1Q3R9L70W0', {
+              page_title: document.title,
+              page_location: window.location.href,
+              anonymize_ip: true,
+              cookie_flags: 'SameSite=None;Secure'
+            });
+          }, 100);
         };
         
         script.onerror = () => {
-          console.warn('Google Analytics (G-1Q3R9L70W0) yüklenemedi');
+          gaLoading = false;
         };
         
         document.head.appendChild(script);
         
       } catch (error) {
-        console.warn('Google Analytics yükleme hatası:', error);
+        gaLoading = false;
       }
     };
     
-    // Load GA after user interaction or after 3 seconds
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-    const loadOnInteraction = () => {
+    // Wait 3 seconds before starting GA (regardless of page load state)
+    setTimeout(() => {
       loadGA();
-      events.forEach(event => document.removeEventListener(event, loadOnInteraction));
-    };
-    
-    events.forEach(event => document.addEventListener(event, loadOnInteraction, { passive: true }));
-    
-    // Fallback: load after 3 seconds
-    const timeout = setTimeout(loadGA, 3000);
+    }, 3000);
     
     return () => {
-      clearTimeout(timeout);
-      events.forEach(event => document.removeEventListener(event, loadOnInteraction));
+      // Cleanup if needed
     };
   }, []);
 
   // Track page views when route changes
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') return;
+    // Only track if GA is loaded
+    if (!gaLoaded) {
+      return;
+    }
     
-    // Wait for GA to be loaded
     const trackPageView = () => {
       try {
         if (typeof (window as any).gtag === 'function') {
@@ -84,7 +101,7 @@ export function GoogleAnalytics() {
           });
         }
       } catch (error) {
-        console.warn('GA tracking hatası:', error);
+        // Silent error handling
       }
     };
     

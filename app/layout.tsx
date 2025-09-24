@@ -87,7 +87,7 @@ export default function RootLayout({
         <meta name="msapplication-tap-highlight" content="no" />
         
         {/* Preload critical images - optimized sizes */}
-        <link rel="preload" href="/favicon-32x32.png" as="image" type="image/png" crossOrigin="anonymous" />
+        {/* Favicon preload removed - favicons are loaded automatically */}
         
         {/* Critical CSS inline yükleme - Optimized */}
         <style dangerouslySetInnerHTML={{

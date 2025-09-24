@@ -69,21 +69,21 @@
       "url": "/?action=search-institution",
       "icons": [
         {
-          "src": "/favicon-192x192.png",
+          "src": "/android-chrome-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
       ]
     },
     {
-      "name": "AI Asistan",
-      "short_name": "AI Asistan", 
-      "description": "Yapay zeka asistanı ile mevzuat analizi",
-      "url": "https://uygulama.mevzuatgpt.org",
+      "name": "Mevzuat Listesi",
+      "short_name": "Mevzuat",
+      "description": "Tüm mevzuat listesini görüntüle",
+      "url": "/mevzuat",
       "icons": [
         {
-          "src": "/favicon-192x192.png",
-          "sizes": "192x192", 
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192",
           "type": "image/png"
         }
       ]
