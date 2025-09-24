@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         ...regulation.tags.slice(0, 5)
       ],
       openGraph: {
-        title: `${regulation.title} | Mevzuat Portal`,
+        title: `${regulation.title} | Mevzuat GPT`,
         description: regulation.summary,
         type: 'article',
         publishedTime: regulation.publishDate,

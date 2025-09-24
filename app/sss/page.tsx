@@ -11,11 +11,11 @@ const Header = dynamic(() => import('@/components/header').then(mod => ({ defaul
 
 export const metadata: Metadata = {
   title: 'Sıkça Sorulan Sorular',
-  description: 'Mevzuat Portal hakkında sıkça sorulan sorular ve cevapları. Platform kullanımı, özellikler ve destek bilgileri.',
-  keywords: ['sss', 'sıkça sorulan sorular', 'yardım', 'destek', 'mevzuat portal'],
+  description: 'Mevzuat GPT hakkında sıkça sorulan sorular ve cevapları. Platform kullanımı, özellikler ve destek bilgileri.',
+  keywords: ['sss', 'sıkça sorulan sorular', 'yardım', 'destek', 'Mevzuat GPT'],
   openGraph: {
-    title: 'Sıkça Sorulan Sorular | Mevzuat Portal',
-    description: 'Mevzuat Portal hakkında sıkça sorulan sorular ve cevapları. Platform kullanımı, özellikler ve destek bilgileri.',
+    title: 'Sıkça Sorulan Sorular | Mevzuat GPT',
+    description: 'Mevzuat GPT hakkında sıkça sorulan sorular ve cevapları. Platform kullanımı, özellikler ve destek bilgileri.',
     type: 'website',
   },
   alternates: {
@@ -52,12 +52,12 @@ export default function FAQPage() {
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="item-1">
                       <AccordionTrigger className="text-left">
-                        Mevzuat Portal nedir ve nasıl kullanılır?
+                        Mevzuat GPT nedir ve nasıl kullanılır?
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-3 text-gray-600 dark:text-gray-300">
                           <p>
-                            Mevzuat Portal, kamu kurumlarının yayınladığı genelge, yönetmelik ve diğer 
+                            Mevzuat GPT, kamu kurumlarının yayınladığı genelge, yönetmelik ve diğer 
                             mevzuat metinlerine tek noktadan erişim sağlayan bir platformdur.
                           </p>
                           <p>Kullanım adımları:</p>
@@ -77,7 +77,7 @@ export default function FAQPage() {
                       </AccordionTrigger>
                       <AccordionContent>
                         <p className="text-gray-600 dark:text-gray-300">
-                          Evet, Mevzuat Portal tamamen ücretsizdir. Tüm mevzuat metinlerine, 
+                          Evet, Mevzuat GPT tamamen ücretsizdir. Tüm mevzuat metinlerine, 
                           arama özelliklerine ve yapay zeka asistanına ücretsiz erişebilirsiniz. 
                           Kayıt olmaya da gerek yoktur.
                         </p>
@@ -176,7 +176,7 @@ export default function FAQPage() {
                       </AccordionTrigger>
                       <AccordionContent>
                         <p className="text-gray-600 dark:text-gray-300">
-                          Evet, Mevzuat Portal mobil uyumlu olarak tasarlanmıştır. 
+                          Evet, Mevzuat GPT mobil uyumlu olarak tasarlanmıştır. 
                           Telefon, tablet ve bilgisayarınızdan aynı özelliklere erişebilirsiniz. 
                           Responsive tasarım sayesinde her cihazda optimal görüntüleme sağlanır.
                         </p>

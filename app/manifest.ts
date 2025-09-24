@@ -2,8 +2,8 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Mevzuat Portal - Güncel Genelgeler ve Mevzuat Metinleri',
-    short_name: 'Mevzuat Portal',
+    name: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
+    short_name: 'Mevzuat GPT',
     description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform. Yapay zeka destekli arama ile hızlı erişim.',
     start_url: '/',
     display: 'standalone',

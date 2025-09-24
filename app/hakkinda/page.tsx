@@ -11,11 +11,11 @@ const Header = dynamic(() => import('@/components/header').then(mod => ({ defaul
 
 export const metadata: Metadata = {
   title: 'Hakkımızda',
-  description: 'Mevzuat Portal hakkında bilgi edinin. Misyonumuz, vizyonumuz ve değerlerimizi keşfedin.',
-  keywords: ['hakkımızda', 'misyon', 'vizyon', 'mevzuat portal', 'kamu mevzuatı'],
+  description: 'Mevzuat GPT hakkında bilgi edinin. Misyonumuz, vizyonumuz ve değerlerimizi keşfedin.',
+  keywords: ['hakkımızda', 'misyon', 'vizyon', 'Mevzuat GPT', 'kamu mevzuatı'],
   openGraph: {
-    title: 'Hakkımızda | Mevzuat Portal',
-    description: 'Mevzuat Portal hakkında bilgi edinin. Misyonumuz, vizyonumuz ve değerlerimizi keşfedin.',
+    title: 'Hakkımızda | Mevzuat GPT',
+    description: 'Mevzuat GPT hakkında bilgi edinin. Misyonumuz, vizyonumuz ve değerlerimizi keşfedin.',
     type: 'website',
   },
   alternates: {
@@ -172,18 +172,18 @@ export default function AboutPage() {
                 <CardContent className="p-8 lg:p-12">
                   <div className="prose prose-lg dark:prose-invert max-w-none">
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-                      Mevzuat Portal Nedir?
+                      Mevzuat GPT Nedir?
                     </h2>
                     
                     <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                      Mevzuat Portal, Türkiye'deki kamu kurumlarının yayınladığı genelge, yönetmelik, 
+                      Mevzuat GPT, Türkiye'deki kamu kurumlarının yayınladığı genelge, yönetmelik, 
                       tebliğ ve diğer mevzuat metinlerine tek noktadan erişim sağlayan modern bir platformdur. 
                       Vatandaşların, akademisyenlerin, hukukçuların ve kamu çalışanlarının güncel mevzuat 
                       bilgilerine hızlı ve kolay erişimini hedefler.
                     </p>
 
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                      Neden Mevzuat Portal?
+                      Neden Mevzuat GPT?
                     </h3>
                     
                     <ul className="space-y-3 text-gray-600 dark:text-gray-300 mb-6">

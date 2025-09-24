@@ -87,7 +87,7 @@ export function PWAInstallPrompt() {
             Uygulamayı Yükle
           </h4>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-            Mevzuat Portal'ı telefonunuza yükleyerek daha hızlı erişim sağlayın.
+            Mevzuat GPT'ı telefonunuza yükleyerek daha hızlı erişim sağlayın.
           </p>
           <div className="flex space-x-2">
             <Button

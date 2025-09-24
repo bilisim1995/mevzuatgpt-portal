@@ -18,7 +18,7 @@ export function Header() {
           <Link href="/" className="flex items-center">
             <img 
               src="/mevzuat-logo-beyaz.png" 
-              alt="Mevzuat Portal Logo" 
+              alt="Mevzuat GPT Logo" 
               className="h-10 w-auto dark:hidden"
               width={224}
               height={40}
@@ -27,7 +27,7 @@ export function Header() {
             />
             <img 
               src="/mevzuat-logo-siyah.png" 
-              alt="Mevzuat Portal Logo" 
+              alt="Mevzuat GPT Logo" 
               className="h-10 w-auto hidden dark:block"
               width={224}
               height={40}

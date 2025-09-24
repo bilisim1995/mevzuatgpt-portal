@@ -9,11 +9,11 @@ const Header = dynamic(() => import('@/components/header').then(mod => ({ defaul
 
 export const metadata: Metadata = {
   title: 'Çerez Politikası',
-  description: 'Mevzuat Portal çerez politikası. Çerez kullanımı ve veri toplama hakkında bilgiler.',
+  description: 'Mevzuat GPT çerez politikası. Çerez kullanımı ve veri toplama hakkında bilgiler.',
   keywords: ['çerez politikası', 'cookies', 'veri toplama', 'tracking'],
   openGraph: {
-    title: 'Çerez Politikası | Mevzuat Portal',
-    description: 'Mevzuat Portal çerez politikası. Çerez kullanımı ve veri toplama hakkında bilgiler.',
+    title: 'Çerez Politikası | Mevzuat GPT',
+    description: 'Mevzuat GPT çerez politikası. Çerez kullanımı ve veri toplama hakkında bilgiler.',
     type: 'website',
   },
   alternates: {

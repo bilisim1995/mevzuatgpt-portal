@@ -9,11 +9,11 @@ const Header = dynamic(() => import('@/components/header').then(mod => ({ defaul
 
 export const metadata: Metadata = {
   title: 'Gizlilik Politikası',
-  description: 'Mevzuat Portal gizlilik politikası. Kişisel verilerinizin korunması ve işlenmesi hakkında bilgiler.',
+  description: 'Mevzuat GPT gizlilik politikası. Kişisel verilerinizin korunması ve işlenmesi hakkında bilgiler.',
   keywords: ['gizlilik politikası', 'kişisel veriler', 'KVKK', 'veri koruma'],
   openGraph: {
-    title: 'Gizlilik Politikası | Mevzuat Portal',
-    description: 'Mevzuat Portal gizlilik politikası. Kişisel verilerinizin korunması ve işlenmesi hakkında bilgiler.',
+    title: 'Gizlilik Politikası | Mevzuat GPT',
+    description: 'Mevzuat GPT gizlilik politikası. Kişisel verilerinizin korunması ve işlenmesi hakkında bilgiler.',
     type: 'website',
   },
   alternates: {
@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
                   <div className="prose prose-lg dark:prose-invert max-w-none">
                     <h2>1. Veri Sorumlusu</h2>
                     <p>
-                      Bu gizlilik politikası, Mevzuat Portal ("Platform") tarafından işlenen kişisel verilerinizin 
+                      Bu gizlilik politikası, Mevzuat GPT ("Platform") tarafından işlenen kişisel verilerinizin 
                       korunması amacıyla hazırlanmıştır.
                     </p>
 

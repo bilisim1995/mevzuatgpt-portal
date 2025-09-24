@@ -19,14 +19,14 @@ const baseUrl = process.env.NODE_ENV === 'production'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    template: '%s | Mevzuat Portal',
-    default: 'Mevzuat Portal - Güncel Genelgeler ve Mevzuat Metinleri'
+    template: '%s | Mevzuat GPT',
+    default: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri'
   },
   description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform. Hızlı arama, kategorilere göre filtreleme.',
   keywords: ['mevzuat', 'genelge', 'yönetmelik', 'kamu', 'hukuk', 'kanun', 'resmi gazete'],
-  authors: [{ name: 'Mevzuat Portal' }],
-  creator: 'Mevzuat Portal',
-  publisher: 'Mevzuat Portal',
+  authors: [{ name: 'Mevzuat GPT' }],
+  creator: 'Mevzuat GPT',
+  publisher: 'Mevzuat GPT',
   robots: {
     index: true,
     follow: true,
@@ -42,13 +42,13 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'tr_TR',
     url: baseUrl,
-    title: 'Mevzuat Portal - Güncel Genelgeler ve Mevzuat Metinleri',
+    title: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
     description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform.',
-    siteName: 'Mevzuat Portal',
+    siteName: 'Mevzuat GPT',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mevzuat Portal - Güncel Genelgeler ve Mevzuat Metinleri',
+    title: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
     description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform.',
     creator: '@mevzuatportal',
   },
@@ -76,10 +76,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://mc.yandex.ru" />
         
         {/* PWA Meta Tags */}
-        <meta name="application-name" content="Mevzuat Portal" />
+        <meta name="application-name" content="Mevzuat GPT" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Mevzuat Portal" />
+        <meta name="apple-mobile-web-app-title" content="Mevzuat GPT" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
@@ -161,7 +161,7 @@ export default function RootLayout({
                 {
                   "@type": "Organization",
                   "@id": `${baseUrl}/#organization`,
-                  "name": "Mevzuat Portal",
+                  "name": "Mevzuat GPT",
                   "url": baseUrl,
                   "logo": {
                     "@type": "ImageObject",
@@ -183,7 +183,7 @@ export default function RootLayout({
                   "@type": "WebSite",
                   "@id": `${baseUrl}/#website`,
                   "url": baseUrl,
-                  "name": "Mevzuat Portal",
+                  "name": "Mevzuat GPT",
                   "description": "Türkiye'nin en kapsamlı mevzuat veritabanı - Genelge, yönetmelik ve mevzuat metinleri",
                   "publisher": {
                     "@id": `${baseUrl}/#organization`
@@ -202,7 +202,7 @@ export default function RootLayout({
                   "@type": "WebPage",
                   "@id": `${baseUrl}/#webpage`,
                   "url": baseUrl,
-                  "name": "Mevzuat Portal - Güncel Genelgeler ve Mevzuat Metinleri",
+                  "name": "Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri",
                   "isPartOf": {
                     "@id": `${baseUrl}/#website`
                   },

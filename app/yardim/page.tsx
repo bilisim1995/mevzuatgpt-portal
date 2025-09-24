@@ -11,11 +11,11 @@ const Header = dynamic(() => import('@/components/header').then(mod => ({ defaul
 
 export const metadata: Metadata = {
   title: 'Yardım',
-  description: 'Mevzuat Portal kullanım kılavuzu. Platform özelliklerini nasıl kullanacağınızı öğrenin.',
-  keywords: ['yardım', 'kullanım kılavuzu', 'rehber', 'nasıl kullanılır', 'mevzuat portal'],
+  description: 'Mevzuat GPT kullanım kılavuzu. Platform özelliklerini nasıl kullanacağınızı öğrenin.',
+  keywords: ['yardım', 'kullanım kılavuzu', 'rehber', 'nasıl kullanılır', 'Mevzuat GPT'],
   openGraph: {
-    title: 'Yardım | Mevzuat Portal',
-    description: 'Mevzuat Portal kullanım kılavuzu. Platform özelliklerini nasıl kullanacağınızı öğrenin.',
+    title: 'Yardım | Mevzuat GPT',
+    description: 'Mevzuat GPT kullanım kılavuzu. Platform özelliklerini nasıl kullanacağınızı öğrenin.',
     type: 'website',
   },
   alternates: {
@@ -56,7 +56,7 @@ export default function HelpPage() {
                         Platform Nasıl Kullanılır?
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">
-                        Mevzuat Portal'a hoş geldiniz! Bu platform, kamu kurumlarının mevzuat metinlerine 
+                        Mevzuat GPT'a hoş geldiniz! Bu platform, kamu kurumlarının mevzuat metinlerine 
                         hızlı ve kolay erişim sağlar. İki ana yöntemle mevzuatlara ulaşabilirsiniz:
                       </p>
                       <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 ml-4">

@@ -13,7 +13,7 @@ export function Footer() {
             <div className="flex items-center">
               <img 
                 src="/mevzuat-logo-beyaz.png" 
-                alt="Mevzuat Portal Logo" 
+                alt="Mevzuat GPT Logo" 
                 className="h-8 w-auto dark:hidden"
                 width={179}
                 height={32}
@@ -22,7 +22,7 @@ export function Footer() {
               />
               <img 
                 src="/mevzuat-logo-siyah.png" 
-                alt="Mevzuat Portal Logo" 
+                alt="Mevzuat GPT Logo" 
                 className="h-8 w-auto hidden dark:block"
                 width={179}
                 height={32}

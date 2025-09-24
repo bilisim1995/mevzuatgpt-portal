@@ -9,11 +9,11 @@ const Header = dynamic(() => import('@/components/header').then(mod => ({ defaul
 
 export const metadata: Metadata = {
   title: 'Kullanım Koşulları',
-  description: 'Mevzuat Portal kullanım koşulları. Platform kullanımına ilişkin kurallar ve şartlar.',
-  keywords: ['kullanım koşulları', 'şartlar', 'kurallar', 'mevzuat portal'],
+  description: 'Mevzuat GPT kullanım koşulları. Platform kullanımına ilişkin kurallar ve şartlar.',
+  keywords: ['kullanım koşulları', 'şartlar', 'kurallar', 'Mevzuat GPT'],
   openGraph: {
-    title: 'Kullanım Koşulları | Mevzuat Portal',
-    description: 'Mevzuat Portal kullanım koşulları. Platform kullanımına ilişkin kurallar ve şartlar.',
+    title: 'Kullanım Koşulları | Mevzuat GPT',
+    description: 'Mevzuat GPT kullanım koşulları. Platform kullanımına ilişkin kurallar ve şartlar.',
     type: 'website',
   },
   alternates: {
@@ -44,12 +44,12 @@ export default function TermsOfServicePage() {
                   <div className="prose prose-lg dark:prose-invert max-w-none">
                     <h2>1. Genel Hükümler</h2>
                     <p>
-                      Bu kullanım koşulları, Mevzuat Portal ("Platform") kullanımına ilişkin kuralları belirler. 
+                      Bu kullanım koşulları, Mevzuat GPT ("Platform") kullanımına ilişkin kuralları belirler. 
                       Platformu kullanarak bu koşulları kabul etmiş sayılırsınız.
                     </p>
 
                     <h2>2. Platform Hizmetleri</h2>
-                    <p>Mevzuat Portal aşağıdaki hizmetleri sunar:</p>
+                    <p>Mevzuat GPT aşağıdaki hizmetleri sunar:</p>
                     <ul>
                       <li>Kamu kurumlarının mevzuat metinlerine erişim</li>
                       <li>Mevzuat arama ve filtreleme</li>

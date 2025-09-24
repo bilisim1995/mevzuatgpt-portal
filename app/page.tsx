@@ -95,10 +95,10 @@ export default function HomePage() {
               <div className="pt-8">
                 <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800">
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-                    Neden Mevzuat Portal?
+                    Neden Mevzuat GPT?
                   </h3>
                   <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
-                    Geleneksel <strong>mevzuat takibi</strong> zaman alıcı ve karmaşıktır. Mevzuat Portal, 
+                    Geleneksel <strong>mevzuat takibi</strong> zaman alıcı ve karmaşıktır. Mevzuat GPT, 
                     bu süreci basitleştirerek size zaman kazandırır. Güncel <strong>genelge</strong>, 
                     <strong>yönetmelik</strong> ve <strong>mevzuat bilgileri</strong>ne hızla ulaşın, 
                     yapay zeka ile karmaşık <strong>hukuki metinleri</strong> anlayın ve işinizi daha verimli yapın.
@@ -120,10 +120,10 @@ export default function HomePage() {
               <div className="space-y-8">
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                    Mevzuat Portal nedir?
+                    Mevzuat GPT nedir?
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Mevzuat Portal, kamu kurumlarının yayınladığı <strong>genelge</strong>, 
+                    Mevzuat GPT, kamu kurumlarının yayınladığı <strong>genelge</strong>, 
                     <strong>yönetmelik</strong>, <strong>tebliğ</strong> ve diğer <strong>mevzuat metinleri</strong>ni 
                     tek platformda toplayan Türkiye'nin en kapsamlı <strong>mevzuat veritabanı</strong>dır.
                   </p>

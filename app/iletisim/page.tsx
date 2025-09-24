@@ -13,11 +13,11 @@ const Header = dynamic(() => import('@/components/header').then(mod => ({ defaul
 
 export const metadata: Metadata = {
   title: 'İletişim',
-  description: 'Mevzuat Portal ile iletişime geçin. Sorularınız, önerileriniz ve geri bildirimleriniz için bizimle iletişim kurun.',
-  keywords: ['iletişim', 'destek', 'geri bildirim', 'mevzuat portal', 'yardım'],
+  description: 'Mevzuat GPT ile iletişime geçin. Sorularınız, önerileriniz ve geri bildirimleriniz için bizimle iletişim kurun.',
+  keywords: ['iletişim', 'destek', 'geri bildirim', 'Mevzuat GPT', 'yardım'],
   openGraph: {
-    title: 'İletişim | Mevzuat Portal',
-    description: 'Mevzuat Portal ile iletişime geçin. Sorularınız, önerileriniz ve geri bildirimleriniz için bizimle iletişim kurun.',
+    title: 'İletişim | Mevzuat GPT',
+    description: 'Mevzuat GPT ile iletişime geçin. Sorularınız, önerileriniz ve geri bildirimleriniz için bizimle iletişim kurun.',
     type: 'website',
   },
   alternates: {
@@ -174,7 +174,7 @@ export default function ContactPage() {
                           Platform ücretsiz mi?
                         </h4>
                         <p className="text-sm text-gray-600 dark:text-gray-300">
-                          Evet, Mevzuat Portal tamamen ücretsizdir ve herkese açıktır.
+                          Evet, Mevzuat GPT tamamen ücretsizdir ve herkese açıktır.
                         </p>
                       </div>
                       

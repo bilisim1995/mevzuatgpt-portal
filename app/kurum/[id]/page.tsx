@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       institution.category === 'ministry' ? 'bakanlık' : 'kurum'
     ],
     openGraph: {
-      title: `${institution.name} Mevzuatı | Mevzuat Portal`,
+      title: `${institution.name} Mevzuatı | Mevzuat GPT`,
       description: `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${regulations.length} adet güncel mevzuat metni.`,
       type: 'website',
     },

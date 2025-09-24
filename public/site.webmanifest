@@ -1,6 +1,6 @@
 {
-  "name": "Mevzuat Portal",
-  "short_name": "Mevzuat Portal",
+  "name": "Mevzuat GPT",
+  "short_name": "Mevzuat GPT",
   "description": "Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform. Yapay zeka destekli arama ile hızlı erişim.",
   "lang": "tr",
   "dir": "ltr",
@@ -11,14 +11,14 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Mevzuat Portal Ana Sayfa"
+      "label": "Mevzuat GPT Ana Sayfa"
     },
     {
       "src": "/screenshot-narrow.png", 
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Mevzuat Portal Mobil Görünüm"
+      "label": "Mevzuat GPT Mobil Görünüm"
     }
   ],
   "icons": [
