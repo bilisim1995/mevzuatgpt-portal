@@ -44,9 +44,14 @@ export function Header() {
             <Link href="/hakkinda" className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Hakkında
             </Link>
-            <Link href="/blog" className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+            <a 
+              href="https://blog.mevzuatgpt.org" 
+              target="_blank" 
+              rel="follow noopener noreferrer"
+              className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+            >
               Blog
-            </Link>
+            </a>
             <Link href="/iletisim" className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               İletişim
             </Link>
@@ -90,9 +95,14 @@ export function Header() {
               <Link href="/hakkinda" className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                 Hakkında
               </Link>
-              <Link href="/blog" className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+              <a 
+                href="https://blog.mevzuatgpt.org" 
+                target="_blank" 
+                rel="follow noopener noreferrer"
+                className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+              >
                 Blog
-              </Link>
+              </a>
               <Link href="/iletisim" className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                 İletişim
               </Link>
