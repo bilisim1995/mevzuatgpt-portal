@@ -2,11 +2,11 @@ import './globals.css';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 
 // Lazy load components
 const ThemeProvider = dynamic(() => import('@/components/theme-provider').then(mod => ({ default: mod.ThemeProvider })), { ssr: false });
 const Toaster = dynamic(() => import('@/components/ui/sonner').then(mod => ({ default: mod.Toaster })), { ssr: false });
-const GoogleAnalytics = dynamic(() => import('@/components/google-analytics').then(mod => ({ default: mod.GoogleAnalytics })), { ssr: false });
 const YandexMetrika = dynamic(() => import('@/components/yandex-metrika').then(mod => ({ default: mod.YandexMetrika })), { ssr: false });
 const PWAInstallPrompt = dynamic(() => import('@/components/pwa-install-prompt').then(mod => ({ default: mod.PWAInstallPrompt })), { ssr: false });
 const OfflineIndicator = dynamic(() => import('@/components/offline-indicator').then(mod => ({ default: mod.OfflineIndicator })), { ssr: false });
@@ -230,9 +230,10 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <Suspense fallback={null}>
-          <GoogleAnalytics />
           <YandexMetrika />
         </Suspense>
+        <GoogleAnalytics gaId="G-1Q3R9L70W0" />
+        <GoogleTagManager gtmId="GTM-N7RFBFCD" />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
