@@ -473,6 +473,16 @@ picture img {
   }
 }
 
+/* Kayan yazı için sürekli animasyon - tüm içerik bitene kadar */
+@keyframes scroll-continuous {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 /* Kayan yazı container */
 .scroll-container {
   overflow: hidden;
@@ -486,7 +496,7 @@ picture img {
 .scroll-content {
   display: flex;
   align-items: flex-end;
-  animation: scroll-right 20s linear infinite;
+  animation: scroll-continuous 30s linear infinite;
   will-change: transform;
   white-space: nowrap;
   height: 100%;
@@ -498,15 +508,15 @@ picture img {
   animation-play-state: paused;
 }
 
-/* Responsive animasyon hızı */
+/* Responsive animasyon hızı - daha uzun süreler */
 @media (max-width: 768px) {
   .scroll-content {
-    animation-duration: 15s;
+    animation-duration: 25s;
   }
 }
 
 @media (max-width: 480px) {
   .scroll-content {
-    animation-duration: 10s;
+    animation-duration: 20s;
   }
 }
