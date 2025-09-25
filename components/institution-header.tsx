@@ -5,10 +5,11 @@ import Image from 'next/image';
 import { Institution } from '@/lib/data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Building, Loader2, FileText, CheckCircle, ExternalLink } from 'lucide-react';
+import { Building, Loader2, FileText, CheckCircle, ExternalLink, Circle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { fetchKurumDuyurular, KurumDuyuru } from '@/lib/api';
+import { UsefulLinksModal } from '@/components/useful-links-modal';
 
 interface Props {
   institution: Institution;
@@ -33,6 +34,9 @@ const categoryColors = {
 export function InstitutionHeader({ institution, regulations, loading = false }: Props) {
   const [duyurular, setDuyurular] = useState<KurumDuyuru[]>([]);
   const [duyuruLoading, setDuyuruLoading] = useState(true);
+  const [isUsefulLinksModalOpen, setIsUsefulLinksModalOpen] = useState(false);
+  const [currentDuyuruIndex, setCurrentDuyuruIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const loadDuyurular = async () => {
@@ -59,6 +63,36 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
 
     return () => clearTimeout(timer);
   }, [institution.id]);
+
+  // Duyuru değişim timer'ı ve progress bar
+  useEffect(() => {
+    if (duyurular.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentDuyuruIndex((prevIndex) => 
+        (prevIndex + 1) % duyurular.length
+      );
+      setProgress(0); // Her değişimde progress'i sıfırla
+    }, 5000); // 5 saniye
+
+    return () => clearInterval(interval);
+  }, [duyurular.length]);
+
+  // Progress bar animasyonu
+  useEffect(() => {
+    if (duyurular.length <= 1) return;
+
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          return 0;
+        }
+        return prev + 2; // Her 100ms'de %2 artır (5 saniyede %100)
+      });
+    }, 100);
+
+    return () => clearInterval(progressInterval);
+  }, [duyurular.length, currentDuyuruIndex]);
 
   return (
     <section className="relative overflow-hidden py-6 sm:py-8 lg:py-10">
@@ -151,10 +185,15 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
                     <FileText className="h-4 w-4 mr-1" />
                     Yüklü belge sayısı: {institution.documentCount} adet
                   </Badge>
-                  <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs sm:text-sm px-3 py-1">
-                    <CheckCircle className="h-4 w-4 mr-1" />
-                    Güncel
-                  </Badge>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setIsUsefulLinksModalOpen(true)}
+                    className="text-xs sm:text-sm px-3 py-1 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 text-blue-700 dark:text-white border-blue-200 dark:border-blue-700"
+                  >
+                    <ExternalLink className="h-4 w-4 mr-1" />
+                    Yararlı Linkler
+                  </Button>
                 </div>
               </div>
             </div>
@@ -163,85 +202,63 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
             {(duyurular.length > 0 || duyuruLoading) && (
               <div className="mt-auto">
                 <hr className="mt-2 mb-0 border-gray-200 dark:border-gray-600" />
-                <div className="scroll-container">
-                  <div className="scroll-content">
-                    {duyuruLoading ? (
-                      // Skeleton Loading
-                      <>
-                        {[...Array(3)].map((_, index) => (
-                          <div key={index} className="flex-shrink-0 mr-4">
-                            <div className="flex items-center space-x-1">
-                              <div className="h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                              <div className="h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                              <div className="h-3 w-16 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+                <div className="duyuru-container">
+                  {duyuruLoading ? (
+                    // Skeleton Loading
+                    <div className="flex items-center space-x-1">
+                      <div className="h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+                      <div className="h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+                      <div className="h-3 w-16 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+                    </div>
+                  ) : (
+                    // Gerçek Duyurular - Aşağıdan yukarı değişim
+                    <div className="duyuru-content">
+                      {duyurular.map((duyuru, index) => (
+                        <div 
+                          key={index}
+                          className={`duyuru-item ${index === currentDuyuruIndex ? 'active' : ''}`}
+                        >
+                          <a
+                            href={duyuru.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center space-x-1 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
+                          >
+                            <span className="font-medium group-hover:underline duyuru-baslik">
+                              {duyuru.baslik}
+                            </span>
+                            <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </a>
+                          
+                          {/* Tarih ve progress bar - hem masaüstü hem mobil */}
+                          <div className="duyuru-bottom">
+                            <span className="duyuru-tarih">
+                              {duyuru.tarih}
+                            </span>
+                            <div className="duyuru-progress">
+                              <div 
+                                className="duyuru-progress-bar"
+                                style={{ width: `${progress}%` }}
+                              ></div>
                             </div>
                           </div>
-                        ))}
-                        {[...Array(3)].map((_, index) => (
-                          <div key={`skeleton-repeat-${index}`} className="flex-shrink-0 mr-4">
-                            <div className="flex items-center space-x-1">
-                              <div className="h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                              <div className="h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                              <div className="h-3 w-16 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                            </div>
-                          </div>
-                        ))}
-                      </>
-                    ) : (
-                      // Gerçek Duyurular
-                      <>
-                        {duyurular.map((duyuru, index) => (
-                          <div key={index} className="flex-shrink-0 mr-4">
-                            <a
-                              href={duyuru.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center space-x-1 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
-                            >
-                              <svg className="h-4 w-4 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                              </svg>
-                              <span className="font-medium group-hover:underline">
-                                {duyuru.baslik}
-                              </span>
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {duyuru.tarih}
-                              </span>
-                              <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </a>
-                          </div>
-                        ))}
-                        {/* Animasyon için tekrar eden içerik */}
-                        {duyurular.map((duyuru, index) => (
-                          <div key={`repeat-${index}`} className="flex-shrink-0 mr-4">
-                            <a
-                              href={duyuru.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center space-x-1 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
-                            >
-                              <svg className="h-4 w-4 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                              </svg>
-                              <span className="font-medium group-hover:underline">
-                                {duyuru.baslik}
-                              </span>
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                {duyuru.tarih}
-                              </span>
-                              <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </a>
-                          </div>
-                        ))}
-                      </>
-                    )}
-                  </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
                 </div>
               </div>
             )}
           </div>
         </div>
       </div>
+      
+      {/* Yararlı Linkler Modal */}
+      <UsefulLinksModal 
+        isOpen={isUsefulLinksModalOpen}
+        onClose={() => setIsUsefulLinksModalOpen(false)}
+      />
     </section>
   )
 }
