@@ -29,6 +29,100 @@ const ScrollToTop = dynamic(() => import('@/components/scroll-to-top').then(mod 
 export default function HomePage() {
   return (
     <div className="flex flex-col">
+      {/* WebSite Schema - Ana sayfa için */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "MevzuatGPT",
+            "alternateName": "Mevzuat GPT",
+            "url": "https://mevzuatgpt.org",
+            "description": "Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine kolayca ulaşın. Yapay zeka destekli mevzuat arama ve analiz platformu.",
+            "inLanguage": "tr-TR",
+            "publisher": {
+              "@type": "Organization",
+              "name": "MevzuatGPT",
+              "url": "https://mevzuatgpt.org",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://mevzuatgpt.org/mevzuat-logo-beyaz.png",
+                "width": 179,
+                "height": 32
+              },
+              "sameAs": [
+                "https://orbitinovasyon.com"
+              ]
+            },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://mevzuatgpt.org/arama?q={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            },
+            "mainEntity": {
+              "@type": "ItemList",
+              "name": "Türkiye Kamu Kurumları Mevzuat Listesi",
+              "description": "Türkiye'deki tüm kamu kurumlarının mevzuat metinleri, genelgeler, yönetmelikler ve tebliğler",
+              "numberOfItems": "1000+",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Bakanlıklar",
+                  "description": "Türkiye Cumhuriyeti Bakanlıkları mevzuat metinleri"
+                },
+                {
+                  "@type": "ListItem", 
+                  "position": 2,
+                  "name": "Bağımsız İdari Otoriteler",
+                  "description": "Bağımsız idari otoritelerin mevzuat metinleri"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Belediyeler",
+                  "description": "Büyükşehir ve il belediyelerinin mevzuat metinleri"
+                }
+              ]
+            },
+            "offers": {
+              "@type": "Offer",
+              "name": "Ücretsiz Mevzuat Erişimi",
+              "description": "Tüm mevzuat metinlerine ücretsiz erişim",
+              "price": "0",
+              "priceCurrency": "TRY",
+              "availability": "https://schema.org/InStock"
+            },
+            "applicationCategory": "GovernmentApplication",
+            "operatingSystem": "Web Browser",
+            "browserRequirements": "Requires JavaScript. Requires HTML5.",
+            "softwareVersion": "1.0.0",
+            "dateCreated": "2024-01-01",
+            "dateModified": new Date().toISOString().split('T')[0],
+            "isAccessibleForFree": true,
+            "license": "https://creativecommons.org/licenses/by/4.0/",
+            "keywords": [
+              "mevzuat",
+              "genelge", 
+              "yönetmelik",
+              "tebliğ",
+              "resmi gazete",
+              "hukuki düzenlemeler",
+              "kamu kurumları",
+              "bakanlık",
+              "belediye",
+              "yapay zeka",
+              "mevzuat arama",
+              "hukuki metinler"
+            ]
+          })
+        }}
+      />
+      
       <Header />
       
       <main className="flex-1">

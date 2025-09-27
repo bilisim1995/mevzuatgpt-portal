@@ -45,12 +45,22 @@ export const metadata: Metadata = {
     title: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
     description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform.',
     siteName: 'Mevzuat GPT',
+    images: [
+      {
+        url: '/mevzuat-logo-beyaz.png',
+        width: 179,
+        height: 32,
+        alt: 'Mevzuat GPT Logo',
+      }
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
     description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform.',
     creator: '@mevzuatportal',
+    site: '@mevzuatportal',
+    images: ['/mevzuat-logo-beyaz.png'],
   },
   verification: {
     google: 'google-site-verification-code',

@@ -6,6 +6,7 @@ import { Building, ChevronDown, Check, Loader2 } from '@/components/icon-compone
 import { Institution } from '@/lib/data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -109,88 +110,79 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
             </div>
           </button>
 
-          {/* Dropdown List */}
+          {/* Dropdown List with Search */}
           {isOpen && !loading && !isNavigating && (
             <div className="absolute top-full left-0 right-0 mt-1 z-50">
               <Card className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 shadow-2xl shadow-gray-500/30 dark:shadow-black/60 drop-shadow-xl" role="listbox">
-                <CardContent className="p-2">
-                  <div className="max-h-48 overflow-y-auto">
-                    {institutions.length === 0 ? (
-                      // DÜZELTME 3: Gereksiz span kaldırıldı ve stiller basitleştirildi
-                      <div className="p-4 text-center text-gray-600 dark:text-gray-400">
-                        Kurum bulunamadı
-                      </div>
-                    ) : (
-                    institutions.map((institution) => (
-                      <button
-                        key={institution.id}
-                        onClick={() => handleSelect(institution)}
-                        disabled={isNavigating}
-                        className={cn(
-                          "w-full p-4 text-left rounded-lg transition-all duration-150",
-                          "hover:bg-gray-100 dark:hover:bg-blue-950/50",
-                          selectedInstitution?.id === institution.id && "bg-blue-50 dark:bg-blue-900/30",
-                          isNavigating && "opacity-50 cursor-not-allowed"
-                        )}
-                        role="option"
-                        aria-selected={selectedInstitution?.id === institution.id}
-                        aria-label={`${institution.name} - ${institution.documentCount} belge`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-14 h-14 flex items-center justify-center">
-                          
-                              {institution.logo && institution.logo.trim() !== '' ? (
-                                <Image
-                                  src={institution.logo}
-                                  alt={`${institution.name} logosu`}
-                                  width={32}
-                                  height={32}
-                                  className="w-16 h-16 object-contain rounded"
-                                  loading="lazy"
-                                  unoptimized={true}
-                                  onError={(e) => {
-                                    // Hata durumunda fallback emoji göster
-                                    const target = e.target as HTMLImageElement;
-                                    target.style.display = 'none';
-                                    const parent = target.parentElement;
-                                    if (parent) {
-                                      parent.innerHTML = `<span class="text-2xl text-gray-600 dark:text-gray-300">${institution.category === 'ministry' ? '🏛️' : '🏢'}</span>`;
-                                    }
-                                  }}
-                                  onLoad={() => {
-                                    // Başarılı yükleme durumunda herhangi bir işlem yapma
-                                  }}
-                                />    
-                              ) : (
-                                <span className="text-2xl text-gray-600 dark:text-gray-300">
-                                  {institution.category === 'ministry' ? '🏛️' : '🏢'}
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2">
-                                <span className="font-medium text-gray-900 dark:text-gray-100">{institution.name}</span>
-                                <Badge className={cn("text-xs", categoryColors[institution.category])}>
-                                  {institution.documentCount} Adet
-                                </Badge>
+                <CardContent className="p-0">
+                  <Command className="rounded-lg">
+                    <CommandInput 
+                      placeholder="Kurum ara..." 
+                      className="h-9 border-0 focus:ring-0"
+                    />
+                    <CommandList className="max-h-48">
+                      <CommandEmpty>Kurum bulunamadı.</CommandEmpty>
+                      <CommandGroup>
+                        {institutions.map((institution) => (
+                          <CommandItem
+                            key={institution.id}
+                            value={institution.name}
+                            onSelect={() => handleSelect(institution)}
+                            className="flex items-center justify-between cursor-pointer p-4"
+                            disabled={isNavigating}
+                          >
+                            <div className="flex items-center space-x-4 flex-1">
+                              <div className="w-14 h-14 flex items-center justify-center">
+                                {institution.logo && institution.logo.trim() !== '' ? (
+                                  <Image
+                                    src={institution.logo}
+                                    alt={`${institution.name} logosu`}
+                                    width={32}
+                                    height={32}
+                                    className="w-16 h-16 object-contain rounded"
+                                    loading="lazy"
+                                    unoptimized={true}
+                                    onError={(e) => {
+                                      const target = e.target as HTMLImageElement;
+                                      target.style.display = 'none';
+                                      const parent = target.parentElement;
+                                      if (parent) {
+                                        parent.innerHTML = `<span class="text-2xl text-gray-600 dark:text-gray-300">${institution.category === 'ministry' ? '🏛️' : '🏢'}</span>`;
+                                      }
+                                    }}
+                                    onLoad={() => {
+                                      // Başarılı yükleme durumunda herhangi bir işlem yapma
+                                    }}
+                                  />    
+                                ) : (
+                                  <span className="text-2xl text-gray-600 dark:text-gray-300">
+                                    {institution.category === 'ministry' ? '🏛️' : '🏢'}
+                                  </span>
+                                )}
                               </div>
-                              <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                {institution.kurum_aciklama}
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-medium text-gray-900 dark:text-gray-100">{institution.name}</span>
+                                  <Badge className={cn("text-xs", categoryColors[institution.category])}>
+                                    {institution.documentCount} Adet
+                                  </Badge>
+                                </div>
+                                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 text-left">
+                                  {institution.kurum_aciklama}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          {selectedInstitution?.id === institution.id && !isNavigating && (
-                            <Check className="h-5 w-5 text-blue-600" />
-                          )}
-                          {selectedInstitution?.id === institution.id && isNavigating && (
-                            <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
-                          )}
-                        </div>
-                      </button>
-                    ))
-                    )}
-                  </div>
+                            {selectedInstitution?.id === institution.id && !isNavigating && (
+                              <Check className="h-5 w-5 text-blue-600" />
+                            )}
+                            {selectedInstitution?.id === institution.id && isNavigating && (
+                              <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
+                            )}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
                 </CardContent>
               </Card>
             </div>

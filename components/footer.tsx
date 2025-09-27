@@ -88,7 +88,7 @@ export function Footer() {
 
         <div className="flex flex-col sm:flex-row justify-between items-center">
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            © 2025 MevzuatGPT. Tüm hakları saklıdır.
+            © 2025 MevzuatGPT. Tüm hakları saklıdır. <a href="https://orbitinovasyon.com" target="_blank" rel="dofollow" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">Orbit İnovasyon Ltd.</a> tarafından geliştirilmiştir.
           </p>
         </div>
       </div>

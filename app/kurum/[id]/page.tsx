@@ -36,15 +36,49 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'genelge',
       'yönetmelik',
       'mevzuat',
+      'resmi gazete',
+      'hukuki düzenlemeler',
       institution.category === 'ministry' ? 'bakanlık' : 'kurum'
     ],
     openGraph: {
       title: `${institution.name} Mevzuatı | Mevzuat GPT`,
       description: `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${regulations.length} adet güncel mevzuat metni.`,
       type: 'website',
+      url: `https://mevzuatgpt.org/kurum/${params.id}`,
+      siteName: 'Mevzuat GPT',
+      images: [
+        {
+          url: institution.logo || '/mevzuat-logo-beyaz.png',
+          width: 60,
+          height: 60,
+          alt: `${institution.name} Logo`,
+        }
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${institution.name} Mevzuatı`,
+      description: `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${regulations.length} adet güncel mevzuat metni.`,
+      images: [institution.logo || '/mevzuat-logo-beyaz.png'],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
     alternates: {
-      canonical: `/kurum/${params.id}`,
+      canonical: `https://mevzuatgpt.org/kurum/${params.id}`,
+    },
+    other: {
+      'article:author': institution.name,
+      'article:section': institution.category,
+      'article:tag': institution.name,
     },
   };
 }
@@ -150,6 +184,67 @@ export default async function InstitutionPage({ params }: Props) {
                 "position": 2,
                 "name": institution.name,
                 "item": `https://mevzuatgpt.org/kurum/${params.id}`
+              }
+            ]
+          })
+        }}
+      />
+      
+      {/* ItemList Schema - Kurum Mevzuat Listesi */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": `${institution.name} Mevzuat Listesi`,
+            "description": `${institution.name} tarafından yayınlanan tüm mevzuat metinleri, genelgeler, yönetmelikler ve tebliğler`,
+            "numberOfItems": institution.documentCount,
+            "url": `https://mevzuatgpt.org/kurum/${params.id}`,
+            "mainEntity": {
+              "@type": "Organization",
+              "name": institution.name,
+              "url": `https://mevzuatgpt.org/kurum/${params.id}`
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "MevzuatGPT",
+              "url": "https://mevzuatgpt.org"
+            },
+            "dateModified": new Date().toISOString().split('T')[0],
+            "inLanguage": "tr-TR",
+            "keywords": [
+              institution.name,
+              institution.shortName,
+              "mevzuat",
+              "genelge",
+              "yönetmelik", 
+              "tebliğ",
+              "resmi gazete",
+              "hukuki düzenlemeler",
+              institution.category === 'ministry' ? 'bakanlık' : 'kurum'
+            ],
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Genelgeler",
+                "description": `${institution.name} genelgeleri`,
+                "url": `https://mevzuatgpt.org/kurum/${params.id}?kategori=genelge`
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Yönetmelikler", 
+                "description": `${institution.name} yönetmelikleri`,
+                "url": `https://mevzuatgpt.org/kurum/${params.id}?kategori=yonetmelik`
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Tebliğler",
+                "description": `${institution.name} tebliğleri`,
+                "url": `https://mevzuatgpt.org/kurum/${params.id}?kategori=teblig`
               }
             ]
           })

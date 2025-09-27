@@ -58,18 +58,43 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: `${regulation.title} | Mevzuat GPT`,
         description: regulation.summary,
         type: 'article',
+        url: `https://mevzuatgpt.org/mevzuat/${params.id}`,
+        siteName: 'Mevzuat GPT',
         publishedTime: regulation.publishDate,
+        modifiedTime: regulation.publishDate,
         authors: [regulation.institutionName],
         section: regulation.category,
         tags: regulation.tags,
+        images: [
+          {
+            url: '/mevzuat-logo-beyaz.png',
+            width: 179,
+            height: 32,
+            alt: 'Mevzuat GPT Logo',
+          }
+        ],
       },
       twitter: {
         card: 'summary_large_image',
         title: regulation.title,
         description: regulation.summary,
+        images: ['/mevzuat-logo-beyaz.png'],
+        creator: '@mevzuatportal',
+        site: '@mevzuatportal',
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-video-preview': -1,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
       },
       alternates: {
-        canonical: `/mevzuat/${params.id}`,
+        canonical: `https://mevzuatgpt.org/mevzuat/${params.id}`,
       },
       other: {
         'article:published_time': regulation.publishDate,
@@ -104,7 +129,83 @@ export default async function RegulationPage({ params }: Props) {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
         <main className="container mx-auto px-4 py-8 min-h-screen">
-          {/* SEO için structured data */}
+          {/* Article Schema - Mevzuat Detayı */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Article",
+                "headline": regulation.title,
+                "description": regulation.summary,
+                "author": {
+                  "@type": "Organization",
+                  "name": regulation.institutionName,
+                  "url": `https://mevzuatgpt.org/kurum/${regulation.institutionId}`
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "MevzuatGPT",
+                  "url": "https://mevzuatgpt.org",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://mevzuatgpt.org/mevzuat-logo-beyaz.png",
+                    "width": 179,
+                    "height": 32
+                  }
+                },
+                "datePublished": regulation.publishDate,
+                "dateModified": regulation.publishDate,
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": `https://mevzuatgpt.org/mevzuat/${params.id}`
+                },
+                "articleSection": regulation.category,
+                "keywords": regulation.tags,
+                "wordCount": regulation.content ? regulation.content.length : 0,
+                "inLanguage": "tr-TR",
+                "isAccessibleForFree": true,
+                "license": "https://creativecommons.org/licenses/by/4.0/",
+                "about": {
+                  "@type": "Thing",
+                  "name": regulation.category,
+                  "description": `${regulation.category} kategorisindeki mevzuat metni`
+                },
+                "mentions": [
+                  {
+                    "@type": "Organization",
+                    "name": regulation.institutionName,
+                    "url": `https://mevzuatgpt.org/kurum/${regulation.institutionId}`
+                  }
+                ],
+                "breadcrumb": {
+                  "@type": "BreadcrumbList",
+                  "itemListElement": [
+                    {
+                      "@type": "ListItem",
+                      "position": 1,
+                      "name": "Ana Sayfa",
+                      "item": "https://mevzuatgpt.org"
+                    },
+                    {
+                      "@type": "ListItem",
+                      "position": 2,
+                      "name": regulation.institutionName,
+                      "item": `https://mevzuatgpt.org/kurum/${regulation.institutionId}`
+                    },
+                    {
+                      "@type": "ListItem",
+                      "position": 3,
+                      "name": regulation.title,
+                      "item": `https://mevzuatgpt.org/mevzuat/${params.id}`
+                    }
+                  ]
+                }
+              })
+            }}
+          />
+          
+          {/* GovernmentService Schema - Hükümet Hizmeti */}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -115,7 +216,8 @@ export default async function RegulationPage({ params }: Props) {
                 "description": regulation.summary,
                 "provider": {
                   "@type": "GovernmentOrganization",
-                  "name": regulation.institutionName
+                  "name": regulation.institutionName,
+                  "url": `https://mevzuatgpt.org/kurum/${regulation.institutionId}`
                 },
                 "datePublished": regulation.publishDate,
                 "dateModified": regulation.publishDate,
@@ -123,7 +225,12 @@ export default async function RegulationPage({ params }: Props) {
                 "isAccessibleForFree": true,
                 "keywords": regulation.tags.join(", "),
                 "category": regulation.category,
-                "url": `https://mevzuatgpt.org/mevzuat/${params.id}`
+                "url": `https://mevzuatgpt.org/mevzuat/${params.id}`,
+                "serviceType": regulation.category,
+                "areaServed": {
+                  "@type": "Country",
+                  "name": "Türkiye"
+                }
               })
             }}
           />
