@@ -1,52 +1,50 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Copy, ExternalLink, QrCode } from 'lucide-react';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Copy, ExternalLink, QrCode, Loader2, Check } from 'lucide-react';
 import { toast } from 'sonner';
-
-interface UsefulLink {
-  id: string;
-  title: string;
-  description: string;
-  url: string;
-}
-
-const usefulLinks: UsefulLink[] = [
-  {
-    id: 'ebys',
-    title: 'Elektronik Belge Yönetim Sistemi Evrak Doğrulama',
-    description: 'Bu hizmeti kullanarak, ilgili kurum tarafından Elektronik Belge Yönetim Sistemi (EBYS) ile oluşturulan evrakları doğrulayabilirsiniz.',
-    url: 'https://www.turkiye.gov.tr/sgk-ebys'
-  },
-  {
-    id: 'kyk-yurt',
-    title: 'Emekliler İçin KYK Yurtlarında Konaklama Ön Başvurusu',
-    description: 'Bu hizmet ile, Emekliler Yılı kapsamında, emeklilerimizin, Kredi ve Yurtlar Kurumuna bağlı yurtlarda konaklaması için ön başvuruları alınmaktadır. Başvuru sonuçlandıktan sonra emeklilerimiz ile irtibata geçilerek ayrıntılı bilgilendirme yapılacaktır.',
-    url: 'https://www.turkiye.gov.tr/sosyal-guvenlik-emekliler-icin-kyk-yurtlarinda-konaklama-on-basvurusu'
-  }
-];
+import { fetchKurumLinks, KurumLink } from '@/lib/api';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  kurumId: string;
 }
 
-export function UsefulLinksModal({ isOpen, onClose }: Props) {
-  const [selectedLink, setSelectedLink] = useState<UsefulLink | null>(null);
+export function UsefulLinksModal({ isOpen, onClose, kurumId }: Props) {
+  const [links, setLinks] = useState<KurumLink[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedLink, setSelectedLink] = useState<KurumLink | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
 
-  const handleLinkSelect = (linkId: string) => {
-    const link = usefulLinks.find(l => l.id === linkId);
-    setSelectedLink(link || null);
-    
-    if (link) {
-      // QR kod oluştur
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link.url)}`;
-      setQrCodeUrl(qrUrl);
+  // Kurum linklerini çek
+  useEffect(() => {
+    if (isOpen && kurumId) {
+      const loadLinks = async () => {
+        setLoading(true);
+        try {
+          const data = await fetchKurumLinks(kurumId);
+          setLinks(data);
+        } catch (error) {
+          console.error('Linkler yüklenemedi:', error);
+          toast.error('Linkler yüklenirken bir hata oluştu');
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadLinks();
     }
+  }, [isOpen, kurumId]);
+
+  const handleLinkSelect = (link: KurumLink) => {
+    setSelectedLink(link);
+    
+    // QR kod oluştur
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(link.url)}`;
+    setQrCodeUrl(qrUrl);
   };
 
   const handleCopyLink = async (url: string) => {
@@ -64,7 +62,7 @@ export function UsefulLinksModal({ isOpen, onClose }: Props) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-[95vw] max-w-md mx-auto p-0 sm:max-w-lg sm:w-full max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="w-[95vw] max-w-md mx-auto p-0 sm:max-w-lg sm:w-full max-h-[90vh] overflow-hidden flex flex-col mt-8 sm:mt-12">
         <DialogHeader className="p-4 sm:p-6 pb-4 flex-shrink-0">
           <DialogTitle className="text-base sm:text-lg font-semibold text-center">
             Yararlı Linkler
@@ -75,26 +73,62 @@ export function UsefulLinksModal({ isOpen, onClose }: Props) {
         </DialogHeader>
         
         <div className="px-4 sm:px-6 pb-4 sm:pb-6 space-y-4 flex-1 overflow-y-auto">
-          {/* Listbox */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Hizmet Seçin
-            </label>
-            <Select onValueChange={handleLinkSelect}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Bir hizmet seçin..." />
-              </SelectTrigger>
-              <SelectContent>
-                {usefulLinks.map((link) => (
-                  <SelectItem key={link.id} value={link.id}>
-                    <div className="flex flex-col items-start">
-                      <span className="font-medium">{link.title}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Loading State */}
+          {loading && (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
+              <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                Linkler yükleniyor...
+              </span>
+            </div>
+          )}
+
+          {/* No Links State */}
+          {!loading && links.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Bu kurum için henüz yararlı link bulunmuyor.
+              </p>
+            </div>
+          )}
+
+          {/* Arama özellikli liste */}
+          {!loading && links.length > 0 && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Hizmet Seçin ({links.length} hizmet)
+              </label>
+              <Command className="rounded-lg border shadow-md">
+                <CommandInput 
+                  placeholder="Hizmet ara..." 
+                  className="h-9"
+                />
+                <CommandList className="max-h-[200px]">
+                  <CommandEmpty>Hizmet bulunamadı.</CommandEmpty>
+                  <CommandGroup>
+                    {links.map((link) => (
+                      <CommandItem
+                        key={link.id}
+                        value={link.baslik}
+                        onSelect={() => handleLinkSelect(link)}
+                        className="flex items-center justify-between cursor-pointer"
+                      >
+                        <div className="flex flex-col items-start flex-1">
+                          <span className="font-medium text-sm leading-tight">{link.baslik}</span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[200px]">
+                            {link.aciklama.substring(0, 60)}...
+                          </span>
+                        </div>
+                        {selectedLink?.id === link.id && (
+                          <Check className="h-4 w-4 text-blue-600" />
+                        )}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </div>
+          )}
 
           {/* Seçilen link detayları */}
           {selectedLink && (
@@ -102,10 +136,10 @@ export function UsefulLinksModal({ isOpen, onClose }: Props) {
               {/* Açıklama */}
               <div>
                 <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2 text-sm sm:text-base leading-tight">
-                  {selectedLink.title}
+                  {selectedLink.baslik}
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {selectedLink.description}
+                  {selectedLink.aciklama}
                 </p>
               </div>
 

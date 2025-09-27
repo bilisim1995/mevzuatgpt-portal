@@ -258,6 +258,7 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
       <UsefulLinksModal 
         isOpen={isUsefulLinksModalOpen}
         onClose={() => setIsUsefulLinksModalOpen(false)}
+        kurumId={institution.id}
       />
     </section>
   )

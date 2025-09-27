@@ -365,6 +365,22 @@ export interface KurumDuyuru {
   tarih: string;
 }
 
+export interface KurumLink {
+  id: string;
+  baslik: string;
+  aciklama: string;
+  url: string;
+  kurum_id: string;
+  created_at: string;
+}
+
+export interface KurumLinksResponse {
+  success: boolean;
+  data: KurumLink[];
+  count: number;
+  message: string;
+}
+
 export interface KurumDuyuruResponse {
   success: boolean;
   data: KurumDuyuru[];
@@ -384,6 +400,23 @@ export async function fetchKurumDuyurular(kurumId: string): Promise<KurumDuyuru[
     return result.data || [];
   } catch (error) {
     console.error('Kurum duyuruları çekilemedi:', error);
+    return [];
+  }
+}
+
+// Kurum linklerini çek
+export async function fetchKurumLinks(kurumId: string): Promise<KurumLink[]> {
+  try {
+    const response = await apiFetch(`/api/v1/links?kurum_id=${kurumId}`);
+    const result: KurumLinksResponse = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.message || 'API hatası');
+    }
+
+    return result.data || [];
+  } catch (error) {
+    console.error('Kurum linkleri çekilemedi:', error);
     return [];
   }
 }
