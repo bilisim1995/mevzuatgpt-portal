@@ -554,29 +554,17 @@ picture img {
   flex-shrink: 0;
 }
 
-/* Masaüstünde progress bar - tarih ile aynı hizada */
-.duyuru-item .duyuru-progress {
+/* Masaüstünde ince çizgi - tarih ile aynı hizada */
+.duyuru-item .duyuru-line {
   flex: 1;
   height: 1px;
   background-color: rgb(229 231 235);
   border-radius: 0.5px;
-  overflow: hidden;
   margin: 0;
 }
 
-.duyuru-item .duyuru-progress-bar {
-  height: 100%;
-  background-color: rgb(59 130 246);
-  border-radius: 0.5px;
-  transition: width 0.1s linear;
-}
-
-.dark .duyuru-item .duyuru-progress {
+.dark .duyuru-item .duyuru-line {
   background-color: rgb(55 65 81);
-}
-
-.dark .duyuru-item .duyuru-progress-bar {
-  background-color: rgb(96 165 250);
 }
 
 .dark .duyuru-item .duyuru-tarih {
@@ -656,29 +644,17 @@ picture img {
     flex-shrink: 0;
   }
 
-  /* Mobilde progress bar - tarih ile aynı hizada */
-  .duyuru-item .duyuru-progress {
+  /* Mobilde ince çizgi - tarih ile aynı hizada */
+  .duyuru-item .duyuru-line {
     flex: 1;
     height: 1px;
     background-color: rgb(229 231 235);
     border-radius: 0.5px;
-    overflow: hidden;
     margin: 0;
   }
 
-  .duyuru-item .duyuru-progress-bar {
-    height: 100%;
-    background-color: rgb(59 130 246);
-    border-radius: 1px;
-    transition: width 0.1s linear;
-  }
-
-  .dark .duyuru-item .duyuru-progress {
+  .dark .duyuru-item .duyuru-line {
     background-color: rgb(55 65 81);
-  }
-
-  .dark .duyuru-item .duyuru-progress-bar {
-    background-color: rgb(96 165 250);
   }
 
   .dark .duyuru-item .duyuru-tarih {

@@ -230,17 +230,12 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
                             <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </a>
                           
-                          {/* Tarih ve progress bar - hem masaüstü hem mobil */}
+                          {/* Tarih ve ince çizgi - hem masaüstü hem mobil */}
                           <div className="duyuru-bottom">
                             <span className="duyuru-tarih">
                               {duyuru.tarih}
                             </span>
-                            <div className="duyuru-progress">
-                              <div 
-                                className="duyuru-progress-bar"
-                                style={{ width: `${progress}%` }}
-                              ></div>
-                            </div>
+                            <div className="duyuru-line"></div>
                           </div>
                         </div>
                       ))}
