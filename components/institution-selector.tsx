@@ -35,6 +35,16 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
   const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
 
+  // Kurumları sırala: Mevzuat adedi 0'dan büyük olanlar en başta, sonra alfabetik
+  const sortedInstitutions = [...institutions].sort((a, b) => {
+    // Önce mevzuat adedi 0'dan büyük olanları en başa al
+    if (a.documentCount > 0 && b.documentCount === 0) return -1;
+    if (a.documentCount === 0 && b.documentCount > 0) return 1;
+    
+    // Aynı durumda olanları alfabetik sırala
+    return a.name.localeCompare(b.name, 'tr');
+  });
+
   const handleSelect = (institution: Institution) => {
     setSelectedInstitution(institution);
     setIsNavigating(true);
@@ -118,12 +128,12 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                   <Command className="rounded-lg">
                     <CommandInput 
                       placeholder="Kurum ara..." 
-                      className="h-9 border-0 focus:ring-0"
+                      className="h-12 border-0 focus:ring-0"
                     />
                     <CommandList className="max-h-48">
                       <CommandEmpty>Kurum bulunamadı.</CommandEmpty>
                       <CommandGroup>
-                        {institutions.map((institution) => (
+                        {sortedInstitutions.map((institution) => (
                           <CommandItem
                             key={institution.id}
                             value={institution.name}
@@ -163,9 +173,19 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                               <div className="flex-1">
                                 <div className="flex items-center space-x-2">
                                   <span className="font-medium text-gray-900 dark:text-gray-100">{institution.name}</span>
-                                  <Badge className={cn("text-xs", categoryColors[institution.category])}>
+                                  <Badge className={cn(
+                                    "text-xs",
+                                    institution.documentCount > 0 
+                                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" 
+                                      : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                                  )}>
                                     {institution.documentCount} Adet
                                   </Badge>
+                                  {institution.documentCount > 0 && (
+                                    <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs">
+                                      Aktif
+                                    </Badge>
+                                  )}
                                 </div>
                                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 text-left">
                                   {institution.kurum_aciklama}
