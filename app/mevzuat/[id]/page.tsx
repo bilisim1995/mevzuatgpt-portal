@@ -195,7 +195,6 @@ export default async function RegulationPage({ params }: Props) {
                 "isAccessibleForFree": true,
                 "license": "https://creativecommons.org/licenses/by/4.0/",
                 "dateCreated": regulation.publishDate,
-                "dateModified": regulation.publishDate,
                 "expires": regulation.effectiveDate,
                 "readingTime": regulation.content ? Math.ceil(regulation.content.length / 1000) : 0,
                 "articleBody": regulation.content || regulation.summary,

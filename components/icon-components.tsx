@@ -39,3 +39,6 @@ export const Link2 = dynamic(() => import('lucide-react').then(mod => ({ default
 export const File = dynamic(() => import('lucide-react').then(mod => ({ default: mod.File })), { ssr: false });
 export const HardDrive = dynamic(() => import('lucide-react').then(mod => ({ default: mod.HardDrive })), { ssr: false });
 export const Filter = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Filter })), { ssr: false });
+export const CheckCircle = dynamic(() => import('lucide-react').then(mod => ({ default: mod.CheckCircle })), { ssr: false });
+export const XCircle = dynamic(() => import('lucide-react').then(mod => ({ default: mod.XCircle })), { ssr: false });
+export const RefreshCw = dynamic(() => import('lucide-react').then(mod => ({ default: mod.RefreshCw })), { ssr: false });
