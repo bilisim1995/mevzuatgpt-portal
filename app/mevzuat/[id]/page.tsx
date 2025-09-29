@@ -102,6 +102,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         'article:author': regulation.institutionName,
         'article:section': regulation.category,
         'article:tag': regulation.tags.join(', '),
+        'article:expiration_time': regulation.effectiveDate,
+        'article:word_count': regulation.content ? regulation.content.length : 0,
+        'article:reading_time': regulation.content ? Math.ceil(regulation.content.length / 1000) : 0,
+        'og:locale': 'tr_TR',
+        'og:type': 'article',
+        'og:site_name': 'Mevzuat GPT',
+        'og:updated_time': regulation.publishDate,
+        'twitter:domain': 'mevzuatgpt.org',
+        'twitter:url': `https://mevzuatgpt.org/mevzuat/${params.id}`,
+        'twitter:label1': 'Kurum',
+        'twitter:data1': regulation.institutionName,
+        'twitter:label2': 'Kategori',
+        'twitter:data2': regulation.category,
+        'twitter:label3': 'Yayın Tarihi',
+        'twitter:data3': regulation.publishDate,
       },
     };
   } catch (error) {
@@ -123,6 +138,19 @@ export default async function RegulationPage({ params }: Props) {
     
     if (!regulation) {
       notFound();
+    }
+
+    // IndexNow bildirimi (background'da çalışır)
+    if (process.env.NODE_ENV === 'production') {
+      try {
+        const { notifyNewRegulation } = await import('@/lib/indexnow');
+        // Background'da IndexNow bildirimi gönder (await etme)
+        notifyNewRegulation(params.id).catch(error => {
+          console.warn('IndexNow bildirimi başarısız:', error);
+        });
+      } catch (error) {
+        console.warn('IndexNow import hatası:', error);
+      }
     }
 
     return (
@@ -166,6 +194,20 @@ export default async function RegulationPage({ params }: Props) {
                 "inLanguage": "tr-TR",
                 "isAccessibleForFree": true,
                 "license": "https://creativecommons.org/licenses/by/4.0/",
+                "dateCreated": regulation.publishDate,
+                "dateModified": regulation.publishDate,
+                "expires": regulation.effectiveDate,
+                "readingTime": regulation.content ? Math.ceil(regulation.content.length / 1000) : 0,
+                "articleBody": regulation.content || regulation.summary,
+                "mainEntity": {
+                  "@type": "GovernmentService",
+                  "name": regulation.title,
+                  "description": regulation.summary,
+                  "provider": {
+                    "@type": "GovernmentOrganization",
+                    "name": regulation.institutionName
+                  }
+                },
                 "about": {
                   "@type": "Thing",
                   "name": regulation.category,

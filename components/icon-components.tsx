@@ -38,3 +38,4 @@ export const Key = dynamic(() => import('lucide-react').then(mod => ({ default: 
 export const Link2 = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Link2 })), { ssr: false });
 export const File = dynamic(() => import('lucide-react').then(mod => ({ default: mod.File })), { ssr: false });
 export const HardDrive = dynamic(() => import('lucide-react').then(mod => ({ default: mod.HardDrive })), { ssr: false });
+export const Filter = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Filter })), { ssr: false });

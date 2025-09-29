@@ -116,7 +116,7 @@ export function HeroSection() {
               <a href="https://uygulama.mevzuatgpt.org" target="_blank" rel="noopener noreferrer">
                 <Button 
                   size="lg" 
-                  className="group relative text-base sm:text-lg font-semibold text-white px-6 sm:px-8 py-4 sm:py-6 rounded-full
+                  className="group relative text-base sm:text-lg font-semibold text-white px-6 sm:px-8 py-5 sm:py-7 rounded-full
                     bg-white hover:bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800
                     shadow-lg hover:shadow-2xl hover:shadow-pink-500/40 dark:hover:shadow-pink-400/30
                     transition-all duration-300 ease-in-out transform hover:scale-105 w-full sm:w-auto"

@@ -1,5 +1,5 @@
 import { Institution, Regulation } from './data';
-import { ApiInstitution, ApiRegulation, ApiRegulationDetail, ApiSearchResult } from './api';
+import { ApiInstitution, ApiRegulation, ApiRegulationDetail, ApiSearchResult, ApiRecentRegulation } from './api';
 
 // URL encoding helper function - Sadece problemli URL'leri düzelt
 function encodeLogoUrl(logoUrl: string): string {
@@ -163,5 +163,41 @@ export function adaptApiSearchResultToRegulation(apiResult: ApiSearchResult): Re
     relevanceScore: apiResult.relevance_score,
     relevancePercentage: apiResult.relevance_percentage,
     matchCount: apiResult.match_count
+  };
+}
+
+// Yeni endpoint için adapter fonksiyonu
+export function adaptApiRecentRegulationToRegulation(apiReg: ApiRecentRegulation): Regulation {
+  // Etiketleri parse et
+  const tags = apiReg.etiketler ? apiReg.etiketler.split(',').map(tag => tag.trim()) : [];
+  
+  // Belge türünü kategori olarak kullan
+  const category = apiReg.belge_turu || 'Genelge';
+
+  // Status'u dönüştür
+  let status: 'active' | 'amended' | 'repealed' = 'active';
+  if (apiReg.belge_durumu?.toLowerCase().includes('yürürlükten')) {
+    status = 'repealed';
+  } else if (apiReg.belge_durumu?.toLowerCase().includes('değişik')) {
+    status = 'amended';
+  }
+
+  return {
+    id: apiReg.url_slug,
+    title: apiReg.pdf_adi,
+    summary: apiReg.aciklama || 'Açıklama bulunmuyor',
+    content: '', // İçerik detay sayfasında yüklenecek
+    institutionId: apiReg.kurum_id,
+    institutionName: apiReg.kurum_adi,
+    institutionLogo: encodeLogoUrl(apiReg.kurum_logo || ''),
+    publishDate: apiReg.belge_yayin_tarihi,
+    effectiveDate: apiReg.belge_yayin_tarihi,
+    category: category,
+    tags: [...new Set(tags)], // Tekrarları kaldır
+    documentNumber: apiReg.etiketler,
+    pdfUrl: apiReg.pdf_url,
+    status: status,
+    pageCount: apiReg.sayfa_sayisi,
+    fileSizeMB: apiReg.dosya_boyutu_mb
   };
 }

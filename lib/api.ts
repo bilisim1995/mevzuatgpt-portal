@@ -381,6 +381,34 @@ export interface KurumLinksResponse {
   message: string;
 }
 
+// Son mevzuatlar için yeni interface
+export interface ApiRecentRegulation {
+  id: string;
+  pdf_adi: string;
+  kurum_id: string;
+  kurum_adi: string;
+  kurum_logo: string;
+  kurum_aciklama: string;
+  belge_turu: string;
+  belge_durumu: string;
+  belge_yayin_tarihi: string;
+  etiketler: string;
+  aciklama: string;
+  url_slug: string;
+  sayfa_sayisi: number;
+  dosya_boyutu_mb: number;
+  yukleme_tarihi: string;
+  olusturulma_tarihi: string;
+  pdf_url: string;
+}
+
+export interface ApiRecentRegulationsResponse {
+  success: boolean;
+  data: ApiRecentRegulation[];
+  count: number;
+  message: string;
+}
+
 export interface KurumDuyuruResponse {
   success: boolean;
   data: KurumDuyuru[];
@@ -417,6 +445,47 @@ export async function fetchKurumLinks(kurumId: string): Promise<KurumLink[]> {
     return result.data || [];
   } catch (error) {
     console.error('Kurum linkleri çekilemedi:', error);
+    return [];
+  }
+}
+
+// Son mevzuatları çek - YENİ PERFORMANS OPTİMİZE EDİLMİŞ ENDPOINT
+export async function fetchRecentRegulations(options: {
+  limit?: number;
+  sort_by?: 'belge_yayin_tarihi' | 'olusturulma_tarihi' | 'yukleme_tarihi' | 'pdf_adi';
+  sort_order?: 'asc' | 'desc';
+  kurum_id?: string;
+  belge_turu?: string;
+  belge_durumu?: string;
+  start_date?: string;
+  end_date?: string;
+} = {}): Promise<ApiRecentRegulation[]> {
+  try {
+    const params = new URLSearchParams();
+    
+    // Query parametrelerini ekle
+    if (options.limit) params.set('limit', String(options.limit));
+    if (options.sort_by) params.set('sort_by', options.sort_by);
+    if (options.sort_order) params.set('sort_order', options.sort_order);
+    if (options.kurum_id) params.set('kurum_id', options.kurum_id);
+    if (options.belge_turu) params.set('belge_turu', options.belge_turu);
+    if (options.belge_durumu) params.set('belge_durumu', options.belge_durumu);
+    if (options.start_date) params.set('start_date', options.start_date);
+    if (options.end_date) params.set('end_date', options.end_date);
+    
+    const queryString = params.toString();
+    const endpoint = `/api/v1/regulations/recent${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await apiFetch(endpoint);
+    const result: ApiRecentRegulationsResponse = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.message || 'Son mevzuatlar çekilemedi');
+    }
+
+    return result.data || [];
+  } catch (error) {
+    console.error('Son mevzuatlar çekilemedi:', error);
     return [];
   }
 }

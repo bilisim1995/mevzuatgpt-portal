@@ -1,0 +1,17 @@
+# IndexNow Key for MevzuatGPT
+# Bu dosya arama motorlarının site sahipliğini doğrulamak için kullanılır
+
+# Key: mevzuatgpt-indexnow-2024-key
+# Domain: mevzuatgpt.org
+# Created: 2024
+# Purpose: Mevzuat içeriklerinin hızlı indexlenmesi için
+
+# Bu key'i environment variable olarak INDEXNOW_KEY değerine ekleyin
+# Örnek: INDEXNOW_KEY=mevzuatgpt-indexnow-2024-key
+
+# IndexNow API kullanımı:
+# POST https://mevzuatgpt.org/api/indexnow
+# {
+#   "key": "mevzuatgpt-indexnow-2024-key",
+#   "urls": ["https://mevzuatgpt.org/mevzuat/example-id"]
+# }

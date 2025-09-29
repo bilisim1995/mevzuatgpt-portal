@@ -3,6 +3,7 @@ import {
   fetchRegulationsByInstitutionId,
   fetchRegulationDetail,
   fetchGlobalSearch,
+  fetchRecentRegulations,
   ApiInstitution,
   ApiRegulation 
 } from './api';
@@ -10,7 +11,8 @@ import {
   adaptApiInstitutionToInstitution, 
   adaptApiRegulationToRegulation,
   adaptApiRegulationDetailToRegulation,
-  adaptApiSearchResultToRegulation
+  adaptApiSearchResultToRegulation,
+  adaptApiRecentRegulationToRegulation
 } from './data-adapter';
 
 export interface Institution {
@@ -138,29 +140,64 @@ export async function searchRegulations(
   }
 }
 
-// Son eklenen mevzuatları getir
-export async function getRecentRegulations(limit: number = 10): Promise<Regulation[]> {
-  const institutions = await getInstitutions();
-  const allRegulations: Regulation[] = [];
-  
-  for (const institution of institutions) {
-    try {
-      const apiRegulations = await fetchRegulationsByInstitutionId(institution.id, {
-        limit: Math.ceil(limit / institutions.length) + 5, // Her kurumdan biraz fazla al
-        sort_by: 'belge_yayin_tarihi',
-        sort_order: 'desc'
-      });
-      const regulations = apiRegulations
-        .map(adaptApiRegulationToRegulation)
-        .filter(regulation => regulation.status === 'active');
-      allRegulations.push(...regulations);
-    } catch (error) {
-      console.error(`${institution.name} için mevzuatlar alınamadı:`, error);
+// Son eklenen mevzuatları getir - YENİ PERFORMANS OPTİMİZE EDİLMİŞ VERSİYON
+export async function getRecentRegulations(
+  limit: number = 10,
+  filters: {
+    kurum_id?: string;
+    belge_turu?: string;
+    belge_durumu?: string;
+    start_date?: string;
+    end_date?: string;
+    sort_by?: 'belge_yayin_tarihi' | 'olusturulma_tarihi' | 'yukleme_tarihi' | 'pdf_adi';
+    sort_order?: 'asc' | 'desc';
+  } = {}
+): Promise<Regulation[]> {
+  try {
+    // Yeni optimize edilmiş endpoint kullan
+    const apiRegulations = await fetchRecentRegulations({
+      limit: limit,
+      sort_by: filters.sort_by || 'belge_yayin_tarihi',
+      sort_order: filters.sort_order || 'desc',
+      kurum_id: filters.kurum_id,
+      belge_turu: filters.belge_turu,
+      belge_durumu: filters.belge_durumu,
+      start_date: filters.start_date,
+      end_date: filters.end_date
+    });
+    
+    // API response'unu Regulation interface'ine dönüştür
+    const regulations = apiRegulations
+      .map(adaptApiRecentRegulationToRegulation)
+      .filter(regulation => regulation.status === 'active');
+    
+    return regulations;
+  } catch (error) {
+    console.error('Son mevzuatlar yüklenemedi:', error);
+    
+    // Fallback: Eski yöntem (sadece hata durumunda)
+    console.log('Fallback yöntemi kullanılıyor...');
+    const institutions = await getInstitutions();
+    const allRegulations: Regulation[] = [];
+    
+    for (const institution of institutions) {
+      try {
+        const apiRegulations = await fetchRegulationsByInstitutionId(institution.id, {
+          limit: Math.ceil(limit / institutions.length) + 5,
+          sort_by: 'belge_yayin_tarihi',
+          sort_order: 'desc'
+        });
+        const regulations = apiRegulations
+          .map(adaptApiRegulationToRegulation)
+          .filter(regulation => regulation.status === 'active');
+        allRegulations.push(...regulations);
+      } catch (error) {
+        console.error(`${institution.name} için mevzuatlar alınamadı:`, error);
+      }
     }
+    
+    return allRegulations
+      .sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime())
+      .slice(0, limit);
   }
-  
-  // Tarihe göre sırala ve limit uygula
-  return allRegulations
-    .sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime())
-    .slice(0, limit);
 }
