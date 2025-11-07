@@ -308,7 +308,18 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </li>
-                <li className="text-gray-900 dark:text-gray-100 font-medium truncate">{regulation.title}</li>
+                <li className="text-gray-900 dark:text-gray-100 font-medium truncate">
+                  <span className="sm:hidden">
+                    {regulation.title.length > 30 
+                      ? `${regulation.title.substring(0, 30)}...` 
+                      : regulation.title}
+                  </span>
+                  <span className="hidden sm:inline">
+                    {regulation.title.length > 50 
+                      ? `${regulation.title.substring(0, 50)}...` 
+                      : regulation.title}
+                  </span>
+                </li>
               </>
             )}
           </ol>
@@ -319,8 +330,8 @@ export function RegulationContent({ regulationId, initialData }: Props) {
           {loading ? (
             <div className="h-10 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
           ) : regulation && (
-            <Link href={`/kurum/${regulation.institutionId}`}>
-              <Button variant="outline" className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-md hover:shadow-lg">
+            <Link href={`/kurum/${regulation.institutionId}`} className="w-full sm:w-auto block">
+              <Button variant="outline" className="w-full sm:w-auto bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-md hover:shadow-lg">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 {regulation.institutionName} Sayfasına Dön
               </Button>
@@ -501,7 +512,7 @@ export function RegulationContent({ regulationId, initialData }: Props) {
             <div className="sm:hidden mb-6">
               <Button 
                 variant="outline" 
-                className="w-full justify-between bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+                className="w-full justify-between bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-0"
                 onClick={() => setIsMetaOpen(!isMetaOpen)}
               >
                 <div className="flex items-center space-x-2">
@@ -510,13 +521,13 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     Belge Bilgileri
                   </span>
                 </div>
-                <ChevronDown className={`h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
+                <ChevronDown className={`h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-0 ${
                   isMetaOpen ? 'rotate-180' : ''
                 }`} />
               </Button>
               
               {/* Smooth Animation Container */}
-              <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+              <div className={`overflow-hidden transition-all duration-0 ease-in-out ${
                 isMetaOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0 mt-0'
               }`}>
                 <div className="mt-3">
@@ -1028,8 +1039,15 @@ export function RegulationContent({ regulationId, initialData }: Props) {
               <div className="space-y-3">
                 <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Etiketler</h3>
                 <div className="flex flex-wrap gap-2">
-                  {regulation.tags.map(tag => (
-                    <Badge key={tag} variant="secondary" className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                  {/* Mobilde ilk 10 etiket */}
+                  {regulation.tags.slice(0, 10).map(tag => (
+                    <Badge key={tag} variant="secondary" className="sm:hidden text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                      #{tag}
+                    </Badge>
+                  ))}
+                  {/* Web'de ilk 25 etiket */}
+                  {regulation.tags.slice(0, 25).map(tag => (
+                    <Badge key={tag} variant="secondary" className="hidden sm:inline-block text-xs bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                       #{tag}
                     </Badge>
                   ))}

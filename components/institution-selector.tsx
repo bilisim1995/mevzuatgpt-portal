@@ -61,7 +61,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
             onClick={() => setIsOpen(!isOpen)}
             disabled={loading || isNavigating}
             className={cn(
-              "w-full p-6 text-left bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl",
+              "w-full py-px px-4 text-left bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl",
               "bg-gray-800 dark:bg-white border-gray-600 dark:border-gray-200",
               "hover:border-blue-500 dark:hover:border-blue-600 hover:shadow-md hover:bg-gray-700 dark:hover:bg-gray-100",
               isOpen && "border-blue-500 dark:border-blue-500 shadow-xl",
@@ -81,13 +81,21 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  {(loading || isNavigating) ? (
-                    <Loader2 className="h-6 w-6 text-white animate-spin" />
-                  ) : (
-                    <Building className="h-6 w-6 text-white" />
-                  )}
-                </div>
+                {(loading || isNavigating) ? (
+                  <div className="w-20 h-20 flex items-center justify-center">
+                    <Loader2 className="h-8 w-8 text-white animate-spin" />
+                  </div>
+                ) : (
+                  <Image
+                    src="/kurum.gif"
+                    alt="Kurum"
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 object-contain"
+                    loading="lazy"
+                    unoptimized={true}
+                  />
+                )}
                 <div>
               
                   <div className="font-semibold text-xl tracking-wide text-white dark:text-gray-800">
@@ -133,70 +141,74 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                     <CommandList className="max-h-48">
                       <CommandEmpty>Kurum bulunamadı.</CommandEmpty>
                       <CommandGroup>
-                        {sortedInstitutions.map((institution) => (
+                        {sortedInstitutions.map((institution, index) => (
                           <CommandItem
                             key={institution.id}
                             value={institution.name}
                             onSelect={() => handleSelect(institution)}
-                            className="flex items-center justify-between cursor-pointer p-4"
+                            className="flex flex-col cursor-pointer p-4"
                             disabled={isNavigating}
                           >
-                            <div className="flex items-center space-x-4 flex-1">
-                              <div className="w-14 h-14 flex items-center justify-center">
-                                {institution.logo && institution.logo.trim() !== '' ? (
-                                  <Image
-                                    src={institution.logo}
-                                    alt={`${institution.name} logosu`}
-                                    width={32}
-                                    height={32}
-                                    className="w-16 h-16 object-contain rounded"
-                                    loading="lazy"
-                                    unoptimized={true}
-                                    onError={(e) => {
-                                      const target = e.target as HTMLImageElement;
-                                      target.style.display = 'none';
-                                      const parent = target.parentElement;
-                                      if (parent) {
-                                        parent.innerHTML = `<span class="text-2xl text-gray-600 dark:text-gray-300">${institution.category === 'ministry' ? '🏛️' : '🏢'}</span>`;
-                                      }
-                                    }}
-                                    onLoad={() => {
-                                      // Başarılı yükleme durumunda herhangi bir işlem yapma
-                                    }}
-                                  />    
-                                ) : (
-                                  <span className="text-2xl text-gray-600 dark:text-gray-300">
-                                    {institution.category === 'ministry' ? '🏛️' : '🏢'}
-                                  </span>
-                                )}
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-center space-x-2">
-                                  <span className="font-medium text-gray-900 dark:text-gray-100">{institution.name}</span>
-                                  <Badge className={cn(
-                                    "text-xs",
-                                    institution.documentCount > 0 
-                                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" 
-                                      : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
-                                  )}>
-                                    {institution.documentCount} Adet
-                                  </Badge>
-                                  {institution.documentCount > 0 && (
-                                    <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs">
-                                      Aktif
-                                    </Badge>
+                            <div className="flex items-center justify-between w-full">
+                              <div className="flex items-center space-x-4 flex-1">
+                                <div className="w-14 h-14 flex items-center justify-center">
+                                  {institution.logo && institution.logo.trim() !== '' ? (
+                                    <Image
+                                      src={institution.logo}
+                                      alt={`${institution.name} logosu`}
+                                      width={32}
+                                      height={32}
+                                      className="w-16 h-16 object-contain rounded"
+                                      loading="lazy"
+                                      unoptimized={true}
+                                      onError={(e) => {
+                                        const target = e.target as HTMLImageElement;
+                                        target.src = '/kurum.gif';
+                                      }}
+                                      onLoad={() => {
+                                        // Başarılı yükleme durumunda herhangi bir işlem yapma
+                                      }}
+                                    />    
+                                  ) : (
+                                    <Image
+                                      src="/kurum.gif"
+                                      alt="Kurum"
+                                      width={32}
+                                      height={32}
+                                      className="w-16 h-16 object-contain rounded"
+                                      loading="lazy"
+                                      unoptimized={true}
+                                    />
                                   )}
                                 </div>
-                                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 text-left">
-                                  {institution.kurum_aciklama}
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="font-medium text-gray-900 dark:text-gray-100">{institution.name}</span>
+                                    <Badge className={cn(
+                                      "text-xs",
+                                      institution.documentCount > 0 
+                                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" 
+                                        : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                                    )}>
+                                      {institution.documentCount} Adet
+                                    </Badge>
+                                  </div>
+                                  <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 text-left">
+                                    {institution.kurum_aciklama}
+                                  </div>
                                 </div>
                               </div>
+                              {selectedInstitution?.id === institution.id && !isNavigating && (
+                                <Check className="h-5 w-5 text-blue-600" />
+                              )}
+                              {selectedInstitution?.id === institution.id && isNavigating && (
+                                <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
+                              )}
                             </div>
-                            {selectedInstitution?.id === institution.id && !isNavigating && (
-                              <Check className="h-5 w-5 text-blue-600" />
-                            )}
-                            {selectedInstitution?.id === institution.id && isNavigating && (
-                              <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
+                            {index < sortedInstitutions.length - 1 && (
+                              <div className="w-full flex justify-center mt-2">
+                                <div className="w-1/2 h-px bg-gray-200 dark:bg-gray-700"></div>
+                              </div>
                             )}
                           </CommandItem>
                         ))}

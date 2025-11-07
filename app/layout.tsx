@@ -181,7 +181,9 @@ export default function RootLayout({
                   },
                   "description": "Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform",
                   "sameAs": [
-                    "https://twitter.com/mevzuatportal"
+                    "https://instagram.com/mevzuatgpt",
+                    "https://x.com/mevzuatgpt",
+                    "https://orbitinovasyon.com"
                   ],
                   "contactPoint": {
                     "@type": "ContactPoint",

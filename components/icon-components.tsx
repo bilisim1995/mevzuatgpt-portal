@@ -42,3 +42,13 @@ export const Filter = dynamic(() => import('lucide-react').then(mod => ({ defaul
 export const CheckCircle = dynamic(() => import('lucide-react').then(mod => ({ default: mod.CheckCircle })), { ssr: false });
 export const XCircle = dynamic(() => import('lucide-react').then(mod => ({ default: mod.XCircle })), { ssr: false });
 export const RefreshCw = dynamic(() => import('lucide-react').then(mod => ({ default: mod.RefreshCw })), { ssr: false });
+export const Instagram = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Instagram })), { ssr: false });
+export const Lightbulb = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Lightbulb })), { ssr: false });
+export const Heart = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Heart })), { ssr: false });
+export const Rocket = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Rocket })), { ssr: false });
+export const TrendingUp = dynamic(() => import('lucide-react').then(mod => ({ default: mod.TrendingUp })), { ssr: false });
+export const Briefcase = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Briefcase })), { ssr: false });
+export const Palette = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Palette })), { ssr: false });
+export const BarChart = dynamic(() => import('lucide-react').then(mod => ({ default: mod.BarChart })), { ssr: false });
+export const GraduationCap = dynamic(() => import('lucide-react').then(mod => ({ default: mod.GraduationCap })), { ssr: false });
+export const BookOpen = dynamic(() => import('lucide-react').then(mod => ({ default: mod.BookOpen })), { ssr: false });

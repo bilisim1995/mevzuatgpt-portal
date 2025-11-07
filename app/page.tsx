@@ -1,6 +1,9 @@
 import dynamic from 'next/dynamic';
 
 // Optimized lazy loading - Critical components with SSR, non-critical without
+const HowItWorksButton = dynamic(() => import('@/components/how-it-works-button').then(mod => ({ default: mod.HowItWorksButton })), { 
+  ssr: false 
+});
 const Header = dynamic(() => import('@/components/header').then(mod => ({ default: mod.Header })), {
   ssr: true, // Header is critical for SEO
   loading: () => <div className="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800" />
@@ -52,7 +55,9 @@ export default function HomePage() {
                 "height": 32
               },
               "sameAs": [
-                "https://orbitinovasyon.com"
+                "https://orbitinovasyon.com",
+                "https://instagram.com/mevzuatgpt",
+                "https://x.com/mevzuatgpt"
               ]
             },
             "potentialAction": {
@@ -255,12 +260,7 @@ export default function HomePage() {
                           </svg>
                         </a>
                         
-                        <button className="inline-flex items-center justify-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300">
-                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          Nasıl Çalışır?
-                        </button>
+                        <HowItWorksButton />
                       </div>
                     </div>
                     
@@ -515,6 +515,69 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+      
+      {/* FAQPage Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Mevzuat GPT nedir?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Mevzuat GPT, kamu kurumlarının yayınladığı genelge, yönetmelik, tebliğ ve diğer mevzuat metinlerini tek platformda toplayan Türkiye'nin en kapsamlı mevzuat veritabanıdır."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Hangi kurumların mevzuatları bulunuyor?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Bakanlıklar, bağımsız idari otoriteler, belediyeler ve diğer kamu kurumlarının resmi gazetede yayınlanan tüm hukuki düzenlemeleri bulunmaktadır."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Mevzuat arama nasıl yapılır?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Gelişmiş mevzuat arama özellikleri ile kurum, tarih, konu ve anahtar kelime bazında filtreleme yapabilir, yapay zeka destekli arama ile hukuki metinleri kolayca bulabilirsiniz."
+                }
+              }
+            ]
+          })
+        }}
+      />
+
+      {/* VideoObject Structured Data - Nasıl Çalışır Videosu */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "VideoObject",
+            "name": "MevzuatGPT Nasıl Çalışır?",
+            "description": "MevzuatGPT platformunun nasıl kullanılacağını gösteren eğitim videosu",
+            "thumbnailUrl": "https://mevzuatgpt.org/mevzuat-logo-beyaz.png",
+            "uploadDate": "2024-01-01",
+            "duration": "PT3M",
+            "contentUrl": "https://www.youtube.com/watch?v=4rXdRNVtMFQ",
+            "embedUrl": "https://www.youtube.com/embed/4rXdRNVtMFQ",
+            "publisher": {
+              "@type": "Organization",
+              "name": "MevzuatGPT",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://mevzuatgpt.org/mevzuat-logo-beyaz.png"
+              }
+            }
+          })
+        }}
+      />
       
       <Footer />
       
