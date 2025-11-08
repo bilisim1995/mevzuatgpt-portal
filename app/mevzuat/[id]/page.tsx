@@ -140,23 +140,16 @@ export default async function RegulationPage({ params }: Props) {
       notFound();
     }
 
-    // IndexNow bildirimi (background'da çalışır)
-    if (process.env.NODE_ENV === 'production') {
-      try {
-        const { notifyNewRegulation } = await import('@/lib/indexnow');
-        // Background'da IndexNow bildirimi gönder (await etme)
-        notifyNewRegulation(params.id).catch(error => {
-          console.warn('IndexNow bildirimi başarısız:', error);
-        });
-      } catch (error) {
-        console.warn('IndexNow import hatası:', error);
-      }
-    }
-
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
-        <main className="container mx-auto px-4 py-8 min-h-screen">
+        <main 
+          id="main-content" 
+          role="main" 
+          className="container mx-auto px-4 py-8 min-h-screen" 
+          tabIndex={-1}
+          aria-label={`${regulation.title} mevzuat detay sayfası`}
+        >
           {/* Article Schema - Mevzuat Detayı */}
           <script
             type="application/ld+json"
@@ -289,17 +282,30 @@ export default async function RegulationPage({ params }: Props) {
       <div className="min-h-screen flex flex-col">
         <Header />
         
-        <main className="flex-1 flex items-center justify-center">
+        <main 
+          id="main-content" 
+          role="main" 
+          className="flex-1 flex items-center justify-center" 
+          tabIndex={-1}
+        >
           <div className="text-center max-w-md mx-auto px-4">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            <div className="mb-4" aria-hidden="true">
+              <div className="w-16 h-16 mx-auto bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               Mevzuat Yüklenemedi
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Bu mevzuat şu anda yüklenemiyor. Lütfen daha sonra tekrar deneyin.
             </p>
             <a 
               href="/" 
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors"
+              aria-label="Ana sayfaya dön"
             >
               Ana Sayfaya Dön
             </a>

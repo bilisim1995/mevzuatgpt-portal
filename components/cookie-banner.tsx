@@ -8,6 +8,7 @@ import { X, Cookie, Shield, ExternalLink } from 'lucide-react';
 export function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [activeElementBeforeBanner, setActiveElementBeforeBanner] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     // LocalStorage'dan cookie tercihini kontrol et
@@ -36,8 +37,75 @@ export function CookieBanner() {
 
   const closeBanner = () => {
     setIsVisible(false);
-    setTimeout(() => setShowBanner(false), 400);
+    setTimeout(() => {
+      setShowBanner(false);
+      // Focus'u geri döndür (eğer kaydedilmişse)
+      if (activeElementBeforeBanner && document.contains(activeElementBeforeBanner)) {
+        activeElementBeforeBanner.focus();
+      }
+    }, 400);
   };
+
+  // Klavye navigasyonu - Esc tuşu ile kapatma ve focus trap
+  useEffect(() => {
+    if (!showBanner) return;
+
+    // Banner açıldığında aktif element'i kaydet (focus return için)
+    const currentActiveElement = document.activeElement as HTMLElement;
+    setActiveElementBeforeBanner(currentActiveElement);
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeBanner();
+      }
+    };
+
+    // Focus trap - Tab tuşu ile banner içinde kal
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      const banner = document.querySelector('[role="dialog"]') || 
+                    document.querySelector('.cookie-banner') ||
+                    document.querySelector('[aria-label*="Çerez"]')?.closest('div');
+      
+      if (!banner) return;
+
+      const focusableElements = banner.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    window.addEventListener('keydown', handleTab);
+    
+    // Banner açıldığında ilk butona focus ver
+    setTimeout(() => {
+      const firstButton = document.querySelector('[role="dialog"] button, .cookie-banner button') as HTMLElement;
+      firstButton?.focus();
+    }, 200);
+
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('keydown', handleTab);
+    };
+  }, [showBanner]);
 
   if (!showBanner) return null;
 
@@ -53,6 +121,9 @@ export function CookieBanner() {
       
       {/* Cookie Banner */}
       <div 
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cookie-banner-title"
         className={`fixed bottom-0 left-0 right-0 sm:bottom-4 sm:left-4 sm:right-4 lg:left-auto lg:right-4 lg:max-w-md z-50 transform transition-all duration-400 ease-out ${
           isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-full sm:translate-y-8 opacity-0 scale-95'
         }`}
@@ -81,7 +152,7 @@ export function CookieBanner() {
                   <Cookie className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">
+                  <h3 id="cookie-banner-title" className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">
                     🍪 Çerez Tercihleri
                   </h3>
                   <div className="flex items-center space-x-1 mt-1">
@@ -114,8 +185,9 @@ export function CookieBanner() {
                 <Button
                   onClick={handleAccept}
                   className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 font-semibold py-2.5 rounded-xl"
+                  aria-label="Tüm çerezleri kabul et"
                 >
-                  <Cookie className="w-4 h-4 mr-2" />
+                  <Cookie className="w-4 h-4 mr-2" aria-hidden="true" />
                   Tümünü Kabul Et
                 </Button>
                 
@@ -123,6 +195,7 @@ export function CookieBanner() {
                   variant="outline"
                   onClick={handleDecline}
                   className="flex-1 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 font-semibold py-2.5 rounded-xl transition-all duration-200"
+                  aria-label="Çerezleri reddet"
                 >
                   Reddet
                 </Button>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 // Lazy load UI components
 const Card = dynamic(() => import('@/components/ui/card').then(mod => ({ default: mod.Card })), { ssr: false });
@@ -87,6 +88,7 @@ export function RegulationsList({ institutionId }: Props) {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<ApiAutocompleteSuggestion[]>([]);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestionLoading, setSuggestionLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -224,7 +226,13 @@ export function RegulationsList({ institutionId }: Props) {
   const handleSuggestionSelect = (suggestion: ApiAutocompleteSuggestion) => {
     setSearchQuery(suggestion.text);
     setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
   };
+
+  // Öneriler değiştiğinde seçili index'i sıfırla
+  useEffect(() => {
+    setSelectedSuggestionIndex(-1);
+  }, [suggestions]);
 
   // Input focus/blur yönetimi
   const handleInputFocus = () => {
@@ -253,10 +261,35 @@ export function RegulationsList({ institutionId }: Props) {
     // NOT: Input'a yazı yazılması hiçbir arama işlemi tetiklemez
     // Sadece autocomplete çalışır, arama için buton tıklanmalı
   };
-  // Enter tuşu ile arama
+  // Klavye navigasyonu - Enter, ok tuşları
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleSearch();
+      if (showSuggestions && selectedSuggestionIndex >= 0 && suggestions[selectedSuggestionIndex]) {
+        // Öneri seçildiyse onu kullan
+        e.preventDefault();
+        handleSuggestionSelect(suggestions[selectedSuggestionIndex]);
+      } else {
+        // Arama yap
+        handleSearch();
+      }
+    } else if (e.key === 'ArrowDown') {
+      // Aşağı ok - bir sonraki öneriye git
+      if (showSuggestions && suggestions.length > 0) {
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+      }
+    } else if (e.key === 'ArrowUp') {
+      // Yukarı ok - bir önceki öneriye git
+      if (showSuggestions && suggestions.length > 0) {
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => prev > 0 ? prev - 1 : -1);
+      }
+    } else if (e.key === 'Escape') {
+      // Esc - önerileri kapat
+      setShowSuggestions(false);
+      setSelectedSuggestionIndex(-1);
     }
   };
 
@@ -424,11 +457,14 @@ export function RegulationsList({ institutionId }: Props) {
         {/* Search */}
         <div className="mb-8 mt-6">
           <div className="max-w-2xl mx-auto">
+            <div className="sr-only" id="search-description">
+              Mevzuat arama kutusu. Arama yapmak için metin girin ve Enter tuşuna basın veya ara butonuna tıklayın.
+            </div>
             <div className="relative" onBlur={handleInputBlur}>
               {/* Modern search container */}
               <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-xl focus-within:shadow-xl focus-within:border-blue-500 dark:focus-within:border-blue-400">
                 {/* Search icon */}
-                <div className="absolute left-5 top-1/2 transform -translate-y-1/2 z-10">
+                <div className="absolute left-5 top-1/2 transform -translate-y-1/2 z-10" aria-hidden="true">
                   {suggestionLoading ? (
                     <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
                   ) : (
@@ -446,6 +482,10 @@ export function RegulationsList({ institutionId }: Props) {
                   onKeyPress={handleKeyPress}
                   className="w-full pl-16 pr-28 py-8 text-base bg-transparent border-0 focus:ring-0 focus:outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100"
                   aria-label="Mevzuat arama kutusu"
+                  aria-autocomplete="list"
+                  aria-expanded={showSuggestions}
+                  aria-controls="search-suggestions"
+                  aria-describedby="search-description"
                 />
                 
                 {/* Action buttons */}
@@ -459,9 +499,9 @@ export function RegulationsList({ institutionId }: Props) {
                     title="Mevzuat ara"
                   >
                     {searchLoading ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                     ) : (
-                      <Search className="h-4 w-4" />
+                      <Search className="h-4 w-4" aria-hidden="true" />
                     )}
                     <span className="text-sm font-medium">Ara</span>
                   </button>
@@ -471,12 +511,17 @@ export function RegulationsList({ institutionId }: Props) {
 
               {/* Autocomplete Suggestions */}
               {showSuggestions && searchQuery.length >= 2 && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 z-50">
+                <div 
+                  className="absolute top-full left-0 right-0 mt-2 z-50"
+                  role="listbox"
+                  aria-label="Arama önerileri"
+                  id="search-suggestions"
+                >
                   <Card className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 shadow-xl max-h-80 overflow-y-auto">
                     <CardContent className="p-2">
                       {suggestionLoading ? (
-                        <div className="flex justify-center items-center py-4">
-                          <Loader2 className="h-5 w-5 animate-spin text-blue-500" />
+                        <div className="flex justify-center items-center py-4" role="status" aria-live="polite">
+                          <Loader2 className="h-5 w-5 animate-spin text-blue-500" aria-hidden="true" />
                           <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Öneriler yükleniyor...</span>
                         </div>
                       ) : (
@@ -484,8 +529,16 @@ export function RegulationsList({ institutionId }: Props) {
                           {suggestions.map((suggestion, index) => (
                             <button
                               key={index}
+                              role="option"
+                              aria-selected={selectedSuggestionIndex === index}
                               onClick={() => handleSuggestionSelect(suggestion)}
-                              className="w-full p-3 text-left rounded-lg transition-all duration-150 hover:bg-blue-50 dark:hover:bg-blue-950/50 group"
+                              onMouseEnter={() => setSelectedSuggestionIndex(index)}
+                              className={cn(
+                                "w-full p-3 text-left rounded-lg transition-all duration-150 group",
+                                selectedSuggestionIndex === index
+                                  ? "bg-blue-100 dark:bg-blue-900/50"
+                                  : "hover:bg-blue-50 dark:hover:bg-blue-950/50"
+                              )}
                             >
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-3">
@@ -501,7 +554,7 @@ export function RegulationsList({ institutionId }: Props) {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="text-gray-400 group-hover:text-blue-500 transition-colors">
+                                <div className="text-gray-400 group-hover:text-blue-500 transition-colors" aria-hidden="true">
                                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                   </svg>
@@ -534,16 +587,42 @@ export function RegulationsList({ institutionId }: Props) {
               }}
               className="bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 shadow-sm"
             >
-              <X className="h-4 w-4 mr-2" />
+              <X className="h-4 w-4 mr-2" aria-hidden="true" />
               Aramayı Temizle
             </Button>
           </div>
         )}
 
+        {/* Loading Status - Screen Reader Announcement */}
+        {loading && (
+          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+            Mevzuatlar yükleniyor, lütfen bekleyin.
+          </div>
+        )}
+
+        {/* Search Results Status - Screen Reader Announcement */}
+        {isSearchMode && searchLoading && (
+          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+            Arama sonuçları yükleniyor.
+          </div>
+        )}
+
+        {isSearchMode && !searchLoading && searchResults.length > 0 && (
+          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+            {searchTotalCount} adet arama sonucu bulundu.
+          </div>
+        )}
+
+        {isSearchMode && !searchLoading && searchResults.length === 0 && searchQuery.trim() !== '' && (
+          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+            Arama sonucu bulunamadı.
+          </div>
+        )}
+
         {/* Results Count */}
         {loading ? (
-          <div className="flex justify-center items-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-gray-500 dark:text-gray-400" />
+          <div className="flex justify-center items-center py-12" role="status" aria-live="polite">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-500 dark:text-gray-400" aria-hidden="true" />
             <span className="ml-2 text-gray-600 dark:text-gray-400">
               Mevzuatlar yükleniyor...
             </span>

@@ -247,10 +247,10 @@ export function RegulationContent({ regulationId, initialData }: Props) {
   // Hata durumu
   if (error) {
     return (
-      <div className="pt-4 pb-8 bg-gray-50 dark:bg-gray-900 transition-colors font-sans">
+      <div className="pt-4 pb-8 bg-gray-50 dark:bg-gray-900 transition-colors font-sans" role="alert">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <div className="text-center py-16">
-            <div className="text-4xl mb-4">❌</div>
+            <div className="text-4xl mb-4" aria-hidden="true">❌</div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               {error}
             </h1>
@@ -259,9 +259,10 @@ export function RegulationContent({ regulationId, initialData }: Props) {
             </p>
             <a 
               href="/" 
-              className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors"
+              aria-label="Ana sayfaya dön"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
               Ana Sayfaya Dön
             </a>
           </div>
@@ -274,41 +275,42 @@ export function RegulationContent({ regulationId, initialData }: Props) {
     <div className="pt-4 pb-8 bg-gray-50 dark:bg-gray-900 transition-colors font-sans gpu-accelerated">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
         {/* Breadcrumb */}
-        <nav className="mb-6">
-          <ol className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 text-sm text-gray-600 dark:text-gray-300">
-            <li>
-              <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+        <nav className="mb-6" aria-label="Sayfa konumu (breadcrumb)">
+          <ol className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 text-sm text-gray-600 dark:text-gray-300" role="list">
+            <li role="listitem">
+              <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors" aria-label="Ana sayfaya dön">
                 Ana Sayfa
               </Link>
             </li>
-            <li className="hidden sm:block text-gray-400">
+            <li className="hidden sm:block text-gray-400" aria-hidden="true">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </li>
             {loading ? (
               <>
-                <li><SkeletonLine width="120px" /></li>
-                <li className="hidden sm:block text-gray-400">
+                <li role="listitem"><SkeletonLine width="120px" /></li>
+                <li className="hidden sm:block text-gray-400" aria-hidden="true">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </li>
-                <li><SkeletonLine width="200px" /></li>
+                <li role="listitem"><SkeletonLine width="200px" /></li>
               </>
             ) : regulation && (
               <>
-                <li>
-                  <Link href={`/kurum/${regulation.institutionId}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                <li role="listitem">
+                  <Link href={`/kurum/${regulation.institutionId}`} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors" aria-label={`${regulation.institutionName} kurum sayfasına git`}>
                     {regulation.institutionName}
                   </Link>
                 </li>
-                <li className="hidden sm:block text-gray-400">
+                <li className="hidden sm:block text-gray-400" aria-hidden="true">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </li>
-                <li className="text-gray-900 dark:text-gray-100 font-medium truncate">
+                <li className="text-gray-900 dark:text-gray-100 font-medium truncate" role="listitem" aria-current="page">
+                  <span className="sr-only">Şu anki sayfa: </span>
                   <span className="sm:hidden">
                     {regulation.title.length > 30 
                       ? `${regulation.title.substring(0, 30)}...` 
@@ -328,11 +330,13 @@ export function RegulationContent({ regulationId, initialData }: Props) {
         {/* Back Button */}
         <div className="mb-6">
           {loading ? (
-            <div className="h-10 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+            <div className="h-10 w-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" role="status" aria-label="Yükleniyor" aria-live="polite">
+              <span className="sr-only">İçerik yükleniyor, lütfen bekleyin.</span>
+            </div>
           ) : regulation && (
             <Link href={`/kurum/${regulation.institutionId}`} className="w-full sm:w-auto block">
-              <Button variant="outline" className="w-full sm:w-auto bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-md hover:shadow-lg">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+              <Button variant="outline" className="w-full sm:w-auto bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-md hover:shadow-lg" aria-label={`${regulation.institutionName} kurum sayfasına dön`}>
+                <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
                 {regulation.institutionName} Sayfasına Dön
               </Button>
             </Link>
@@ -355,7 +359,7 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 </div>
               ) : regulation && (
                 <div className="flex items-start justify-between gap-4">
-                  <CardTitle className="text-xl lg:text-2xl font-bold leading-tight text-gray-900 dark:text-gray-100 flex-1">
+                  <CardTitle id="regulation-title" className="text-xl lg:text-2xl font-bold leading-tight text-gray-900 dark:text-gray-100 flex-1">
                     {regulation.title}
                   </CardTitle>
                   
@@ -444,63 +448,66 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                   ))}
                 </div>
               ) : regulation && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                  <div className="flex items-center space-x-2">
-                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" role="list" aria-label="Belge bilgileri">
+                  <div className="flex items-center space-x-2" role="listitem">
+                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                     <div className="text-sm">
                       <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Tür</div>
-                      <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.category}</div>
+                      <div className="text-gray-600 dark:text-gray-400 text-xs" aria-label={`Belge türü: ${regulation.category}`}>{regulation.category}</div>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
-                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <div className="flex items-center space-x-2" role="listitem">
+                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                     <div className="text-sm">
-                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">{regulation.documentNumber}</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs" aria-label={`Belge numarası: ${regulation.documentNumber}`}>{regulation.documentNumber}</div>
                     
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
-                    <Clock className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <div className="flex items-center space-x-2" role="listitem">
+                    <Clock className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                     <div className="text-sm">
                       <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Durum</div>
                       <div className={`text-xs font-medium ${
                         regulation.status === 'active' 
                           ? 'text-green-600 dark:text-green-400'
                           : 'text-red-600 dark:text-red-400'
-                      }`}>
+                      }`} aria-label={`Belge durumu: ${regulation.status === 'active' ? 'Yürürlükte' : 'Yürürlükten Kalktı'}`}>
                         {regulation.status === 'active' ? 'Yürürlükte' : 'Yürürlükten Kalktı'}
                       </div>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
-                    <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <div className="flex items-center space-x-2" role="listitem">
+                    <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                     <div className="text-sm">
                       <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Yayın</div>
-                      <div className="text-gray-600 dark:text-gray-400 text-xs">
+                      <div 
+                        className="text-gray-600 dark:text-gray-400 text-xs" 
+                        aria-label={`Yayın tarihi: ${new Date(regulation.publishDate).toLocaleDateString('tr-TR')}`}
+                      >
                         {new Date(regulation.publishDate).toLocaleDateString('tr-TR')}
                       </div>
                     </div>
                   </div>
                   
                   {regulation.pageCount && (
-                    <div className="flex items-center space-x-2">
-                      <File className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                    <div className="flex items-center space-x-2" role="listitem">
+                      <File className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                       <div className="text-sm">
                         <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Sayfa</div>
-                        <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.pageCount}</div>
+                        <div className="text-gray-600 dark:text-gray-400 text-xs" aria-label={`Sayfa sayısı: ${regulation.pageCount}`}>{regulation.pageCount}</div>
                       </div>
                     </div>
                   )}
 
                   {regulation.fileSizeMB && (
-                    <div className="flex items-center space-x-2">
-                      <HardDrive className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                    <div className="flex items-center space-x-2" role="listitem">
+                      <HardDrive className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                       <div className="text-sm">
                         <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Boyut</div>
-                        <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.fileSizeMB.toFixed(1)} MB</div>
+                        <div className="text-gray-600 dark:text-gray-400 text-xs" aria-label={`Dosya boyutu: ${regulation.fileSizeMB.toFixed(1)} MB`}>{regulation.fileSizeMB.toFixed(1)} MB</div>
                       </div>
                     </div>
                   )}
@@ -511,25 +518,34 @@ export function RegulationContent({ regulationId, initialData }: Props) {
             {/* Mobile Collapsible Meta Information - Optimized */}
             <div className="sm:hidden mb-6">
               <Button 
+                id="mobile-meta-button"
                 variant="outline" 
                 className="w-full justify-between bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-0"
                 onClick={() => setIsMetaOpen(!isMetaOpen)}
+                aria-expanded={isMetaOpen}
+                aria-controls="mobile-meta-info"
+                aria-label={`Belge bilgileri ${isMetaOpen ? 'gizle' : 'göster'}`}
               >
                 <div className="flex items-center space-x-2">
-                  <Info className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <Info className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Belge Bilgileri
                   </span>
                 </div>
                 <ChevronDown className={`h-4 w-4 text-gray-500 dark:text-gray-400 transition-transform duration-0 ${
                   isMetaOpen ? 'rotate-180' : ''
-                }`} />
+                }`} aria-hidden="true" />
               </Button>
               
               {/* Smooth Animation Container */}
-              <div className={`overflow-hidden transition-all duration-0 ease-in-out ${
-                isMetaOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0 mt-0'
-              }`}>
+              <div 
+                id="mobile-meta-info"
+                className={`overflow-hidden transition-all duration-0 ease-in-out ${
+                  isMetaOpen ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0 mt-0'
+                }`}
+                role="region"
+                aria-labelledby="mobile-meta-button"
+              >
                 <div className="mt-3">
                   {loading ? (
                     <div className="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg border border-gray-200 dark:border-gray-600">
@@ -713,8 +729,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                   onClick={handleOpenPdf} 
                   size="sm"
                   className="bg-blue-50 hover:bg-blue-100 dark:bg-gray-700 dark:hover:bg-gray-600 border-blue-200 dark:border-gray-600 text-blue-700 dark:text-blue-300 flex-1"
+                  aria-label="PDF dosyasını yeni pencerede aç"
                 >
-                  <FileText className="h-4 w-4 mr-2" />
+                  <FileText className="h-4 w-4 mr-2" aria-hidden="true" />
                   PDF Aç
                 </Button>
                 <Button
@@ -722,9 +739,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                   size="sm"
                   onClick={handleCopyLink}
                   className="bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 flex-1"
-                  title="Link kopyala"
+                  aria-label="Sayfa linkini panoya kopyala"
                 >
-                  <Link2 className="h-4 w-4 mr-1" />
+                  <Link2 className="h-4 w-4 mr-1" aria-hidden="true" />
                   Link
                 </Button>
               </div>
@@ -741,9 +758,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     variant="outline"
                     onClick={shareToTwitter}
                     className="h-12 w-12 rounded-full bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/20 dark:hover:bg-sky-900/30 border-sky-200 dark:border-sky-800 text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300 transition-all duration-200 hover:scale-105"
-                    title="Twitter'da paylaş"
+                    aria-label="Twitter'da paylaş"
                   >
-                    <TwitterIcon className="h-6 w-6" />
+                    <TwitterIcon className="h-6 w-6" aria-hidden="true" />
                   </Button>
                   
                   <Button
@@ -751,9 +768,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     variant="outline"
                     onClick={shareToFacebook}
                     className="h-12 w-12 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
-                    title="Facebook'ta paylaş"
+                    aria-label="Facebook'ta paylaş"
                   >
-                    <FacebookIcon className="h-6 w-6" />
+                    <FacebookIcon className="h-6 w-6" aria-hidden="true" />
                   </Button>
                   
                   <Button
@@ -761,9 +778,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     variant="outline"
                     onClick={shareToLinkedIn}
                     className="h-12 w-12 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
-                    title="LinkedIn'de paylaş"
+                    aria-label="LinkedIn'de paylaş"
                   >
-                    <LinkedinIcon className="h-6 w-6" />
+                    <LinkedinIcon className="h-6 w-6" aria-hidden="true" />
                   </Button>
                   
                   <Button
@@ -771,9 +788,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     variant="outline"
                     onClick={shareToWhatsApp}
                     className="h-12 w-12 rounded-full bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-105"
-                    title="WhatsApp'ta paylaş"
+                    aria-label="WhatsApp'ta paylaş"
                   >
-                    <WhatsAppIcon className="h-6 w-6" />
+                    <WhatsAppIcon className="h-6 w-6" aria-hidden="true" />
                   </Button>
                   
                   <Button
@@ -781,9 +798,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     variant="outline"
                     onClick={copyToClipboard}
                     className="h-12 w-12 rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-all duration-200 hover:scale-105"
-                    title="Linki kopyala"
+                    aria-label="Sayfa linkini panoya kopyala"
                   >
-                    <Copy className="h-6 w-6" />
+                    <Copy className="h-6 w-6" aria-hidden="true" />
                   </Button>
                 </div>
               </div>
@@ -794,22 +811,22 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 <SkeletonLine width="200px" />
               ) : (
                 <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-gray-100">
-                  <FileText className="h-5 w-5" />
+                  <FileText className="h-5 w-5" aria-hidden="true" />
                   <span>Mevzuat İçeriği</span>
                   
                   {/* Dikey Ayraç */}
-                  <div className="hidden lg:block w-px h-6 bg-gray-300 dark:bg-gray-600 ml-2"></div>
+                  <div className="hidden lg:block w-px h-6 bg-gray-300 dark:bg-gray-600 ml-2" aria-hidden="true"></div>
                   
                   {/* Sosyal Paylaşım Butonları - Masaüstünde Mevzuat İçeriği yanında */}
-                  <div className="hidden lg:flex items-center gap-2 ml-2">
+                  <div className="hidden lg:flex items-center gap-2 ml-2" role="group" aria-label="Sosyal medya paylaşım seçenekleri">
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={shareToTwitter}
                       className="h-10 w-10 rounded-full bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/20 dark:hover:bg-sky-900/30 border-sky-200 dark:border-sky-800 text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300 transition-all duration-200 hover:scale-105"
-                      title="Twitter'da paylaş"
+                      aria-label="Twitter'da paylaş"
                     >
-                      <TwitterIcon className="h-5 w-5" />
+                      <TwitterIcon className="h-5 w-5" aria-hidden="true" />
                     </Button>
                     
                     <Button
@@ -817,9 +834,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       variant="outline"
                       onClick={shareToFacebook}
                       className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
-                      title="Facebook'ta paylaş"
+                      aria-label="Facebook'ta paylaş"
                     >
-                      <FacebookIcon className="h-5 w-5" />
+                      <FacebookIcon className="h-5 w-5" aria-hidden="true" />
                     </Button>
                     
                     <Button
@@ -827,9 +844,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       variant="outline"
                       onClick={shareToLinkedIn}
                       className="h-10 w-10 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-all duration-200 hover:scale-105"
-                      title="LinkedIn'de paylaş"
+                      aria-label="LinkedIn'de paylaş"
                     >
-                      <LinkedinIcon className="h-5 w-5" />
+                      <LinkedinIcon className="h-5 w-5" aria-hidden="true" />
                     </Button>
                     
                     <Button
@@ -837,9 +854,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       variant="outline"
                       onClick={shareToWhatsApp}
                       className="h-10 w-10 rounded-full bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-105"
-                      title="WhatsApp'ta paylaş"
+                      aria-label="WhatsApp'ta paylaş"
                     >
-                      <WhatsAppIcon className="h-5 w-5" />
+                      <WhatsAppIcon className="h-5 w-5" aria-hidden="true" />
                     </Button>
                     
                     <Button
@@ -847,9 +864,9 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       variant="outline"
                       onClick={copyToClipboard}
                       className="h-10 w-10 rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-all duration-200 hover:scale-105"
-                      title="Linki kopyala"
+                      aria-label="Sayfa linkini panoya kopyala"
                     >
-                      <Copy className="h-5 w-5" />
+                      <Copy className="h-5 w-5" aria-hidden="true" />
                     </Button>
                   </div>
                 </CardTitle>
@@ -868,17 +885,19 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     onClick={handleOpenPdf} 
                     size="sm"
                     className="bg-blue-50 hover:bg-blue-100 dark:bg-gray-700 dark:hover:bg-gray-600 border-blue-200 dark:border-gray-600 text-blue-700 dark:text-blue-300"
+                    aria-label="PDF dosyasını yeni pencerede aç"
                   >
-                    <FileText className="h-4 w-4 mr-2" />
+                    <FileText className="h-4 w-4 mr-2" aria-hidden="true" />
                     PDF Aç
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
+                    onClick={handleCopyLink}
                     className="bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200"
-                    title="Link kopyala"
+                    aria-label="Sayfa linkini panoya kopyala"
                   >
-                    <Link2 className="h-4 w-4" />
+                    <Link2 className="h-4 w-4" aria-hidden="true" />
                     <span className="ml-2">Link Kopyala</span>
                   </Button>
                 </div>
@@ -887,7 +906,8 @@ export function RegulationContent({ regulationId, initialData }: Props) {
           </CardHeader>
           <CardContent>
             {loading || !contentLoaded ? (
-              <div className="max-h-96 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
+              <div role="status" aria-live="polite" aria-label="Mevzuat içeriği yükleniyor" className="max-h-96 overflow-y-auto bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
+                <span className="sr-only">Mevzuat içeriği yükleniyor, lütfen bekleyin.</span>
                 {/* Mevzuat İçerik Loading Skeleton */}
                 <div className="space-y-6">
                   {/* Başlık Skeleton */}
@@ -933,9 +953,10 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 </div>
               </div>
             ) : regulation && (
-            <div 
+            <article 
               className="max-h-96 overflow-y-auto prose prose-lg dark:prose-invert max-w-none bg-gray-50 dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600" 
               key={`content-${regulation.id}-${Date.now()}`} // Cache-busting için unique key
+              aria-labelledby="regulation-title"
             >
               <ReactMarkdown 
                 remarkPlugins={[]}
@@ -985,7 +1006,7 @@ export function RegulationContent({ regulationId, initialData }: Props) {
               >
                 {regulation.content}
               </ReactMarkdown>
-            </div>
+            </article>
             )}
 
             {/* AI Assistant Button */}

@@ -11,6 +11,7 @@ const YandexMetrika = dynamic(() => import('@/components/yandex-metrika').then(m
 const PWAInstallPrompt = dynamic(() => import('@/components/pwa-install-prompt').then(mod => ({ default: mod.PWAInstallPrompt })), { ssr: false });
 const OfflineIndicator = dynamic(() => import('@/components/offline-indicator').then(mod => ({ default: mod.OfflineIndicator })), { ssr: false });
 const CookieBanner = dynamic(() => import('@/components/cookie-banner').then(mod => ({ default: mod.CookieBanner })), { ssr: false });
+const SkipToContent = dynamic(() => import('@/components/skip-to-content').then(mod => ({ default: mod.SkipToContent })), { ssr: false });
 
 const baseUrl = process.env.NODE_ENV === 'production' 
   ? 'https://mevzuatgpt.org' 
@@ -240,7 +241,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased relative">
         <Suspense fallback={null}>
           <YandexMetrika />
         </Suspense>
@@ -253,6 +254,7 @@ export default function RootLayout({
           disableTransitionOnChange
           storageKey="mevzuat-theme"
         >
+          <SkipToContent />
           <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
             {children}
           </div>

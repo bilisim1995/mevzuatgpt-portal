@@ -30,7 +30,7 @@
     --secondary: 0 0% 94%;
     --secondary-foreground: 0 0% 15%;
     --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 35%;
+    --muted-foreground: 0 0% 25%; /* WCAG AA uyumlu - daha koyu */
     --accent: 0 0% 94%;
     --accent-foreground: 0 0% 15%;
     --destructive: 0 84.2% 60.2%;
@@ -57,7 +57,7 @@
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted-foreground: 0 0% 75%; /* WCAG AA uyumlu - daha açık */
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -361,6 +361,208 @@ picture img {
   display: block;
 }
 
+/* Skip to Content Button - Accessibility */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 100;
+  padding: 12px 24px;
+  background: #3b82f6;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 0 0 8px 0;
+  transition: top 0.2s ease;
+  outline: none;
+}
+
+.skip-to-content:focus {
+  top: 0;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+}
+
+.skip-to-content:hover {
+  background: #2563eb;
+}
+
+.dark .skip-to-content {
+  background: #60a5fa;
+  color: #1e293b;
+}
+
+.dark .skip-to-content:hover {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Main content focusable for skip navigation */
+#main-content {
+  outline: none;
+}
+
+#main-content:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+/* Screen Reader Only - Görünmez ama ekran okuyucular için */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Screen Reader Only - Focus durumunda görünür */
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Keyboard Navigation - Focus Visible Styles */
+/* Klavye ile odaklanan elementler için görünür stil */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Mouse ile tıklanan elementlerde outline gizle (sadece klavye için) */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Dark mode için focus-visible */
+.dark *:focus-visible {
+  outline-color: #60a5fa;
+}
+
+.dark button:focus-visible,
+.dark a:focus-visible,
+.dark input:focus-visible,
+.dark select:focus-visible,
+.dark textarea:focus-visible {
+  outline-color: #60a5fa;
+}
+
+/* Color Contrast Improvements - WCAG AA Compliance */
+/* Yetersiz kontrastlı renk kombinasyonlarını düzelt */
+
+/* Light Mode - Text Gray Improvements */
+.text-gray-400:not(.dark *) {
+  color: rgb(107 114 128); /* gray-500 - daha koyu */
+}
+
+.dark .text-gray-400:not([class*="institution-selector"]) {
+  color: rgb(209 213 219); /* gray-300 - daha açık */
+}
+
+/* Light Mode - Text Gray-500 Improvements */
+.text-gray-500 {
+  color: rgb(75 85 99); /* gray-600 - daha koyu */
+}
+
+.dark .text-gray-500 {
+  color: rgb(229 231 235); /* gray-200 - daha açık */
+}
+
+/* Light Mode - Text Gray-600 on Light Background */
+.bg-white .text-gray-600,
+.bg-gray-50 .text-gray-600,
+.bg-gray-100 .text-gray-600 {
+  color: rgb(55 65 79); /* gray-700 - daha koyu */
+}
+
+/* Dark Mode - Text Gray-300 on Dark Background */
+.dark .bg-gray-800 .text-gray-300,
+.dark .bg-gray-900 .text-gray-300 {
+  color: rgb(243 244 246); /* gray-100 - daha açık */
+}
+
+/* Button Text Contrast Improvements */
+button.text-gray-700,
+a.text-gray-700 {
+  color: rgb(55 65 79); /* gray-700 - daha koyu */
+}
+
+.dark button.text-gray-300,
+.dark a.text-gray-300 {
+  color: rgb(243 244 246); /* gray-100 - daha açık */
+}
+
+/* Link Contrast Improvements */
+a.text-blue-600 {
+  color: rgb(37 99 235); /* blue-600 - WCAG AA uyumlu */
+}
+
+.dark a.text-blue-400 {
+  color: rgb(96 165 250); /* blue-300 - daha açık */
+}
+
+/* Border Contrast Improvements */
+.border-gray-200 {
+  border-color: rgb(229 231 235); /* gray-200 */
+}
+
+.dark .border-gray-700 {
+  border-color: rgb(55 65 79); /* gray-700 */
+}
+
+.dark .border-gray-600 {
+  border-color: rgb(75 85 99); /* gray-600 - daha açık */
+}
+
+/* Input Placeholder Contrast */
+input::placeholder,
+textarea::placeholder {
+  color: rgb(107 114 128); /* gray-500 - WCAG AA uyumlu */
+  opacity: 1;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: rgb(156 163 175); /* gray-400 - daha açık */
+  opacity: 1;
+}
+
+/* Badge Text Contrast */
+.bg-gray-100 .text-gray-600 {
+  color: rgb(55 65 79); /* gray-700 - daha koyu */
+}
+
+.dark .bg-gray-700 .text-gray-400 {
+  color: rgb(209 213 219); /* gray-300 - daha açık */
+}
+
+/* Institution Selector - Dark Mode Text Fix */
+.dark button[aria-haspopup="listbox"] .text-gray-300 {
+  color: rgb(17 24 39) !important; /* gray-900 - siyah */
+}
+
+/* Muted Text Contrast - CSS Variables zaten yukarıda tanımlı */
+
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in-up,
@@ -375,6 +577,10 @@ picture img {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+  
+  .skip-to-content {
+    transition: none;
   }
 }
 

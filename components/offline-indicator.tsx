@@ -39,12 +39,17 @@ export function OfflineIndicator() {
   if (!showIndicator) return null;
 
   return (
-    <div className={`offline-indicator ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}>
+    <div 
+      className={`offline-indicator ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       <div className="flex items-center space-x-2">
         {isOnline ? (
-          <Wifi className="h-4 w-4" />
+          <Wifi className="h-4 w-4" aria-hidden="true" />
         ) : (
-          <WifiOff className="h-4 w-4" />
+          <WifiOff className="h-4 w-4" aria-hidden="true" />
         )}
         <span className="text-sm font-medium">
           {isOnline ? 'Bağlantı yeniden kuruldu' : 'İnternet bağlantısı yok'}

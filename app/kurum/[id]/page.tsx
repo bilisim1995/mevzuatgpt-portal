@@ -92,11 +92,16 @@ export default async function InstitutionPage({ params }: Props) {
       <div className="min-h-screen flex flex-col">
         <Header />
         
-        <main className="flex-1 flex items-center justify-center">
+        <main 
+          id="main-content" 
+          role="main" 
+          className="flex-1 flex items-center justify-center" 
+          tabIndex={-1}
+        >
           <div className="text-center max-w-md mx-auto p-6">
             <div className="mb-4">
-              <div className="w-16 h-16 mx-auto bg-amber-100 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 mx-auto bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center" aria-hidden="true">
+                <svg className="w-8 h-8 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
@@ -110,6 +115,7 @@ export default async function InstitutionPage({ params }: Props) {
             <a 
               href="/"
               className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors"
+              aria-label="Ana sayfaya dön"
             >
               Ana Sayfaya Dön
             </a>
@@ -253,7 +259,13 @@ export default async function InstitutionPage({ params }: Props) {
       
       <Header />
       
-      <main className="flex-1">
+      <main 
+        id="main-content" 
+        role="main" 
+        className="flex-1" 
+        tabIndex={-1}
+        aria-label={`${institution.name} mevzuat sayfası`}
+      >
         <InstitutionHeader institution={institution} regulations={[]} />
         <RegulationsList institutionId={params.id} />
       </main>

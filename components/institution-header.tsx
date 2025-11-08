@@ -95,26 +95,32 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
   }, [duyurular.length, currentDuyuruIndex]);
 
   return (
-    <section className="relative overflow-hidden py-6 sm:py-8 lg:py-10">
+    <section 
+      className="relative overflow-hidden py-6 sm:py-8 lg:py-10"
+      aria-labelledby="institution-header-title"
+    >
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 via-purple-50/40 to-pink-50/40 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 via-purple-50/40 to-pink-50/40 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700" aria-hidden="true"></div>
       
       {/* Decorative elements */}
-      <div className="absolute top-10 left-4 w-20 h-20 sm:top-20 sm:left-10 sm:w-32 sm:h-32 bg-purple-200/30 dark:bg-purple-600/10 rounded-full opacity-60 blur-3xl" style={{ willChange: 'opacity', transform: 'translateZ(0)' }}></div>
-      <div className="absolute top-1/4 right-4 w-24 h-24 sm:top-1/3 sm:right-20 sm:w-48 sm:h-48 bg-pink-200/30 dark:bg-pink-600/10 rounded-full opacity-60 blur-3xl" style={{ willChange: 'opacity', transform: 'translateZ(0)' }}></div>
-      <div className="absolute bottom-10 left-1/4 w-16 h-16 sm:bottom-20 sm:w-36 sm:h-36 bg-blue-200/30 dark:bg-blue-600/10 rounded-full opacity-60 blur-3xl" style={{ willChange: 'opacity', transform: 'translateZ(0)' }}></div>
+      <div className="absolute top-10 left-4 w-20 h-20 sm:top-20 sm:left-10 sm:w-32 sm:h-32 bg-purple-200/30 dark:bg-purple-600/10 rounded-full opacity-60 blur-3xl" style={{ willChange: 'opacity', transform: 'translateZ(0)' }} aria-hidden="true"></div>
+      <div className="absolute top-1/4 right-4 w-24 h-24 sm:top-1/3 sm:right-20 sm:w-48 sm:h-48 bg-pink-200/30 dark:bg-pink-600/10 rounded-full opacity-60 blur-3xl" style={{ willChange: 'opacity', transform: 'translateZ(0)' }} aria-hidden="true"></div>
+      <div className="absolute bottom-10 left-1/4 w-16 h-16 sm:bottom-20 sm:w-36 sm:h-36 bg-blue-200/30 dark:bg-blue-600/10 rounded-full opacity-60 blur-3xl" style={{ willChange: 'opacity', transform: 'translateZ(0)' }} aria-hidden="true"></div>
       
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="mb-4 sm:mb-8" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-            <li>
-              <Link href="/" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+        <nav className="mb-4 sm:mb-8" aria-label="Sayfa konumu (breadcrumb)">
+          <ol className="flex items-center space-x-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400" role="list">
+            <li role="listitem">
+              <Link href="/" className="hover:text-gray-900 dark:hover:text-gray-100 transition-colors" aria-label="Ana sayfaya dön">
                 Ana Sayfa
               </Link>
             </li>
-            <li className="text-gray-400">/</li>
-            <li className="text-gray-900 dark:text-gray-100 font-medium truncate max-w-[200px] sm:max-w-none">{institution.name}</li>
+            <li className="text-gray-400" aria-hidden="true">/</li>
+            <li className="text-gray-900 dark:text-gray-100 font-medium truncate max-w-[200px] sm:max-w-none" role="listitem" aria-current="page">
+              <span className="sr-only">Şu anki sayfa: </span>
+              {institution.name}
+            </li>
           </ol>
         </nav>
 
@@ -165,7 +171,10 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
                 {/* Content - Her zaman sağda */}
                 <div className="flex-1 space-y-1 sm:space-y-3 text-left min-w-0">
                   {/* Başlık */}
-                  <h1 className="text-base sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
+                  <h1 
+                    id="institution-header-title"
+                    className="text-base sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 dark:text-gray-100 leading-tight"
+                  >
                     {institution.name}
                   </h1>
                   
@@ -181,8 +190,8 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
                 <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-start sm:space-x-2">
            
             
-                  <Badge variant="outline" className="text-xs sm:text-sm px-3 py-1 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                    <FileText className="h-4 w-4 mr-1" />
+                  <Badge variant="outline" className="text-xs sm:text-sm px-3 py-1 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300" aria-label={`Yüklü belge sayısı: ${institution.documentCount} adet`}>
+                    <FileText className="h-4 w-4 mr-1" aria-hidden="true" />
                     Yüklü belge sayısı: {institution.documentCount} adet
                   </Badge>
                   <Button 
@@ -190,8 +199,9 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
                     size="sm"
                     onClick={() => setIsUsefulLinksModalOpen(true)}
                     className="text-xs sm:text-sm px-3 py-1 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 text-blue-700 dark:text-white border-blue-200 dark:border-blue-700"
+                    aria-label="Yararlı linkleri görüntüle"
                   >
-                    <ExternalLink className="h-4 w-4 mr-1" />
+                    <ExternalLink className="h-4 w-4 mr-1" aria-hidden="true" />
                     Yararlı Linkler
                   </Button>
                 </div>
@@ -201,41 +211,45 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
             {/* Kurum Duyuruları Bölümü - Kartın en altında */}
             {(duyurular.length > 0 || duyuruLoading) && (
               <div className="mt-auto">
-                <hr className="mt-2 mb-0 border-gray-200 dark:border-gray-600" />
-                <div className="duyuru-container">
+                <hr className="mt-2 mb-0 border-gray-200 dark:border-gray-600" aria-hidden="true" />
+                <div className="duyuru-container" role="region" aria-label="Kurum duyuruları">
                   {duyuruLoading ? (
                     // Skeleton Loading
-                    <div className="flex items-center space-x-1">
-                      <div className="h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                      <div className="h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
-                      <div className="h-3 w-16 bg-gray-300 dark:bg-gray-600 rounded animate-pulse"></div>
+                    <div className="flex items-center space-x-1" role="status" aria-live="polite" aria-label="Duyurular yükleniyor">
+                      <div className="h-4 w-4 bg-gray-300 dark:bg-gray-600 rounded animate-pulse" aria-hidden="true"></div>
+                      <div className="h-4 w-32 bg-gray-300 dark:bg-gray-600 rounded animate-pulse" aria-hidden="true"></div>
+                      <div className="h-3 w-16 bg-gray-300 dark:bg-gray-600 rounded animate-pulse" aria-hidden="true"></div>
+                      <span className="sr-only">Kurum duyuruları yükleniyor, lütfen bekleyin.</span>
                     </div>
                   ) : (
                     // Gerçek Duyurular - Aşağıdan yukarı değişim
-                    <div className="duyuru-content">
+                    <div className="duyuru-content" role="list" aria-label={`${duyurular.length} adet kurum duyurusu`}>
                       {duyurular.map((duyuru, index) => (
                         <div 
                           key={index}
                           className={`duyuru-item ${index === currentDuyuruIndex ? 'active' : ''}`}
+                          role="listitem"
+                          aria-current={index === currentDuyuruIndex ? 'true' : undefined}
                         >
                           <a
                             href={duyuru.link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center space-x-1 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
+                            aria-label={`${duyuru.baslik}, ${duyuru.tarih} tarihli duyuru, yeni pencerede açılır`}
                           >
                             <span className="font-medium group-hover:underline duyuru-baslik">
                               {duyuru.baslik}
                             </span>
-                            <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                           </a>
                           
                           {/* Tarih ve ince çizgi - hem masaüstü hem mobil */}
                           <div className="duyuru-bottom">
-                            <span className="duyuru-tarih">
+                            <span className="duyuru-tarih" aria-label={`Duyuru tarihi: ${duyuru.tarih}`}>
                               {duyuru.tarih}
                             </span>
-                            <div className="duyuru-line"></div>
+                            <div className="duyuru-line" aria-hidden="true"></div>
                           </div>
                         </div>
                       ))}

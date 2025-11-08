@@ -52,3 +52,13 @@ export const Palette = dynamic(() => import('lucide-react').then(mod => ({ defau
 export const BarChart = dynamic(() => import('lucide-react').then(mod => ({ default: mod.BarChart })), { ssr: false });
 export const GraduationCap = dynamic(() => import('lucide-react').then(mod => ({ default: mod.GraduationCap })), { ssr: false });
 export const BookOpen = dynamic(() => import('lucide-react').then(mod => ({ default: mod.BookOpen })), { ssr: false });
+export const Lock = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Lock })), { ssr: false });
+export const Cookie = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Cookie })), { ssr: false });
+export const UserCheck = dynamic(() => import('lucide-react').then(mod => ({ default: mod.UserCheck })), { ssr: false });
+export const Server = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Server })), { ssr: false });
+export const AlertCircle = dynamic(() => import('lucide-react').then(mod => ({ default: mod.AlertCircle })), { ssr: false });
+export const AlertTriangle = dynamic(() => import('lucide-react').then(mod => ({ default: mod.AlertTriangle })), { ssr: false });
+export const Info = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Info })), { ssr: false });
+export const FileCheck = dynamic(() => import('lucide-react').then(mod => ({ default: mod.FileCheck })), { ssr: false });
+export const Scale = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Scale })), { ssr: false });
+export const Settings = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Settings })), { ssr: false });

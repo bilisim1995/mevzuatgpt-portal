@@ -52,6 +52,17 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
     router.push(`/kurum/${institution.id}`);
   };
 
+  // Klavye navigasyonu için handler'lar
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'Escape' && isOpen) {
+      e.preventDefault();
+      setIsOpen(false);
+    } else if ((e.key === 'Enter' || e.key === ' ') && !isOpen) {
+      e.preventDefault();
+      setIsOpen(true);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="space-y-4">
@@ -59,6 +70,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
           {/* Selector Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
+            onKeyDown={handleKeyDown}
             disabled={loading || isNavigating}
             className={cn(
               "w-full py-px px-4 text-left bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl",
@@ -98,7 +110,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                 )}
                 <div>
               
-                  <div className="font-semibold text-xl tracking-wide text-white dark:text-gray-800">
+                  <div className="font-semibold text-xl tracking-wide text-white dark:text-gray-900">
                     {loading
                       ? 'Kurumlar yükleniyor...'
                       : isNavigating
@@ -108,7 +120,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                         : 'Listeden kurum seçin'
                     }
                   </div>
-                  <div className="text-sm text-gray-300 dark:text-gray-600">
+                  <div className="text-sm text-gray-300 dark:text-black">
                     {loading
                       ? 'Lütfen bekleyin'
                       : isNavigating
@@ -121,7 +133,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                 </div>
               </div>
               <ChevronDown className={cn(
-                "h-5 w-5 text-gray-300 dark:text-gray-700 transition-transform duration-200",
+                "h-5 w-5 text-gray-300 dark:text-gray-500 transition-transform duration-200",
                 isOpen && "rotate-180",
                 (loading || isNavigating) && "animate-pulse"
               )} />

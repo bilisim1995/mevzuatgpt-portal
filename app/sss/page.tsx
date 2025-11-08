@@ -28,6 +28,101 @@ export default function FAQPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       
+      {/* FAQPage Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Mevzuat GPT nedir ve nasıl kullanılır?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Mevzuat GPT, kamu kurumlarının yayınladığı genelge, yönetmelik ve diğer mevzuat metinlerine tek noktadan erişim sağlayan bir platformdur. Ana sayfadan bir kurum seçin, arama kutusunu kullanarak mevzuat arayın, istediğiniz belgeye tıklayarak detaylarını görüntüleyin ve PDF olarak indirin veya yapay zeka asistanından yardım alın."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Platform ücretsiz mi?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Evet, Mevzuat GPT tamamen ücretsizdir. Tüm mevzuat metinlerine, arama özelliklerine ve yapay zeka asistanına ücretsiz erişebilirsiniz. Kayıt olmaya da gerek yoktur."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Mevzuatlar ne sıklıkla güncellenir?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Mevzuat metinleri günlük olarak kontrol edilir ve yeni yayınlanan metinler hızla platforma eklenir. Kurumların resmi web sitelerinden otomatik olarak takip edilen güncellemeler sayesinde en güncel bilgilere erişebilirsiniz."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Hangi kurumların mevzuatları bulunuyor?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Platformda bakanlıklar ve bağlı kuruluşları, düzenleyici kurullar (BDDK, SPK, EPDK vb.), kamu kurumları (SGK, İŞKUR, TÜİK vb.), belediyeler ve yerel yönetimler ile diğer kamu kurum ve kuruluşlarının mevzuatları bulunmaktadır."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Yapay zeka asistanı nasıl çalışır?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yapay zeka asistanımız, mevzuat metinlerini analiz ederek sorularınıza hızlı ve doğru cevaplar verir. 'Bu mevzuat ne hakkında?', 'Kimler için geçerli?', 'Ana maddeleri neler?', 'Özetini çıkarır mısın?' gibi sorular sorabilirsiniz."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Arama özelliği nasıl kullanılır?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Etkili arama için en az 2 karakter yazın, anahtar kelimeleri kullanın (örn: 'çalışma izni', 'vergi muafiyeti'), otomatik tamamlama önerilerini kullanın, tam cümle yerine önemli kelimeleri yazın ve kurum sayfasında arama yaparak sonuçları daraltın."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "PDF dosyalarını indirebilir miyim?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Evet, mevzuat metinlerinin PDF versiyonlarını ücretsiz olarak indirebilirsiniz. Her mevzuat sayfasında 'PDF İndir' butonu bulunmaktadır. İndirilen dosyalar orijinal formatlarında ve tam içerikli olarak sunulur."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Mobil cihazlarda kullanabilir miyim?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Evet, Mevzuat GPT mobil uyumlu olarak tasarlanmıştır. Telefon, tablet ve bilgisayarınızdan aynı özelliklere erişebilirsiniz. Responsive tasarım sayesinde her cihazda optimal görüntüleme sağlanır."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Mevzuat metinlerinin doğruluğu garanti edilir mi?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Mevzuat metinleri resmi kaynaklardan alınmakta ve düzenli olarak güncellenmektedir. Ancak resmi işlemler için mutlaka orijinal kaynaklara başvurmanızı öneririz. Bu platform bilgilendirme amaçlıdır."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "API hizmeti var mı?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Evet, geliştiriciler için REST API hizmeti sunuyoruz. API ile kendi uygulamanızda mevzuat verilerine erişebilirsiniz. API kullanımı hakkında detaylı bilgi için bizimle iletişime geçebilirsiniz."
+                }
+              }
+            ],
+            "url": "https://mevzuatgpt.org/sss",
+            "inLanguage": "tr-TR"
+          })
+        }}
+      />
+      
       <main className="flex-1 bg-gray-50 dark:bg-gray-900">
         <section className="py-16 lg:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">

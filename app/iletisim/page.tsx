@@ -30,6 +30,57 @@ export default function ContactPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       
+      {/* ContactPage Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            "name": "İletişim - Mevzuat GPT",
+            "description": "Mevzuat GPT ile iletişime geçin. Sorularınız, önerileriniz ve geri bildirimleriniz için bizimle iletişim kurun.",
+            "url": "https://mevzuatgpt.org/iletisim",
+            "mainEntity": {
+              "@type": "Organization",
+              "name": "Mevzuat GPT",
+              "url": "https://mevzuatgpt.org",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://mevzuatgpt.org/mevzuat-logo-beyaz.png",
+                "width": 179,
+                "height": 32
+              },
+              "contactPoint": [
+                {
+                  "@type": "ContactPoint",
+                  "contactType": "customer service",
+                  "email": "info@mevzuatgpt.org",
+                  "availableLanguage": ["Turkish"],
+                  "areaServed": "TR"
+                },
+                {
+                  "@type": "ContactPoint",
+                  "contactType": "technical support",
+                  "email": "destek@mevzuatgpt.org",
+                  "availableLanguage": ["Turkish"],
+                  "areaServed": "TR"
+                }
+              ],
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "TR"
+              },
+              "sameAs": [
+                "https://instagram.com/mevzuatgpt",
+                "https://x.com/mevzuatgpt",
+                "https://orbitinovasyon.com"
+              ]
+            },
+            "inLanguage": "tr-TR"
+          })
+        }}
+      />
+      
       <main className="flex-1 bg-gray-50 dark:bg-gray-900">
         {/* Hero Section */}
         <section className="relative overflow-hidden py-16 lg:py-24">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Moon, Sun, Menu, X } from '@/components/icon-components';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
@@ -10,12 +10,72 @@ export function Header() {
   const { theme, setTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Klavye navigasyonu - Esc tuşu ile menüyü kapatma ve focus trap
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsMenuOpen(false);
+        // Menü butonuna focus döndür
+        const menuButton = document.querySelector('[aria-label*="Menü"]') as HTMLButtonElement;
+        menuButton?.focus();
+      }
+    };
+
+    // Focus trap - Tab tuşu ile menü içinde kal
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      const menu = document.querySelector('[role="dialog"][aria-modal="true"]');
+      if (!menu) return;
+
+      const focusableElements = menu.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    window.addEventListener('keydown', handleTab);
+    
+    // Menü açıldığında ilk linke focus ver
+    setTimeout(() => {
+      const firstLink = document.querySelector('[role="dialog"] a') as HTMLElement;
+      firstLink?.focus();
+    }, 100);
+
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      window.removeEventListener('keydown', handleTab);
+    };
+  }, [isMenuOpen]);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-gray-200 dark:border-gray-800">
+    <header 
+      role="banner" 
+      className="sticky top-0 z-50 w-full border-b bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-gray-200 dark:border-gray-800"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center" aria-label="Ana sayfaya dön">
             <img 
               src="/mevzuat-logo-beyaz.png" 
               alt="Mevzuat GPT Logo" 
@@ -37,7 +97,11 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav 
+            role="navigation" 
+            aria-label="Ana navigasyon menüsü"
+            className="hidden md:flex items-center space-x-8"
+          >
             <Link href="/" className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               Ana Sayfa
             </Link>
@@ -87,8 +151,17 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-            <nav className="flex flex-col space-y-4 p-4">
+          <div 
+            className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobil menü"
+          >
+            <nav 
+              role="navigation" 
+              aria-label="Mobil navigasyon menüsü"
+              className="flex flex-col space-y-4 p-4"
+            >
               <Link href="/" className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
                 Ana Sayfa
               </Link>

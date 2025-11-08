@@ -130,7 +130,7 @@ export default function HomePage() {
       
       <Header />
       
-      <main className="flex-1">
+      <main id="main-content" role="main" className="flex-1" tabIndex={-1}>
         <HeroSection />
         <RecentRegulations />
         
@@ -268,7 +268,7 @@ export default function HomePage() {
                     <div className="flex justify-center lg:justify-end">
                       <div className="relative">
                         {/* YZ SVG Görseli */}
-                        <div className="w-[28rem] h-[28rem] flex items-center justify-center">
+                        <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-[28rem] lg:h-[28rem] flex items-center justify-center">
                           <img 
                             src="/yz.svg" 
                             alt="MevzuatGPT Yapay Zeka" 
