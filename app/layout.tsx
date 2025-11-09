@@ -99,6 +99,19 @@ export default function RootLayout({
         
         {/* Preload critical images - optimized sizes */}
         {/* Favicon preload removed - favicons are loaded automatically */}
+        {/* LCP Optimization: Preload logo for faster rendering */}
+        <link 
+          rel="preload" 
+          href="/mevzuat-logo-beyaz.png" 
+          as="image" 
+          type="image/png"
+        />
+        <link 
+          rel="preload" 
+          href="/mevzuat-logo-siyah.png" 
+          as="image" 
+          type="image/png"
+        />
         
         {/* Critical CSS inline yükleme - Optimized */}
         <style dangerouslySetInnerHTML={{

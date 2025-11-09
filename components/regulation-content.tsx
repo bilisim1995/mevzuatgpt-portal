@@ -1078,6 +1078,45 @@ export function RegulationContent({ regulationId, initialData }: Props) {
           </CardContent>
         </Card>
 
+        {/* Sponsorlu İçerik */}
+        <div className="mt-8">
+          <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-2 border-amber-200 dark:border-amber-800 shadow-lg">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center space-x-2 text-lg text-gray-900 dark:text-gray-100">
+                <div className="w-7 h-7 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xs">SP</span>
+                </div>
+                <span>Sponsorlu İçerik</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0 pb-4">
+              <div className="space-y-3">
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  Bu alan sponsorlu içerik için ayrılmıştır. Ürün veya hizmetinizi burada tanıtmak isterseniz bizimle iletişime geçebilirsiniz.
+                </p>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                  <a
+                    href="mailto:reklam@mevzuatgpt.org"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white rounded-lg text-sm font-medium transition-colors shadow-md hover:shadow-lg"
+                  >
+                    <span>Reklam İçin İletişime Geçin</span>
+                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  </a>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    <strong className="text-gray-900 dark:text-gray-100">E-posta:</strong>{' '}
+                    <a 
+                      href="mailto:reklam@mevzuatgpt.org" 
+                      className="text-amber-700 dark:text-amber-300 hover:underline"
+                    >
+                      reklam@mevzuatgpt.org
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Related Regulations */}
         <div className="mt-12">
 

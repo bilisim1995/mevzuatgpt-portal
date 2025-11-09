@@ -176,7 +176,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Anında Cevaplar</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Anında Cevaplar</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">Saniyeler içinde doğru yanıtlar</p>
                           </div>
                         </div>
@@ -188,7 +188,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Güncel Veriler</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Güncel Veriler</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">En son mevzuat bilgileri</p>
                           </div>
                         </div>
@@ -200,7 +200,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Akıllı Arama</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Akıllı Arama</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">Doğal dil ile sorgulama</p>
                           </div>
                         </div>
@@ -212,7 +212,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Kaynak Kontrolü</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Kaynak Kontrolü</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">Güvenilir kaynak doğrulama</p>
                           </div>
                         </div>
@@ -224,7 +224,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Güvenilirlik Skoru</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Güvenilirlik Skoru</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">Cevapların doğruluk oranı</p>
                           </div>
                         </div>
@@ -236,7 +236,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Cevap Puanlama</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Cevap Puanlama</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">Cevapların kalite değerlendirmesi</p>
                           </div>
                         </div>
@@ -326,7 +326,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Kurum Bazlı Filtreleme</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Kurum Bazlı Filtreleme</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">Sadece seçili kurumun mevzuatları</p>
                           </div>
                         </div>
@@ -338,7 +338,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Güncel Duyurular</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Güncel Duyurular</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">En son kurum duyuruları</p>
                           </div>
                         </div>
@@ -350,7 +350,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Kategorize Edilmiş</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Kategorize Edilmiş</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">Genelge, yönetmelik, tebliğ</p>
                           </div>
                         </div>
@@ -362,7 +362,7 @@ export default function HomePage() {
                             </svg>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Tarih Sıralaması</h4>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">Tarih Sıralaması</h3>
                             <p className="text-xs text-gray-600 dark:text-gray-400">En yeni önce sıralama</p>
                           </div>
                         </div>

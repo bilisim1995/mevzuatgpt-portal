@@ -84,6 +84,7 @@ export function Header() {
               height={40}
               loading="eager"
               decoding="async"
+              fetchPriority="high"
             />
             <img 
               src="/mevzuat-logo-siyah.png" 
@@ -93,6 +94,7 @@ export function Header() {
               height={40}
               loading="eager"
               decoding="async"
+              fetchPriority="high"
             />
           </Link>
 
