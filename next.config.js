@@ -58,14 +58,61 @@ const nextConfig = {
           {
             key: 'X-Robots-Tag',
             value: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://mc.yandex.ru",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com data:",
+              "img-src 'self' data: https: blob:",
+              "connect-src 'self' https://portalapi.mevzuatgpt.org https://www.google-analytics.com https://mc.yandex.ru https://api.qrserver.com",
+              "frame-src 'self' https://www.google.com",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests"
+            ].join('; ')
+          },
+          {
+            key: 'Permissions-Policy',
+            value: [
+              'camera=()',
+              'microphone=()',
+              'geolocation=()',
+              'interest-cohort=()'
+            ].join(', ')
           }
         ]
       }
     ]
   },
   images: { 
-    unoptimized: true,
-    domains: ['images.pexels.com', 'portalapi.mevzuatgpt.org', 'mevzuatgpt.org', '27897322-76a4-44ee-9eae-a025f2ec0048-00-5kgsvegbsnnj.kirk.replit.dev', 'cdn.mevzuatgpt.org'],
+    unoptimized: false,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'portalapi.mevzuatgpt.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mevzuatgpt.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.mevzuatgpt.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.qrserver.com',
+      },
+    ],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

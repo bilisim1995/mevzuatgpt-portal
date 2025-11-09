@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { Instagram, X } from '@/components/icon-components';
 
@@ -15,23 +16,19 @@ export function Footer() {
           {/* Logo & Description */}
           <div className="space-y-4 col-span-1 md:col-span-1">
             <div className="flex items-center">
-              <img 
+              <Image 
                 src="/mevzuat-logo-beyaz.png" 
                 alt="Mevzuat GPT Logo" 
                 className="h-8 w-auto dark:hidden"
                 width={179}
                 height={32}
-                loading="lazy"
-                decoding="async"
               />
-              <img 
+              <Image 
                 src="/mevzuat-logo-siyah.png" 
                 alt="Mevzuat GPT Logo" 
                 className="h-8 w-auto hidden dark:block"
                 width={179}
                 height={32}
-                loading="lazy"
-                decoding="async"
               />
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">

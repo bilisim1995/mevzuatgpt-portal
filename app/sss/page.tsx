@@ -123,6 +123,31 @@ export default function FAQPage() {
         }}
       />
       
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Ana Sayfa",
+                "item": "https://mevzuatgpt.org"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Sıkça Sorulan Sorular",
+                "item": "https://mevzuatgpt.org/sss"
+              }
+            ]
+          })
+        }}
+      />
+      
       <main className="flex-1 bg-gray-50 dark:bg-gray-900">
         <section className="py-16 lg:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">

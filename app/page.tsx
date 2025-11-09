@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 // Optimized lazy loading - Critical components with SSR, non-critical without
 const HowItWorksButton = dynamic(() => import('@/components/how-it-works-button').then(mod => ({ default: mod.HowItWorksButton })), { 
@@ -269,9 +270,11 @@ export default function HomePage() {
                       <div className="relative">
                         {/* YZ SVG Görseli */}
                         <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-[28rem] lg:h-[28rem] flex items-center justify-center">
-                          <img 
+                          <Image 
                             src="/yz.svg" 
                             alt="MevzuatGPT Yapay Zeka" 
+                            width={448}
+                            height={448}
                             className="w-full h-full object-contain"
                           />
                         </div>
@@ -375,9 +378,11 @@ export default function HomePage() {
                       <div className="relative">
                         {/* DOC SVG Görseli */}
                         <div className="w-80 h-80 flex items-center justify-center">
-                          <img 
+                          <Image 
                             src="/doc.svg" 
                             alt="Kurum Mevzuat ve Duyurular" 
+                            width={320}
+                            height={320}
                             className="w-full h-full object-contain"
                           />
                         </div>

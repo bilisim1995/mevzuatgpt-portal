@@ -211,30 +211,38 @@ export default async function RegulationPage({ params }: Props) {
                     "name": regulation.institutionName,
                     "url": `https://mevzuatgpt.org/kurum/${regulation.institutionId}`
                   }
-                ],
-                "breadcrumb": {
-                  "@type": "BreadcrumbList",
-                  "itemListElement": [
-                    {
-                      "@type": "ListItem",
-                      "position": 1,
-                      "name": "Ana Sayfa",
-                      "item": "https://mevzuatgpt.org"
-                    },
-                    {
-                      "@type": "ListItem",
-                      "position": 2,
-                      "name": regulation.institutionName,
-                      "item": `https://mevzuatgpt.org/kurum/${regulation.institutionId}`
-                    },
-                    {
-                      "@type": "ListItem",
-                      "position": 3,
-                      "name": regulation.title,
-                      "item": `https://mevzuatgpt.org/mevzuat/${params.id}`
-                    }
-                  ]
-                }
+                ]
+              })
+            }}
+          />
+          
+          {/* BreadcrumbList Schema */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Ana Sayfa",
+                    "item": "https://mevzuatgpt.org"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": regulation.institutionName,
+                    "item": `https://mevzuatgpt.org/kurum/${regulation.institutionId}`
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": regulation.title,
+                    "item": `https://mevzuatgpt.org/mevzuat/${params.id}`
+                  }
+                ]
               })
             }}
           />

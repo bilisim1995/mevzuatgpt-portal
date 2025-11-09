@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -167,10 +168,13 @@ export function UsefulLinksModal({ isOpen, onClose, kurumId }: Props) {
                           Mobil erişim için QR kod:
                         </p>
                         <div className="flex justify-center">
-                          <img 
+                          <Image 
                             src={qrCodeUrl} 
                             alt="QR Code" 
+                            width={160}
+                            height={160}
                             className="w-40 h-40 border rounded shadow-lg"
+                            unoptimized
                           />
                         </div>
                       </div>
@@ -268,10 +272,13 @@ export function UsefulLinksModal({ isOpen, onClose, kurumId }: Props) {
                         Mobil erişim için QR kod:
                       </p>
                       <div className="flex justify-center">
-                        <img 
+                        <Image 
                           src={qrCodeUrl} 
                           alt="QR Code" 
+                          width={96}
+                          height={96}
                           className="w-24 h-24 border rounded"
+                          unoptimized
                         />
                       </div>
                     </div>

@@ -81,6 +81,31 @@ export default function ContactPage() {
         }}
       />
       
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Ana Sayfa",
+                "item": "https://mevzuatgpt.org"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "İletişim",
+                "item": "https://mevzuatgpt.org/iletisim"
+              }
+            ]
+          })
+        }}
+      />
+      
       <main className="flex-1 bg-gray-50 dark:bg-gray-900">
         {/* Hero Section */}
         <section className="relative overflow-hidden py-16 lg:py-24">

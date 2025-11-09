@@ -5,6 +5,7 @@ import { Moon, Sun, Menu, X } from '@/components/icon-components';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Header() {
   const { theme, setTheme } = useTheme();
@@ -76,24 +77,22 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center" aria-label="Ana sayfaya dön">
-            <img 
+            <Image 
               src="/mevzuat-logo-beyaz.png" 
               alt="Mevzuat GPT Logo" 
               className="h-10 w-auto dark:hidden"
               width={224}
               height={40}
-              loading="eager"
-              decoding="async"
+              priority
               fetchPriority="high"
             />
-            <img 
+            <Image 
               src="/mevzuat-logo-siyah.png" 
               alt="Mevzuat GPT Logo" 
               className="h-10 w-auto hidden dark:block"
               width={224}
               height={40}
-              loading="eager"
-              decoding="async"
+              priority
               fetchPriority="high"
             />
           </Link>
