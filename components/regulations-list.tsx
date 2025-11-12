@@ -16,6 +16,11 @@ const Skeleton = dynamic(() => import('@/components/ui/skeleton').then(mod => ({
 const Badge = dynamic(() => import('@/components/ui/badge').then(mod => ({ default: mod.Badge })), { ssr: false });
 const Button = dynamic(() => import('@/components/ui/button').then(mod => ({ default: mod.Button })), { ssr: false });
 const Input = dynamic(() => import('@/components/ui/input').then(mod => ({ default: mod.Input })), { ssr: false });
+const Select = dynamic(() => import('@/components/ui/select').then(mod => ({ default: mod.Select })), { ssr: false });
+const SelectContent = dynamic(() => import('@/components/ui/select').then(mod => ({ default: mod.SelectContent })), { ssr: false });
+const SelectItem = dynamic(() => import('@/components/ui/select').then(mod => ({ default: mod.SelectItem })), { ssr: false });
+const SelectTrigger = dynamic(() => import('@/components/ui/select').then(mod => ({ default: mod.SelectTrigger })), { ssr: false });
+const SelectValue = dynamic(() => import('@/components/ui/select').then(mod => ({ default: mod.SelectValue })), { ssr: false });
 
 // Lazy load icons
 const Calendar = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Calendar })), { ssr: false });
@@ -98,6 +103,11 @@ export function RegulationsList({ institutionId }: Props) {
   const [searchTotalCount, setSearchTotalCount] = useState(0);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
+  
+  // Filtre state'leri
+  const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
+  const [selectedSource, setSelectedSource] = useState<string>('Tümü');
+  const [selectedStatus, setSelectedStatus] = useState<string>('Tümü');
 
   useEffect(() => {
     async function loadRegulations() {
@@ -106,6 +116,10 @@ export function RegulationsList({ institutionId }: Props) {
         const { getRegulationsByInstitutionSlug } = await import('@/lib/data');
         const data = await getRegulationsByInstitutionSlug(institutionId);
         setRegulations(data);
+        // Filtreleri sıfırla
+        setSelectedCategory('Tümü');
+        setSelectedSource('Tümü');
+        setSelectedStatus('Tümü');
       } catch (error) {
         // DÜZELTME: Hatalı kod satırı yerine standart hata yönetimi eklendi.
         console.error('Mevzuatları yüklerken hata oluştu:', error);
@@ -332,10 +346,92 @@ export function RegulationsList({ institutionId }: Props) {
       router.push(`/mevzuat/${regulationId}`);
     }, 100);
   };
+  // Filtreleme için benzersiz değerleri hesapla
+  const uniqueCategories = Array.from(new Set(regulations.map(r => r.category).filter(Boolean))).sort();
+  const uniqueStatuses = Array.from(new Set(regulations.map(r => r.status).filter(Boolean)));
+  
+  // Kaynakları tags ve documentNumber'dan çıkar
+  const extractSources = () => {
+    const sources = new Set<string>();
+    regulations.forEach(regulation => {
+      // Tags içinden kaynakları bul
+      if (regulation.tags && regulation.tags.length > 0) {
+        regulation.tags.forEach(tag => {
+          const upperTag = tag.toUpperCase().trim();
+          // KAYSİS, Resmi Gazete gibi kaynakları bul
+          if (upperTag.includes('KAYSİS') || upperTag.includes('RESMİ GAZETE') || upperTag.includes('RG')) {
+            if (upperTag.includes('KAYSİS')) {
+              sources.add('KAYSİS');
+            }
+            if (upperTag.includes('RESMİ GAZETE') || upperTag.includes('RG')) {
+              sources.add('Resmi Gazete');
+            }
+          } else if (tag.trim()) {
+            // Diğer kaynakları da ekle (boş olmayan tag'ler)
+            sources.add(tag.trim());
+          }
+        });
+      }
+      // documentNumber'dan da kontrol et
+      if (regulation.documentNumber) {
+        const upperDoc = regulation.documentNumber.toUpperCase();
+        if (upperDoc.includes('KAYSİS')) {
+          sources.add('KAYSİS');
+        }
+        if (upperDoc.includes('RESMİ GAZETE') || upperDoc.includes('RG')) {
+          sources.add('Resmi Gazete');
+        }
+      }
+    });
+    return Array.from(sources).sort();
+  };
+  
+  const uniqueSources = extractSources();
+
   // Filter regulations
   // Sadece arama modu sonuçları veya tüm mevzuatlar gösterilir
   // Input'a yazılan metin hiçbir filtreleme yapmaz
-  const filteredRegulations = isSearchMode ? searchResults : regulations;
+  let filteredRegulations = isSearchMode ? searchResults : regulations;
+  
+  // Filtreleri uygula
+  if (!isSearchMode) {
+    filteredRegulations = filteredRegulations.filter(regulation => {
+      // Kategori filtresi
+      if (selectedCategory !== 'Tümü' && regulation.category !== selectedCategory) {
+        return false;
+      }
+      
+      // Kaynak filtresi
+      if (selectedSource !== 'Tümü') {
+        const hasSource = regulation.tags?.some((tag: string) => {
+          const upperTag = tag.toUpperCase().trim();
+          if (selectedSource === 'KAYSİS') {
+            return upperTag.includes('KAYSİS');
+          } else if (selectedSource === 'Resmi Gazete') {
+            return upperTag.includes('RESMİ GAZETE') || upperTag.includes('RG');
+          } else {
+            return tag.trim() === selectedSource;
+          }
+        }) || (regulation.documentNumber && (
+          selectedSource === 'KAYSİS' && regulation.documentNumber.toUpperCase().includes('KAYSİS') ||
+          selectedSource === 'Resmi Gazete' && (regulation.documentNumber.toUpperCase().includes('RESMİ GAZETE') || regulation.documentNumber.toUpperCase().includes('RG'))
+        ));
+        
+        if (!hasSource) return false;
+      }
+      
+      // Durum filtresi
+      if (selectedStatus !== 'Tümü') {
+        if (selectedStatus === 'Yürürlükte' && regulation.status !== 'active') {
+          return false;
+        } else if (selectedStatus === 'Yürürlükten Kalktı' && regulation.status === 'active') {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+  }
 
   // Sort regulations
   const sortedRegulations = filteredRegulations
@@ -508,6 +604,79 @@ export function RegulationsList({ institutionId }: Props) {
                 </div>
                 
               </div>
+              
+              {/* Filtreler */}
+              {!loading && regulations.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-3 justify-center">
+                  {/* Kategori Filtresi */}
+                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                    <SelectTrigger className="w-full sm:w-auto min-w-[180px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+                      <span className="flex-1 text-left">
+                        {selectedCategory}
+                      </span>
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px] bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
+                      <SelectItem value="Tümü" className="text-sm cursor-pointer text-gray-900 dark:text-gray-100">
+                        Tümü
+                      </SelectItem>
+                      {uniqueCategories.map((category) => (
+                        <SelectItem 
+                          key={category} 
+                          value={category}
+                          className="text-sm cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  {/* Kaynak Filtresi */}
+                  {uniqueSources.length > 0 && (
+                    <Select value={selectedSource} onValueChange={setSelectedSource}>
+                      <SelectTrigger className="w-full sm:w-auto min-w-[140px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+                        <span className="flex-1 text-left">
+                          {selectedSource}
+                        </span>
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px] bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
+                        <SelectItem value="Tümü" className="text-sm cursor-pointer text-gray-900 dark:text-gray-100">
+                          Tümü
+                        </SelectItem>
+                        {uniqueSources.map((source) => (
+                          <SelectItem 
+                            key={source} 
+                            value={source}
+                            className="text-sm cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            {source}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                  
+                  {/* Durum Filtresi */}
+                  <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                    <SelectTrigger className="w-full sm:w-auto min-w-[140px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+                      <span className="flex-1 text-left">
+                        {selectedStatus}
+                      </span>
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px] bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
+                      <SelectItem value="Tümü" className="text-sm cursor-pointer text-gray-900 dark:text-gray-100">
+                        Tümü
+                      </SelectItem>
+                      <SelectItem value="Yürürlükte" className="text-sm cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        Yürürlükte
+                      </SelectItem>
+                      <SelectItem value="Yürürlükten Kalktı" className="text-sm cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        Yürürlükten Kalktı
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
 
               {/* Autocomplete Suggestions */}
               {showSuggestions && searchQuery.length >= 2 && suggestions.length > 0 && (

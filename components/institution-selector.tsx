@@ -7,6 +7,7 @@ import { Institution } from '@/lib/data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -29,27 +30,80 @@ const categoryColors = {
   regulatory: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300'
 };
 
+// Türkçe alfabe harfleri
+const turkishAlphabet = ['Tümü', 'A', 'B', 'C', 'Ç', 'D', 'E', 'F', 'G', 'Ğ', 'H', 'I', 'İ', 'J', 'K', 'L', 'M', 'N', 'O', 'Ö', 'P', 'R', 'S', 'Ş', 'T', 'U', 'Ü', 'V', 'Y', 'Z'];
+
 export function InstitutionSelector({ institutions, loading = false }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedInstitution, setSelectedInstitution] = useState<Institution | null>(null);
   const [isNavigating, setIsNavigating] = useState(false);
+  const [selectedLetter, setSelectedLetter] = useState<string>('Tümü');
+  const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
-  // Kurumları sırala: Mevzuat adedi 0'dan büyük olanlar en başta, sonra alfabetik
-  const sortedInstitutions = [...institutions].sort((a, b) => {
-    // Önce mevzuat adedi 0'dan büyük olanları en başa al
-    if (a.documentCount > 0 && b.documentCount === 0) return -1;
-    if (a.documentCount === 0 && b.documentCount > 0) return 1;
-    
-    // Aynı durumda olanları alfabetik sırala
-    return a.name.localeCompare(b.name, 'tr');
-  });
+  // Kurumları harf filtresine göre filtrele ve sırala
+  const getFilteredInstitutions = () => {
+    return [...institutions]
+      .filter((institution) => {
+        // Harf filtresi
+        if (selectedLetter !== 'Tümü') {
+          const firstLetter = institution.name.charAt(0).toUpperCase();
+          if (selectedLetter === 'İ') {
+            // İ harfi için: İ veya I ile başlayanları göster
+            const normalizedFirst = firstLetter === 'İ' || firstLetter === 'I' ? 'İ' : firstLetter;
+            if (normalizedFirst !== 'İ') return false;
+          } else if (selectedLetter === 'I') {
+            // I harfi için: Sadece I ile başlayanları göster (İ hariç)
+            if (firstLetter !== 'I') return false;
+          } else {
+            // Diğer harfler için normal kontrol
+            if (firstLetter !== selectedLetter) return false;
+          }
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        // Önce mevzuat adedi 0'dan büyük olanları en başa al
+        if (a.documentCount > 0 && b.documentCount === 0) return -1;
+        if (a.documentCount === 0 && b.documentCount > 0) return 1;
+        
+        // Aynı durumda olanları alfabetik sırala
+        return a.name.localeCompare(b.name, 'tr');
+      });
+  };
+
+  const filteredInstitutions = getFilteredInstitutions();
 
   const handleSelect = (institution: Institution) => {
     setSelectedInstitution(institution);
     setIsNavigating(true);
     setIsOpen(false);
     router.push(`/kurum/${institution.id}`);
+  };
+
+  const handleLetterSelect = (letter: string) => {
+    setSelectedLetter(letter);
+    setSearchQuery(''); // Harf seçildiğinde arama sorgusunu temizle
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    // Arama yapıldığında harf filtresini sıfırla
+    if (value.trim()) {
+      setSelectedLetter('Tümü');
+    }
+  };
+
+  // Command component için custom filter fonksiyonu (sadece arama için)
+  // Harf filtresi zaten getFilteredInstitutions'da yapılıyor
+  const customFilter = (value: string, search: string) => {
+    // Sadece arama sorgusu filtresi (harf filtresi zaten uygulanmış)
+    if (search.trim()) {
+      const normalizedValue = value.toLowerCase();
+      const normalizedSearch = search.toLowerCase();
+      return normalizedValue.includes(normalizedSearch) ? 1 : 0;
+    }
+    return 1;
   };
 
   // Klavye navigasyonu için handler'lar
@@ -145,15 +199,45 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
             <div className="absolute top-full left-0 right-0 mt-1 z-50">
               <Card className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 shadow-2xl shadow-gray-500/30 dark:shadow-black/60 drop-shadow-xl" role="listbox">
                 <CardContent className="p-0">
-                  <Command className="rounded-lg">
-                    <CommandInput 
-                      placeholder="Kurum ara..." 
-                      className="h-12 border-0 focus:ring-0"
-                    />
+                  <Command 
+                    className="rounded-lg"
+                    filter={customFilter}
+                    shouldFilter={true}
+                  >
+                    {/* Arama ve Filtre Satırı */}
+                    <div className="flex items-center gap-2 px-3 py-2 border-b border-gray-200 dark:border-gray-700">
+                      <div className="flex-1 [&>div]:border-0 [&>div]:border-b-0">
+                        <CommandInput 
+                          placeholder="Kurum ara..." 
+                          className="h-10 border-0 focus:ring-0"
+                          value={searchQuery}
+                          onValueChange={handleSearchChange}
+                        />
+                      </div>
+                      
+                      {/* Harf Filtresi Select */}
+                      <Select value={selectedLetter} onValueChange={handleLetterSelect}>
+                        <SelectTrigger className="w-24 h-10 text-sm font-medium shrink-0 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <SelectValue placeholder="Tümü" />
+                        </SelectTrigger>
+                        <SelectContent className="max-h-[300px] bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
+                          {turkishAlphabet.map((letter) => (
+                            <SelectItem 
+                              key={letter} 
+                              value={letter}
+                              className="text-sm cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700"
+                            >
+                              {letter}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
                     <CommandList className="max-h-48">
                       <CommandEmpty>Kurum bulunamadı.</CommandEmpty>
                       <CommandGroup>
-                        {sortedInstitutions.map((institution, index) => (
+                        {filteredInstitutions.map((institution, index) => (
                           <CommandItem
                             key={institution.id}
                             value={institution.name}
@@ -217,7 +301,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                                 <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
                               )}
                             </div>
-                            {index < sortedInstitutions.length - 1 && (
+                            {index < filteredInstitutions.length - 1 && (
                               <div className="w-full flex justify-center mt-2">
                                 <div className="w-1/2 h-px bg-gray-200 dark:bg-gray-700"></div>
                               </div>
