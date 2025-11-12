@@ -24,12 +24,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  // Metadata için regulation sayısını almaya gerek yok, hızlı yükleme için
-  const regulations: Regulation[] = [];
+  // Description için documentCount kullan
+  const documentCount = institution.documentCount || 0;
+  const description = documentCount > 0
+    ? `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${documentCount} adet güncel mevzuat metni. ${institution.description || ''}`
+    : `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${institution.description || ''}`;
 
   return {
     title: `${institution.name} Mevzuatı`,
-    description: `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${regulations.length} adet güncel mevzuat metni. ${institution.description}`,
+    description: description.length > 160 ? description.substring(0, 157) + '...' : description,
     keywords: [
       institution.name,
       institution.shortName,
@@ -42,15 +45,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ],
     openGraph: {
       title: `${institution.name} Mevzuatı | Mevzuat GPT`,
-      description: `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${regulations.length} adet güncel mevzuat metni.`,
+      description: description.length > 200 ? description.substring(0, 197) + '...' : description,
       type: 'website',
       url: `https://mevzuatgpt.org/kurum/${params.id}`,
       siteName: 'Mevzuat GPT',
+      locale: 'tr_TR',
       images: [
         {
-          url: institution.logo || '/mevzuat-logo-beyaz.png',
-          width: 60,
-          height: 60,
+          url: institution.logo || 'https://mevzuatgpt.org/mevzuat-logo-beyaz.png',
+          width: 179,
+          height: 32,
           alt: `${institution.name} Logo`,
         }
       ],
@@ -58,8 +62,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title: `${institution.name} Mevzuatı`,
-      description: `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${regulations.length} adet güncel mevzuat metni.`,
-      images: [institution.logo || '/mevzuat-logo-beyaz.png'],
+      description: description.length > 200 ? description.substring(0, 197) + '...' : description,
+      images: [institution.logo || 'https://mevzuatgpt.org/mevzuat-logo-beyaz.png'],
+      creator: '@mevzuatportal',
+      site: '@mevzuatportal',
     },
     robots: {
       index: true,
@@ -130,25 +136,28 @@ export default async function InstitutionPage({ params }: Props) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Structured Data - Organization Schema */}
+      {/* Structured Data - GovernmentOrganization Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Organization",
+            "@type": "GovernmentOrganization",
             "name": institution.name,
-            "description": institution.description,
+            "description": institution.description || `${institution.name} kamu kurumu`,
             "url": `https://mevzuatgpt.org/kurum/${params.id}`,
             "logo": institution.logo ? {
               "@type": "ImageObject",
               "url": institution.logo,
               "width": 60,
               "height": 60
-            } : undefined,
-            "sameAs": [
-              // Kurumun resmi web sitesi varsa buraya eklenebilir
-            ],
+            } : {
+              "@type": "ImageObject",
+              "url": "https://mevzuatgpt.org/mevzuat-logo-beyaz.png",
+              "width": 179,
+              "height": 32
+            },
+            "sameAs": [],
             "contactPoint": {
               "@type": "ContactPoint",
               "contactType": "customer service",
@@ -165,7 +174,11 @@ export default async function InstitutionPage({ params }: Props) {
               "@type": "OfferCatalog",
               "name": `${institution.name} Mevzuat Kataloğu`,
               "description": `${institution.name} tarafından yayınlanan tüm mevzuat metinleri`,
-              "numberOfItems": institution.documentCount
+              "numberOfItems": institution.documentCount || 0
+            },
+            "areaServed": {
+              "@type": "Country",
+              "name": "Türkiye"
             }
           })
         }}

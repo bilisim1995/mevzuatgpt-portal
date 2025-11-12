@@ -29,6 +29,34 @@ interface Props {
   params: { id: string };
 }
 
+// Markdown'dan plain text çıkarma fonksiyonu
+function stripMarkdown(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/^#+\s+/gm, '') // Başlıkları kaldır
+    .replace(/\*\*(.*?)\*\*/g, '$1') // Bold'u kaldır
+    .replace(/\*(.*?)\*/g, '$1') // Italic'i kaldır
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Link metnini al
+    .replace(/`([^`]+)`/g, '$1') // Inline code'u kaldır
+    .replace(/```[\s\S]*?```/g, '') // Code block'ları kaldır
+    .replace(/>\s+/g, '') // Blockquote'ları kaldır
+    .replace(/\n{2,}/g, ' ') // Çoklu satır sonlarını tek boşluğa çevir
+    .replace(/\s+/g, ' ') // Çoklu boşlukları tek boşluğa çevir
+    .trim();
+}
+
+// İlk 160 karakteri al ve kelimeyi yarıda bölme
+function getSeoDescription(summary: string, content?: string): string {
+  // Önce content'ten dene, yoksa summary'den
+  const source = content ? stripMarkdown(content) : summary;
+  if (source.length <= 160) return source;
+  
+  // 160 karaktere kadar al, son kelimeyi yarıda bölme
+  const truncated = source.substring(0, 157);
+  const lastSpace = truncated.lastIndexOf(' ');
+  return lastSpace > 0 ? truncated.substring(0, lastSpace) + '...' : truncated + '...';
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     // SEO için tam metadata oluştur
@@ -41,25 +69,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       };
     }
 
+    // SEO description: content varsa ondan, yoksa summary'den
+    const seoDescription = getSeoDescription(regulation.summary, regulation.content);
+    const ogDescription = regulation.content 
+      ? stripMarkdown(regulation.content).substring(0, 200) + (stripMarkdown(regulation.content).length > 200 ? '...' : '')
+      : regulation.summary;
+
     return {
       title: `${regulation.title} | ${regulation.institutionName}`,
-      description: regulation.summary.length > 160 
-        ? regulation.summary.substring(0, 157) + '...' 
-        : regulation.summary,
+      description: seoDescription,
       keywords: [
         regulation.institutionName,
         regulation.category,
         'mevzuat',
         'genelge',
         'yönetmelik',
+        regulation.documentNumber,
         ...regulation.tags.slice(0, 5)
       ],
       openGraph: {
         title: `${regulation.title} | Mevzuat GPT`,
-        description: regulation.summary,
+        description: ogDescription,
         type: 'article',
         url: `https://mevzuatgpt.org/mevzuat/${params.id}`,
         siteName: 'Mevzuat GPT',
+        locale: 'tr_TR',
         publishedTime: regulation.publishDate,
         modifiedTime: regulation.publishDate,
         authors: [regulation.institutionName],
@@ -67,7 +101,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         tags: regulation.tags,
         images: [
           {
-            url: '/mevzuat-logo-beyaz.png',
+            url: 'https://mevzuatgpt.org/mevzuat-logo-beyaz.png',
             width: 179,
             height: 32,
             alt: 'Mevzuat GPT Logo',
@@ -77,8 +111,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       twitter: {
         card: 'summary_large_image',
         title: regulation.title,
-        description: regulation.summary,
-        images: ['/mevzuat-logo-beyaz.png'],
+        description: ogDescription,
+        images: ['https://mevzuatgpt.org/mevzuat-logo-beyaz.png'],
         creator: '@mevzuatportal',
         site: '@mevzuatportal',
       },
@@ -103,8 +137,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         'article:section': regulation.category,
         'article:tag': regulation.tags.join(', '),
         'article:expiration_time': regulation.effectiveDate,
-        'article:word_count': regulation.content ? regulation.content.length : 0,
-        'article:reading_time': regulation.content ? Math.ceil(regulation.content.length / 1000) : 0,
+        'article:word_count': regulation.content ? stripMarkdown(regulation.content).split(/\s+/).length : 0,
+        'article:reading_time': regulation.content ? Math.ceil(stripMarkdown(regulation.content).split(/\s+/).length / 200) : 0,
         'og:locale': 'tr_TR',
         'og:type': 'article',
         'og:site_name': 'Mevzuat GPT',
@@ -183,14 +217,15 @@ export default async function RegulationPage({ params }: Props) {
                 },
                 "articleSection": regulation.category,
                 "keywords": regulation.tags,
-                "wordCount": regulation.content ? regulation.content.length : 0,
+                "wordCount": regulation.content ? stripMarkdown(regulation.content).split(/\s+/).length : 0,
                 "inLanguage": "tr-TR",
                 "isAccessibleForFree": true,
                 "license": "https://creativecommons.org/licenses/by/4.0/",
                 "dateCreated": regulation.publishDate,
                 "expires": regulation.effectiveDate,
-                "readingTime": regulation.content ? Math.ceil(regulation.content.length / 1000) : 0,
-                "articleBody": regulation.content || regulation.summary,
+                "readingTime": regulation.content ? Math.ceil(stripMarkdown(regulation.content).split(/\s+/).length / 200) : 0,
+                "articleBody": regulation.content ? stripMarkdown(regulation.content) : regulation.summary,
+                "text": regulation.content ? stripMarkdown(regulation.content) : regulation.summary,
                 "mainEntity": {
                   "@type": "GovernmentService",
                   "name": regulation.title,

@@ -19,7 +19,6 @@ const Calendar = dynamic(() => import('lucide-react').then(mod => ({ default: mo
 const Download = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Download })), { ssr: false });
 const Building = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Building })), { ssr: false });
 const FileText = dynamic(() => import('lucide-react').then(mod => ({ default: mod.FileText })), { ssr: false });
-const Clock = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Clock })), { ssr: false });
 const ArrowLeft = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ArrowLeft })), { ssr: false });
 const Link2 = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Link2 })), { ssr: false });
 const File = dynamic(() => import('lucide-react').then(mod => ({ default: mod.File })), { ssr: false });
@@ -34,6 +33,7 @@ const FacebookIcon = dynamic(() => import('react-icons/fa').then(mod => ({ defau
 const LinkedinIcon = dynamic(() => import('react-icons/fa').then(mod => ({ default: mod.FaLinkedin })), { ssr: false });
 const WhatsAppIcon = dynamic(() => import('react-icons/fa').then(mod => ({ default: mod.FaWhatsapp })), { ssr: false });
 const Copy = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Copy })), { ssr: false });
+const Clock = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Clock })), { ssr: false });
 
 // Lazy load heavy components - İçerik dinamik, cache'lenmez
 const ReactMarkdown = dynamic(() => import('react-markdown'), {
@@ -75,6 +75,30 @@ interface Regulation {
 interface Props {
   regulationId: string;
   initialData?: Regulation;
+}
+
+// Markdown'dan plain text çıkarma fonksiyonu
+function stripMarkdown(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/^#+\s+/gm, '') // Başlıkları kaldır
+    .replace(/\*\*(.*?)\*\*/g, '$1') // Bold'u kaldır
+    .replace(/\*(.*?)\*/g, '$1') // Italic'i kaldır
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Link metnini al
+    .replace(/`([^`]+)`/g, '$1') // Inline code'u kaldır
+    .replace(/```[\s\S]*?```/g, '') // Code block'ları kaldır
+    .replace(/>\s+/g, '') // Blockquote'ları kaldır
+    .replace(/\n{2,}/g, ' ') // Çoklu satır sonlarını tek boşluğa çevir
+    .replace(/\s+/g, ' ') // Çoklu boşlukları tek boşluğa çevir
+    .trim();
+}
+
+// Okuma süresini hesapla (200 kelime/dakika)
+function calculateReadingTime(content: string | undefined): number {
+  if (!content) return 0;
+  const plainText = stripMarkdown(content);
+  const wordCount = plainText.split(/\s+/).filter(word => word.length > 0).length;
+  return Math.max(1, Math.ceil(wordCount / 200)); // En az 1 dakika
 }
 
 export function RegulationContent({ regulationId, initialData }: Props) {
@@ -449,33 +473,21 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 </div>
               ) : regulation && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" role="list" aria-label="Belge bilgileri">
-                  <div className="flex items-center space-x-2" role="listitem">
-                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Tür</div>
-                      <div className="text-gray-600 dark:text-gray-400 text-xs" aria-label={`Belge türü: ${regulation.category}`}>{regulation.category}</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2" role="listitem">
-                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs" aria-label={`Belge numarası: ${regulation.documentNumber}`}>{regulation.documentNumber}</div>
-                    
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2" role="listitem">
-                    <Clock className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
-                    <div className="text-sm">
-                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Durum</div>
-                      <div className={`text-xs font-medium ${
-                        regulation.status === 'active' 
-                          ? 'text-green-600 dark:text-green-400'
-                          : 'text-red-600 dark:text-red-400'
-                      }`} aria-label={`Belge durumu: ${regulation.status === 'active' ? 'Yürürlükte' : 'Yürürlükten Kalktı'}`}>
-                        {regulation.status === 'active' ? 'Yürürlükte' : 'Yürürlükten Kalktı'}
+                  {regulation.fileSizeMB && (
+                    <div className="flex items-center space-x-2" role="listitem">
+                      <HardDrive className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                      <div className="text-sm">
+                        <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Boyut</div>
+                        <div className="text-gray-600 dark:text-gray-400 text-xs" aria-label={`Dosya boyutu: ${regulation.fileSizeMB.toFixed(1)} MB`}>{regulation.fileSizeMB.toFixed(1)} MB</div>
                       </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center space-x-2" role="listitem">
+                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Kaynak</div>
+                      <div className="text-gray-600 dark:text-gray-400 text-xs" aria-label={`Belge numarası: ${regulation.documentNumber}`}>{regulation.documentNumber}</div>
                     </div>
                   </div>
                   
@@ -502,15 +514,13 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     </div>
                   )}
 
-                  {regulation.fileSizeMB && (
-                    <div className="flex items-center space-x-2" role="listitem">
-                      <HardDrive className="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
-                      <div className="text-sm">
-                        <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Boyut</div>
-                        <div className="text-gray-600 dark:text-gray-400 text-xs" aria-label={`Dosya boyutu: ${regulation.fileSizeMB.toFixed(1)} MB`}>{regulation.fileSizeMB.toFixed(1)} MB</div>
-                      </div>
+                  <div className="flex items-center space-x-2 lg:col-span-2" role="listitem">
+                    <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" />
+                    <div className="text-sm flex-1 min-w-0">
+                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Tür</div>
+                      <div className="text-gray-600 dark:text-gray-400 text-xs break-words" aria-label={`Belge türü: ${regulation.category}`}>{regulation.category}</div>
                     </div>
-                  )}
+                  </div>
                 </div>
               )}
             </div>
@@ -557,15 +567,6 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                           <div className="flex-1 space-y-2">
                             <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/3"></div>
                             <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-2/3"></div>
-                          </div>
-                        </div>
-                        
-                        {/* Durum Skeleton */}
-                        <div className="flex items-center space-x-2 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
-                          <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-                          <div className="flex-1 space-y-2">
-                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/4"></div>
-                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-1/2"></div>
                           </div>
                         </div>
                         
@@ -616,27 +617,15 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                     </div>
                   ) : regulation && (
                     <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg border border-gray-200 dark:border-gray-600">
-                      <div className="flex items-center space-x-2">
-                        <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                        <div className="text-sm">
-                          <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Tür</div>
-                          <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.category}</div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <Clock className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                        <div className="text-sm">
-                          <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Durum</div>
-                          <div className={`text-xs font-medium ${
-                            regulation.status === 'active' 
-                              ? 'text-green-600 dark:text-green-400'
-                              : 'text-red-600 dark:text-red-400'
-                          }`}>
-                            {regulation.status === 'active' ? 'Yürürlükte' : 'Yürürlükten Kalktı'}
+                      {regulation.fileSizeMB && (
+                        <div className="flex items-center space-x-2">
+                          <HardDrive className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                          <div className="text-sm">
+                            <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Boyut</div>
+                            <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.fileSizeMB.toFixed(1)} MB</div>
                           </div>
                         </div>
-                      </div>
+                      )}
                       
                       <div className="flex items-center space-x-2">
                         <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -651,7 +640,8 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                       <div className="flex items-center space-x-2">
                     <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                     <div className="text-sm">
-                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">{regulation.documentNumber}</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Kaynak</div>
+                      <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.documentNumber}</div>
                     </div>
                   </div>
                       
@@ -665,15 +655,13 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                         </div>
                       )}
 
-                      {regulation.fileSizeMB && (
-                        <div className="flex items-center space-x-2">
-                          <HardDrive className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                          <div className="text-sm">
-                            <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Boyut</div>
-                            <div className="text-gray-600 dark:text-gray-400 text-xs">{regulation.fileSizeMB.toFixed(1)} MB</div>
-                          </div>
+                      <div className="flex items-center space-x-2 col-span-2">
+                        <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                        <div className="text-sm flex-1 min-w-0">
+                          <div className="font-medium text-gray-900 dark:text-gray-100 text-xs">Tür</div>
+                          <div className="text-gray-600 dark:text-gray-400 text-xs break-words">{regulation.category}</div>
                         </div>
-                      )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -813,6 +801,14 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 <CardTitle className="flex items-center space-x-2 text-gray-900 dark:text-gray-100">
                   <FileText className="h-5 w-5" aria-hidden="true" />
                   <span>Mevzuat İçeriği</span>
+                  
+                  {/* Okuma Süresi */}
+                  {regulation?.content && (
+                    <span className="flex items-center gap-1.5 text-xs font-normal text-gray-500 dark:text-gray-400 ml-2">
+                      <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+                      <span>{calculateReadingTime(regulation.content)} dk</span>
+                    </span>
+                  )}
                   
                   {/* Dikey Ayraç */}
                   <div className="hidden lg:block w-px h-6 bg-gray-300 dark:bg-gray-600 ml-2" aria-hidden="true"></div>

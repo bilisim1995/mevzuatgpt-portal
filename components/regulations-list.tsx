@@ -107,7 +107,6 @@ export function RegulationsList({ institutionId }: Props) {
   // Filtre state'leri
   const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
   const [selectedSource, setSelectedSource] = useState<string>('Tümü');
-  const [selectedStatus, setSelectedStatus] = useState<string>('Tümü');
 
   useEffect(() => {
     async function loadRegulations() {
@@ -119,7 +118,6 @@ export function RegulationsList({ institutionId }: Props) {
         // Filtreleri sıfırla
         setSelectedCategory('Tümü');
         setSelectedSource('Tümü');
-        setSelectedStatus('Tümü');
       } catch (error) {
         // DÜZELTME: Hatalı kod satırı yerine standart hata yönetimi eklendi.
         console.error('Mevzuatları yüklerken hata oluştu:', error);
@@ -420,15 +418,6 @@ export function RegulationsList({ institutionId }: Props) {
         if (!hasSource) return false;
       }
       
-      // Durum filtresi
-      if (selectedStatus !== 'Tümü') {
-        if (selectedStatus === 'Yürürlükte' && regulation.status !== 'active') {
-          return false;
-        } else if (selectedStatus === 'Yürürlükten Kalktı' && regulation.status === 'active') {
-          return false;
-        }
-      }
-      
       return true;
     });
   }
@@ -610,7 +599,7 @@ export function RegulationsList({ institutionId }: Props) {
                 <div className="mt-4 flex flex-wrap gap-3 justify-center">
                   {/* Kategori Filtresi */}
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-full sm:w-auto min-w-[180px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+                    <SelectTrigger className="w-[calc(50%-6px)] sm:w-auto sm:min-w-[180px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
                       <span className="flex-1 text-left">
                         {selectedCategory}
                       </span>
@@ -634,7 +623,7 @@ export function RegulationsList({ institutionId }: Props) {
                   {/* Kaynak Filtresi */}
                   {uniqueSources.length > 0 && (
                     <Select value={selectedSource} onValueChange={setSelectedSource}>
-                      <SelectTrigger className="w-full sm:w-auto min-w-[140px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+                      <SelectTrigger className="w-[calc(50%-6px)] sm:w-auto sm:min-w-[140px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
                         <span className="flex-1 text-left">
                           {selectedSource}
                         </span>
@@ -655,26 +644,6 @@ export function RegulationsList({ institutionId }: Props) {
                       </SelectContent>
                     </Select>
                   )}
-                  
-                  {/* Durum Filtresi */}
-                  <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                    <SelectTrigger className="w-full sm:w-auto min-w-[140px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
-                      <span className="flex-1 text-left">
-                        {selectedStatus}
-                      </span>
-                    </SelectTrigger>
-                    <SelectContent className="max-h-[300px] bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600">
-                      <SelectItem value="Tümü" className="text-sm cursor-pointer text-gray-900 dark:text-gray-100">
-                        Tümü
-                      </SelectItem>
-                      <SelectItem value="Yürürlükte" className="text-sm cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        Yürürlükte
-                      </SelectItem>
-                      <SelectItem value="Yürürlükten Kalktı" className="text-sm cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700">
-                        Yürürlükten Kalktı
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               )}
 
@@ -892,15 +861,6 @@ export function RegulationsList({ institutionId }: Props) {
                                 )}
                                 <Badge variant="outline" className="text-xs hidden sm:inline-flex">
                                   {regulation.documentNumber}
-                                </Badge>
-                                <Badge 
-                                  className={
-                                    regulation.status === 'active' 
-                                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-                                      : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                                  }
-                                >
-                                  {regulation.status === 'active' ? 'Yürürlükte' : 'Yürürlükten Kalktı'}
                                 </Badge>
                                 <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                                   <Calendar className="h-4 w-4 mr-1" />
