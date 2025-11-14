@@ -270,19 +270,28 @@ export function RegulationContent({ regulationId, initialData }: Props) {
     </div>
   );
 
-  // Hata durumu
-  if (error) {
+  // Hata durumu veya mevzuat bulunamadığında
+  if (error || (!loading && !regulation)) {
     return (
       <div className="pt-4 pb-8 bg-gray-50 dark:bg-gray-900 transition-colors font-sans" role="alert">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
           <div className="text-center py-16">
-            <div className="text-4xl mb-4" aria-hidden="true">❌</div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              {error}
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              Aradığınız mevzuatı bulamadık
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Lütfen daha sonra tekrar deneyin veya ana sayfaya dönün.
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-6">
+              Bu mevzuat veritabanımızdan silinmiş olabilir veya hiç eklenmemiş olabilir.
             </p>
+            <div className="flex justify-center mb-6">
+              <Image
+                src="/404.gif"
+                alt="Mevzuat bulunamadı"
+                width={300}
+                height={300}
+                className="w-48 h-48 sm:w-64 sm:h-64 object-contain"
+                unoptimized={true}
+              />
+            </div>
             <a 
               href="/" 
               className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors"

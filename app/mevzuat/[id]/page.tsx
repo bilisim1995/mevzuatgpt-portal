@@ -1,5 +1,6 @@
-import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Footer } from '@/components/footer';
 import { RegulationContent } from '@/components/regulation-content';
 import { getRegulationById, getInstitutionById, getInstitutions, getRegulationsByInstitutionSlug } from '@/lib/data';
@@ -171,7 +172,47 @@ export default async function RegulationPage({ params }: Props) {
     const regulation = await getRegulationById(params.id);
     
     if (!regulation) {
-      notFound();
+      // 404.gif gösterilecek sayfa döndür
+      return (
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+          <Header />
+          <main 
+            id="main-content" 
+            role="main" 
+            className="flex-1 flex items-center justify-center py-16" 
+            tabIndex={-1}
+          >
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+              <div className="text-center">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                  Aradığınız mevzuatı bulamadık
+                </h1>
+                <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-6">
+                  Bu mevzuat veritabanımızdan silinmiş olabilir veya hiç eklenmemiş olabilir.
+                </p>
+                <div className="flex justify-center mb-6">
+                  <Image
+                    src="/404.gif"
+                    alt="Mevzuat bulunamadı"
+                    width={300}
+                    height={300}
+                    className="w-48 h-48 sm:w-64 sm:h-64 object-contain"
+                    unoptimized={true}
+                  />
+                </div>
+                <Link 
+                  href="/" 
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  aria-label="Ana sayfaya dön"
+                >
+                  Ana Sayfaya Dön
+                </Link>
+              </div>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      );
     }
 
     // DETSİS bilgisi için kurum bilgisini çek
