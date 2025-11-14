@@ -54,6 +54,8 @@ const ReactMarkdown = dynamic(() => import('react-markdown'), {
 // Types
 
 interface Regulation {
+  kurum_aciklama?: string;
+  detsis?: string;
   id: string;
   title: string;
   summary: string;
