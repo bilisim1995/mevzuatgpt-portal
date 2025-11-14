@@ -156,30 +156,10 @@ export function StatisticsCard() {
                 <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
                   <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center space-x-2">
                     <BarChart3 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                    <span>Belge Türüne Göre Dağılım</span>
+                    <span>Belge Türüne Göre İstatistik</span>
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {statistics.belge_turu_istatistik.map((item: BelgeTuruIstatistik, index: number) => {
-                      const percentage = statistics.total_belgeler > 0 
-                        ? Math.round((item.count / statistics.total_belgeler) * 100) 
-                        : 0;
-                      
-                      const colors = [
-                        'from-blue-500 to-blue-600',
-                        'from-purple-500 to-purple-600',
-                        'from-pink-500 to-pink-600',
-                        'from-indigo-500 to-indigo-600',
-                        'from-cyan-500 to-cyan-600',
-                        'from-orange-500 to-orange-600'
-                      ];
-                      const darkColors = [
-                        'dark:from-blue-600 dark:to-blue-700',
-                        'dark:from-purple-600 dark:to-purple-700',
-                        'dark:from-pink-600 dark:to-pink-700',
-                        'dark:from-indigo-600 dark:to-indigo-700',
-                        'dark:from-cyan-600 dark:to-cyan-700',
-                        'dark:from-orange-600 dark:to-orange-700'
-                      ];
                       const bgColors = [
                         'bg-blue-50 dark:bg-blue-900/20',
                         'bg-purple-50 dark:bg-purple-900/20',
@@ -205,14 +185,14 @@ export function StatisticsCard() {
                         'text-orange-700 dark:text-orange-300'
                       ];
                       
-                      const colorIndex = index % colors.length;
+                      const colorIndex = index % bgColors.length;
                       
                       return (
                         <div 
                           key={item.belge_turu}
                           className={`rounded-lg p-4 border ${bgColors[colorIndex]} ${borderColors[colorIndex]} hover:shadow-md transition-all duration-300`}
                         >
-                          <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center justify-between">
                             <span className={`text-sm font-semibold ${textColors[colorIndex]}`}>
                               {item.belge_turu}
                             </span>
@@ -220,15 +200,6 @@ export function StatisticsCard() {
                               {formatNumber(item.count)}
                             </span>
                           </div>
-                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                            <div 
-                              className={`h-full bg-gradient-to-r ${colors[colorIndex]} ${darkColors[colorIndex]} transition-all duration-500`}
-                              style={{ width: `${percentage}%` }}
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            %{percentage}
-                          </p>
                         </div>
                       );
                     })}

@@ -133,30 +133,46 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
                 {/* Logo - Her zaman solda */}
             <div className="relative flex-shrink-0">
               {/* Logo için dikdörtgen background */}
-              <div className="bg-white rounded-lg p-2 shadow-md border border-gray-200">
+              <div 
+                className="bg-white rounded-lg p-2 shadow-md border border-gray-200 select-none relative"
+                onContextMenu={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
+                style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+              >
                 {institution.logo && institution.logo.trim() !== '' ? (
-                  <Image 
-                    src={institution.logo}
-                    alt={`${institution.name} logosu`}
-                    width={60}
-                    height={60}
-                    className="h-16 w-16 sm:h-10 sm:w-10 lg:h-14 lg:w-14 object-contain"
-                    loading="eager"
-                    unoptimized={true}
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const parent = target.parentElement;
-                      if (parent) {
-                        parent.innerHTML = '<svg class="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/></svg>';
-                      }
-                    }}
-                    onLoad={() => {
-                      // Başarılı yükleme durumunda herhangi bir işlem yapma
-                    }}
-                  />
+                  <>
+                    <Image 
+                      src={institution.logo}
+                      alt={`${institution.name} logosu`}
+                      width={60}
+                      height={60}
+                      className="h-16 w-16 sm:h-10 sm:w-10 lg:h-14 lg:w-14 object-contain pointer-events-none"
+                      loading="eager"
+                      unoptimized={true}
+                      draggable={false}
+                      onContextMenu={(e) => e.preventDefault()}
+                      onDragStart={(e) => e.preventDefault()}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          parent.innerHTML = '<svg class="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/></svg>';
+                        }
+                      }}
+                      onLoad={() => {
+                        // Başarılı yükleme durumunda herhangi bir işlem yapma
+                      }}
+                    />
+                    {/* Transparent overlay - ekstra koruma */}
+                    <div 
+                      className="absolute inset-0 cursor-not-allowed"
+                      onContextMenu={(e) => e.preventDefault()}
+                      onDragStart={(e) => e.preventDefault()}
+                    />
+                  </>
                 ) : (
-                  <Building className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 text-gray-600" />
+                  <Building className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 text-gray-600 pointer-events-none" />
                 )}
               </div>
             </div>

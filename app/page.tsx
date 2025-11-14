@@ -86,6 +86,11 @@ const StatisticsCard = dynamic(() => import('@/components/statistics-card').then
   loading: () => <div className="py-16 lg:py-24 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900"><div className="container mx-auto px-4"><div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-64 rounded-lg"></div></div></div>
 });
 
+const InstitutionLogosCarousel = dynamic(() => import('@/components/institution-logos-carousel').then(mod => ({ default: mod.InstitutionLogosCarousel })), { 
+  ssr: false, // This can be lazy loaded
+  loading: () => <div className="py-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900"><div className="container mx-auto px-4"><div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-24 rounded-lg"></div></div></div>
+});
+
 const Footer = dynamic(() => import('@/components/footer').then(mod => ({ default: mod.Footer })), { 
   ssr: false, // Footer can be lazy loaded
   loading: () => <div className="bg-gray-900 text-white py-8"><div className="container mx-auto px-4"><div className="animate-pulse bg-gray-700 h-32 rounded"></div></div></div>
@@ -220,6 +225,9 @@ export default function HomePage() {
         <HeroSection />
         <RecentRegulations />
         <StatisticsCard />
+        
+        {/* Kurum Logoları Carousel */}
+        <InstitutionLogosCarousel />
         
         {/* MevzuatGPT RAG Uygulaması Tanıtım Kartı */}
         <section className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">

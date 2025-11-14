@@ -415,13 +415,21 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 <div className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
                   <div className="relative">
                     {regulation.institutionLogo && regulation.institutionLogo.trim() !== '' ? (
-                      <div className="bg-white rounded-lg p-2 shadow-md border border-gray-200">
+                      <div 
+                        className="bg-white rounded-lg p-2 shadow-md border border-gray-200 select-none relative"
+                        onContextMenu={(e) => e.preventDefault()}
+                        onDragStart={(e) => e.preventDefault()}
+                        style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+                      >
                         <Image
                           src={regulation.institutionLogo}
                           alt={`${regulation.institutionName} logosu`}
-                          className="w-9 h-9 object-contain"
+                          className="w-9 h-9 object-contain pointer-events-none"
                           width={36}
                           height={36}
+                          draggable={false}
+                          onContextMenu={(e) => e.preventDefault()}
+                          onDragStart={(e) => e.preventDefault()}
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.style.display = 'none';
@@ -435,10 +443,16 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                             }
                           }}
                         />
+                        {/* Transparent overlay - ekstra koruma */}
+                        <div 
+                          className="absolute inset-0 cursor-not-allowed"
+                          onContextMenu={(e) => e.preventDefault()}
+                          onDragStart={(e) => e.preventDefault()}
+                        />
                       </div>
                     ) : (
                       <div className="bg-white rounded-lg p-2 shadow-md border border-gray-200">
-                        <Building className="h-5 w-5 text-gray-600" />
+                        <Building className="h-5 w-5 text-gray-600 pointer-events-none" />
                       </div>
                     )}
                   </div>

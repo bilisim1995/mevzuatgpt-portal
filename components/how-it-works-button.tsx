@@ -49,11 +49,13 @@ export function HowItWorksButton() {
             {isOpen && (
               <iframe
                 key={videoUrl}
-                className="absolute top-0 left-0 w-full h-full"
+                className="absolute top-0 left-0 w-full h-full border-0"
                 src={videoUrl}
                 title="Nasıl Çalışır Video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                loading="lazy"
+                frameBorder="0"
               />
             )}
           </div>

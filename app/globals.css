@@ -877,3 +877,40 @@ textarea::placeholder {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Chrome, Safari, Opera */
 }
+
+/* Institution Logos Carousel Animation */
+@keyframes scroll-logos {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-logos {
+  animation: scroll-logos 12s linear infinite;
+  will-change: transform;
+}
+
+.animate-scroll-logos-reverse {
+  animation: scroll-logos 12s linear infinite reverse;
+  will-change: transform;
+}
+
+@media (max-width: 640px) {
+  .animate-scroll-logos {
+    animation-duration: 10s;
+  }
+  
+  .animate-scroll-logos-reverse {
+    animation-duration: 10s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll-logos,
+  .animate-scroll-logos-reverse {
+    animation: none;
+  }
+}
