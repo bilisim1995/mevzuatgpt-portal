@@ -23,23 +23,25 @@ export function PWAInstallPrompt() {
 
     // Listen for beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
-      // Prevent the default mini-infobar from appearing
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      
-      // Show prompt immediately if user hasn't dismissed it before
       const dismissed = localStorage.getItem('pwa-install-dismissed');
       const lastDismissed = localStorage.getItem('pwa-install-last-dismissed');
       const now = Date.now();
       const oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000);
       
-      // Show if never dismissed or dismissed more than a week ago
-      if (!dismissed || !lastDismissed || parseInt(lastDismissed) < oneWeekAgo) {
+      // Only prevent default if we're going to show our custom prompt
+      const willShowPrompt = !dismissed || !lastDismissed || parseInt(lastDismissed) < oneWeekAgo;
+      
+      if (willShowPrompt) {
+        // Prevent the default mini-infobar from appearing
+        e.preventDefault();
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
+        
         // Small delay to let page load
         setTimeout(() => {
           setShowPrompt(true);
         }, 2000);
       }
+      // If we're not showing the prompt, let the browser handle it naturally
     };
 
     // Listen for app installed event

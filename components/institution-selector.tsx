@@ -105,6 +105,15 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
     }
     return 1;
   };
+  
+  // Kurum arama değeri oluştur (ad + DETSİS)
+  const getInstitutionSearchValue = (institution: Institution) => {
+    const parts = [institution.name];
+    if (institution.detsis) {
+      parts.push(`DETSİS: ${institution.detsis}`, institution.detsis);
+    }
+    return parts.join(' ');
+  };
 
   // Klavye navigasyonu için handler'lar
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -208,7 +217,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                     <div className="flex items-center gap-2 px-3 py-2 border-b border-gray-200 dark:border-gray-700">
                       <div className="flex-1 [&>div]:border-0 [&>div]:border-b-0">
                         <CommandInput 
-                          placeholder="Kurum ara..." 
+                          placeholder="Kurum adı veya DETSİS no ile ara" 
                           className="h-10 border-0 focus:ring-0"
                           value={searchQuery}
                           onValueChange={handleSearchChange}
@@ -240,7 +249,7 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                         {filteredInstitutions.map((institution, index) => (
                           <CommandItem
                             key={institution.id}
-                            value={institution.name}
+                            value={getInstitutionSearchValue(institution)}
                             onSelect={() => handleSelect(institution)}
                             className="flex flex-col cursor-pointer p-4"
                             disabled={isNavigating}
@@ -291,6 +300,9 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                                   </div>
                                   <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 text-left">
                                     {institution.kurum_aciklama}
+                                    {institution.detsis && (
+                                      <span className="ml-2 text-gray-500 dark:text-gray-500">- DETSİS: {institution.detsis}</span>
+                                    )}
                                   </div>
                                 </div>
                               </div>

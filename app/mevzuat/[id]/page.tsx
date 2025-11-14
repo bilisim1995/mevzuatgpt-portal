@@ -174,6 +174,22 @@ export default async function RegulationPage({ params }: Props) {
       notFound();
     }
 
+    // DETSİS bilgisi için kurum bilgisini çek
+    let institution = null;
+    if (regulation.institutionId) {
+      try {
+        institution = await getInstitutionById(regulation.institutionId);
+        if (institution) {
+          // Regulation objesine kurum bilgilerini ekle
+          regulation.kurum_aciklama = institution.kurum_aciklama;
+          regulation.detsis = institution.detsis;
+        }
+      } catch (error) {
+        // Kurum bilgisi alınamazsa sessizce devam et
+        console.warn('Kurum bilgisi alınamadı:', error);
+      }
+    }
+
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />

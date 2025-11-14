@@ -1,5 +1,66 @@
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import type { Metadata } from 'next';
+
+// SEO Metadata for Homepage
+export const metadata: Metadata = {
+  title: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
+  description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform. Yapay zeka destekli mevzuat arama ve analiz. Binlerce mevzuat metni tek platformda.',
+  keywords: [
+    'mevzuat',
+    'genelge',
+    'yönetmelik',
+    'tebliğ',
+    'resmi gazete',
+    'hukuki düzenlemeler',
+    'kamu kurumları',
+    'bakanlık',
+    'belediye',
+    'yapay zeka',
+    'mevzuat arama',
+    'hukuki metinler',
+    'Türkiye mevzuat',
+    'kamu mevzuatı'
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'tr_TR',
+    url: 'https://mevzuatgpt.org',
+    title: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
+    description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform. Yapay zeka destekli mevzuat arama ve analiz.',
+    siteName: 'Mevzuat GPT',
+    images: [
+      {
+        url: 'https://mevzuatgpt.org/mevzuat-logo-beyaz.png',
+        width: 179,
+        height: 32,
+        alt: 'Mevzuat GPT Logo',
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
+    description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform.',
+    creator: '@mevzuatportal',
+    site: '@mevzuatportal',
+    images: ['https://mevzuatgpt.org/mevzuat-logo-beyaz.png'],
+  },
+  alternates: {
+    canonical: 'https://mevzuatgpt.org',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
 
 // Optimized lazy loading - Critical components with SSR, non-critical without
 const HowItWorksButton = dynamic(() => import('@/components/how-it-works-button').then(mod => ({ default: mod.HowItWorksButton })), { 
@@ -20,6 +81,11 @@ const RecentRegulations = dynamic(() => import('@/components/recent-regulations'
   loading: () => <div className="py-16 lg:py-24 bg-white dark:bg-gray-800"><div className="container mx-auto px-4"><div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-64 rounded-lg"></div></div></div>
 });
 
+const StatisticsCard = dynamic(() => import('@/components/statistics-card').then(mod => ({ default: mod.StatisticsCard })), { 
+  ssr: false, // This can be lazy loaded
+  loading: () => <div className="py-16 lg:py-24 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900"><div className="container mx-auto px-4"><div className="animate-pulse bg-gray-200 dark:bg-gray-700 h-64 rounded-lg"></div></div></div>
+});
+
 const Footer = dynamic(() => import('@/components/footer').then(mod => ({ default: mod.Footer })), { 
   ssr: false, // Footer can be lazy loaded
   loading: () => <div className="bg-gray-900 text-white py-8"><div className="container mx-auto px-4"><div className="animate-pulse bg-gray-700 h-32 rounded"></div></div></div>
@@ -33,6 +99,25 @@ const ScrollToTop = dynamic(() => import('@/components/scroll-to-top').then(mod 
 export default function HomePage() {
   return (
     <div className="flex flex-col">
+      {/* BreadcrumbList Schema - Ana sayfa için */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Ana Sayfa",
+                "item": "https://mevzuatgpt.org"
+              }
+            ]
+          })
+        }}
+      />
+
       {/* WebSite Schema - Ana sayfa için */}
       <script
         type="application/ld+json"
@@ -134,6 +219,7 @@ export default function HomePage() {
       <main id="main-content" role="main" className="flex-1" tabIndex={-1}>
         <HeroSection />
         <RecentRegulations />
+        <StatisticsCard />
         
         {/* MevzuatGPT RAG Uygulaması Tanıtım Kartı */}
         <section className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">

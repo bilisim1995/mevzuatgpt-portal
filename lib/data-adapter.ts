@@ -59,7 +59,8 @@ export function adaptApiInstitutionToInstitution(apiInst: ApiInstitution): Insti
     description: `${apiInst.kurum_adi} mevzuat metinleri`,
     documentCount: apiInst.count,
     category: category,
-    logo: encodeLogoUrl(apiInst.kurum_logo)
+    logo: encodeLogoUrl(apiInst.kurum_logo),
+    detsis: apiInst.detsis
   };
   return result;
 }
@@ -93,6 +94,8 @@ export function adaptApiRegulationToRegulation(apiReg: ApiRegulation): Regulatio
     institutionId: apiReg.kurum_id,
     institutionName: apiReg.kurum_adi || 'Bilinmeyen Kurum',
     institutionLogo: encodeLogoUrl(apiReg.kurum_logo || ''),
+    kurum_aciklama: apiReg.kurum_aciklama,
+    detsis: undefined, // API'den gelmiyor, detay sayfasında yüklenecek
     publishDate: apiReg.belge_yayin_tarihi,
     effectiveDate: apiReg.belge_yayin_tarihi, // Aynı tarih kullanılıyor
     category: category,

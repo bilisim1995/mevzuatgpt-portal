@@ -32,6 +32,7 @@ const ChevronLeft = dynamic(() => import('lucide-react').then(mod => ({ default:
 const ChevronRight = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ChevronRight })), { ssr: false });
 const Clock = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Clock })), { ssr: false });
 const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { ssr: false });
+const ArrowRight = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ArrowRight })), { ssr: false });
 
 // Types
 interface Regulation {
@@ -809,147 +810,190 @@ export function RegulationsList({ institutionId }: Props) {
             ) : currentRegulations.length > 0 ? (
               <>
                 <div className="space-y-4 mb-8">
-                  {currentRegulations.map((regulation) => (
-                    <Card key={regulation.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 group hover:shadow-xl transition-all duration-200">
-                      <CardHeader className="pb-4">
-                        <div className="space-y-3">
+                  {currentRegulations.map((regulation, index) => (
+                    <div key={regulation.id}>
+                      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 group hover:shadow-xl transition-all duration-200">
+                        <CardHeader className="pb-4">
                           <div className="space-y-3">
-                            
-                            <Link href={`/mevzuat/${regulation.id}`}>
-                              <CardTitle className="text-lg sm:text-xl text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer hover:underline mt-2 leading-tight">
-                                {isSearchMode && searchQuery ? highlightSearchTerm(regulation.title, searchQuery) : regulation.title}
-                              </CardTitle>
-                            </Link>
-                            <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed pt-1 line-clamp-3">
-                              {(() => {
-                                const displayText = isSearchMode && (regulation as any).contentPreview 
-                                  ? (regulation as any).contentPreview 
-                                  : regulation.summary;
-                                return isSearchMode && searchQuery ? highlightSearchTerm(displayText, searchQuery) : displayText;
-                              })()}
-                            </CardDescription>
+                            <div className="space-y-3">
+                              
+                              <Link href={`/mevzuat/${regulation.id}`}>
+                                <CardTitle className="text-lg sm:text-xl text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer hover:underline mt-2 leading-tight">
+                                  {isSearchMode && searchQuery ? highlightSearchTerm(regulation.title, searchQuery) : regulation.title}
+                                </CardTitle>
+                              </Link>
+                              <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed pt-1 line-clamp-3">
+                                {(() => {
+                                  const displayText = isSearchMode && (regulation as any).contentPreview 
+                                    ? (regulation as any).contentPreview 
+                                    : regulation.summary;
+                                  return isSearchMode && searchQuery ? highlightSearchTerm(displayText, searchQuery) : displayText;
+                                })()}
+                              </CardDescription>
 
-                            {/* Separator */}
-                            <hr className="border-gray-200 dark:border-gray-600 my-4" />
+                              {/* Separator */}
+                              <hr className="border-gray-200 dark:border-gray-600 my-4" />
 
-                            {/* Meta info and buttons on same level */}
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                              {/* Meta information */}
-                              <div className="flex flex-wrap items-center gap-1.5 text-xs">
-                                <Badge variant="secondary" className="text-xs">
-                                  {regulation.category}
-                                </Badge>
-                                {isSearchMode && (regulation as any).matchType && (
-                                  <div className="flex items-center space-x-2">
-                                    <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-                                      {(() => {
-                                        const matchType = (regulation as any).matchType;
-                                        const types = [];
-                                        if (matchType.includes('title')) types.push('📋 Başlık');
-                                        if (matchType.includes('content')) types.push('📄 İçerik');
-                                        if (matchType.includes('keywords')) types.push('🏷️ Etiket');
-                                        if (matchType.includes('kurum')) types.push('🏢 Kurum');
-                                        return types.join(', ') || matchType;
-                                      })()}
-                                    </Badge>
-                                    {(regulation as any).matchCount && (
-                                      <Badge variant="outline" className="text-xs bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300">
-                                        🔍 {(regulation as any).matchCount} eşleşme
+                              {/* Meta info and buttons on same level */}
+                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                {/* Meta information */}
+                                <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                                  <Badge variant="secondary" className="text-xs">
+                                    {regulation.category}
+                                  </Badge>
+                                  {isSearchMode && (regulation as any).matchType && (
+                                    <div className="flex items-center space-x-2">
+                                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                                        {(() => {
+                                          const matchType = (regulation as any).matchType;
+                                          const types = [];
+                                          if (matchType.includes('title')) types.push('📋 Başlık');
+                                          if (matchType.includes('content')) types.push('📄 İçerik');
+                                          if (matchType.includes('keywords')) types.push('🏷️ Etiket');
+                                          if (matchType.includes('kurum')) types.push('🏢 Kurum');
+                                          return types.join(', ') || matchType;
+                                        })()}
                                       </Badge>
-                                    )}
-                                  </div>
-                                )}
-                                <Badge variant="outline" className="text-xs hidden sm:inline-flex">
-                                  {regulation.documentNumber}
-                                </Badge>
-                                <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                                  <Calendar className="h-4 w-4 mr-1" />
-                                  <span>{new Date(regulation.publishDate).toLocaleDateString('tr-TR')}</span>
-                                </div>
-                                
-                                {/* Tags - Mobilde göster */}
-                                {regulation.tags && regulation.tags.length > 0 && (
-                                  <div className="flex flex-wrap gap-1 sm:hidden">
-                                    {regulation.tags.slice(0, 3).map((tag: string) => (
-                                      <Badge key={tag} variant="outline" className="text-xs bg-gray-50 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-                                        #{tag}
-                                      </Badge>
-                                    ))}
-                                    {regulation.tags.length > 3 && (
-                                      <Badge variant="outline" className="text-xs bg-gray-100 text-gray-500 dark:bg-gray-600 dark:text-gray-400">
-                                        +{regulation.tags.length - 3}
-                                      </Badge>
-                                    )}
-                                  </div>
-                                )}
-                                
-                                {isSearchMode && (regulation as any).relevancePercentage && (
-                                  <div className="flex items-center space-x-2">
-                                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                                      Alakalılık:
-                                    </span>
-                                    <div className="flex items-center space-x-1">
-                                      <div className="relative w-6 h-6">
-                                        <svg className="w-6 h-6 transform -rotate-90" viewBox="0 0 24 24">
-                                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-gray-200 dark:text-gray-700" />
-                                          <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="2.5"
-                                            fill="none"
-                                            strokeDasharray={`${2 * Math.PI * 10}`}
-                                            strokeDashoffset={`${2 * Math.PI * 10 * (1 - (regulation as any).relevancePercentage / 100)}`}
-                                            className="text-yellow-500 dark:text-yellow-400 transition-all duration-500"
-                                            strokeLinecap="round"
-                                          />
-                                        </svg>
-                                      </div>
-                                      <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                                        {(regulation as any).relevancePercentage}%
-                                      </span>
+                                      {(regulation as any).matchCount && (
+                                        <Badge variant="outline" className="text-xs bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                                          🔍 {(regulation as any).matchCount} eşleşme
+                                        </Badge>
+                                      )}
                                     </div>
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* Action buttons */}
-                              <div className="flex gap-2 w-full sm:w-auto">
-                                <Button 
-                                  size="sm" 
-                                  className="shadow-sm w-full text-white dark:text-white"
-                                  onClick={() => handleQuickNavigate(regulation.id)}
-                                  disabled={navigatingTo === regulation.id}
-                                >
-                                  {navigatingTo === regulation.id ? (
-                                    <>
-                                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                                      <span>Yükleniyor...</span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Eye className="h-5 w-5 mr-2" />
-                                      <span>Görüntüle</span>
-                                    </>
                                   )}
-                                </Button>
+                                  <Badge variant="outline" className="text-xs hidden sm:inline-flex">
+                                    {regulation.documentNumber}
+                                  </Badge>
+                                  <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                                    <Calendar className="h-4 w-4 mr-1" />
+                                    <span>{new Date(regulation.publishDate).toLocaleDateString('tr-TR')}</span>
+                                  </div>
+                                  
+                                  {/* Tags - Mobilde göster */}
+                                  {regulation.tags && regulation.tags.length > 0 && (
+                                    <div className="flex flex-wrap gap-1 sm:hidden">
+                                      {regulation.tags.slice(0, 3).map((tag: string) => (
+                                        <Badge key={tag} variant="outline" className="text-xs bg-gray-50 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                          #{tag}
+                                        </Badge>
+                                      ))}
+                                      {regulation.tags.length > 3 && (
+                                        <Badge variant="outline" className="text-xs bg-gray-100 text-gray-500 dark:bg-gray-600 dark:text-gray-400">
+                                          +{regulation.tags.length - 3}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  )}
+                                  
+                                  {isSearchMode && (regulation as any).relevancePercentage && (
+                                    <div className="flex items-center space-x-2">
+                                      <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                                        Alakalılık:
+                                      </span>
+                                      <div className="flex items-center space-x-1">
+                                        <div className="relative w-6 h-6">
+                                          <svg className="w-6 h-6 transform -rotate-90" viewBox="0 0 24 24">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-gray-200 dark:text-gray-700" />
+                                            <circle
+                                              cx="12"
+                                              cy="12"
+                                              r="10"
+                                              stroke="currentColor"
+                                              strokeWidth="2.5"
+                                              fill="none"
+                                              strokeDasharray={`${2 * Math.PI * 10}`}
+                                              strokeDashoffset={`${2 * Math.PI * 10 * (1 - (regulation as any).relevancePercentage / 100)}`}
+                                              className="text-yellow-500 dark:text-yellow-400 transition-all duration-500"
+                                              strokeLinecap="round"
+                                            />
+                                          </svg>
+                                        </div>
+                                        <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                                          {(regulation as any).relevancePercentage}%
+                                        </span>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
 
-                                
-                                {regulation.pdfUrl && (
-                                   <a href={regulation.pdfUrl} target="_blank" rel="noopener noreferrer">
-                                    <Button size="sm" variant="outline" className="shadow-sm w-full">
-                                      <Download className="h-5 w-5 mr-2" />
-                                      <span>PDF</span>
-                                    </Button>
-                                  </a>
-                                )}
+                                {/* Action buttons */}
+                                <div className="flex gap-2 w-full sm:w-auto">
+                                  <Button 
+                                    size="sm" 
+                                    className="shadow-sm w-full text-white dark:text-white"
+                                    onClick={() => handleQuickNavigate(regulation.id)}
+                                    disabled={navigatingTo === regulation.id}
+                                  >
+                                    {navigatingTo === regulation.id ? (
+                                      <>
+                                        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                                        <span>Yükleniyor...</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Eye className="h-5 w-5 mr-2" />
+                                        <span>Görüntüle</span>
+                                      </>
+                                    )}
+                                  </Button>
+
+                                  
+                                  {regulation.pdfUrl && (
+                                     <a href={regulation.pdfUrl} target="_blank" rel="noopener noreferrer">
+                                      <Button size="sm" variant="outline" className="shadow-sm w-full">
+                                        <Download className="h-5 w-5 mr-2" />
+                                        <span>PDF</span>
+                                      </Button>
+                                    </a>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
+                        </CardHeader>
+                      </Card>
+                      
+                      {/* Sponsorlu İçerik - 3. yazıdan sonra */}
+                      {index === 2 && (
+                        <div className="mt-4">
+                          <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-2 border-amber-200 dark:border-amber-800 shadow-lg">
+                            <CardHeader className="pb-3">
+                              <CardTitle className="flex items-center space-x-2 text-lg text-gray-900 dark:text-gray-100">
+                                <div className="w-7 h-7 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
+                                  <span className="text-white font-bold text-xs">SP</span>
+                                </div>
+                                <span>Sponsorlu İçerik</span>
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent className="pt-0 pb-4">
+                              <div className="space-y-3">
+                                <p className="text-sm text-gray-700 dark:text-gray-300">
+                                  Bu alan sponsorlu içerik için ayrılmıştır. Ürün veya hizmetinizi burada tanıtmak isterseniz bizimle iletişime geçebilirsiniz.
+                                </p>
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                                  <a
+                                    href="mailto:reklam@mevzuatgpt.org"
+                                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white rounded-lg text-sm font-medium transition-colors shadow-md hover:shadow-lg"
+                                  >
+                                    <span>Reklam İçin İletişime Geçin</span>
+                                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                                  </a>
+                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                    <strong className="text-gray-900 dark:text-gray-100">E-posta:</strong>{' '}
+                                    <a 
+                                      href="mailto:reklam@mevzuatgpt.org" 
+                                      className="text-amber-700 dark:text-amber-300 hover:underline"
+                                    >
+                                      reklam@mevzuatgpt.org
+                                    </a>
+                                  </p>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
                         </div>
-                      </CardHeader>
-                    </Card>
+                      )}
+                    </div>
                   ))}
                 </div>
 

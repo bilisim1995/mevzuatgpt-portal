@@ -413,13 +413,11 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 <div className="flex items-center space-x-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
                   <div className="relative">
                     {regulation.institutionLogo && regulation.institutionLogo.trim() !== '' ? (
-                      <div className="w-9 h-9 bg-white rounded-lg border border-gray-200 dark:border-gray-600 p-1">
-                      
-                        
+                      <div className="bg-white rounded-lg p-2 shadow-md border border-gray-200">
                         <Image
                           src={regulation.institutionLogo}
                           alt={`${regulation.institutionName} logosu`}
-                          className="w-full h-full object-contain"
+                          className="w-9 h-9 object-contain"
                           width={36}
                           height={36}
                           onError={(e) => {
@@ -428,9 +426,8 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                             const parent = target.parentElement;
                             if (parent) {
                               parent.innerHTML = `
-                                <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-75"></div>
-                                <div class="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2 rounded-lg flex items-center justify-center">
-                                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/></svg>
+                                <div class="bg-white rounded-lg p-2 shadow-md border border-gray-200 flex items-center justify-center">
+                                  <svg class="h-5 w-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/></svg>
                                 </div>
                               `;
                             }
@@ -438,17 +435,23 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                         />
                       </div>
                     ) : (
-                      <>
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-75"></div>
-                        <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2 rounded-lg">
-                          <Building className="h-5 w-5" />
-                        </div>
-                      </>
+                      <div className="bg-white rounded-lg p-2 shadow-md border border-gray-200">
+                        <Building className="h-5 w-5 text-gray-600" />
+                      </div>
                     )}
                   </div>
                   <div>
                     <div className="font-medium text-gray-900 dark:text-gray-100">{regulation.institutionName}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">{regulation.institutionName} mevzuat metinleri</div>
+                    <div className="flex flex-wrap items-center gap-2 text-sm">
+                      <span className="text-gray-600 dark:text-gray-400">
+                        {regulation.kurum_aciklama || regulation.institutionName}
+                      </span>
+                      {regulation.detsis && (
+                        <Badge variant="outline" className="text-xs font-medium text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
+                          DETSİS: {regulation.detsis}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
@@ -1030,7 +1033,7 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                   <a href="https://uygulama.mevzuatgpt.org" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                     <Button 
                       size="sm"
-                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-sm w-full sm:w-auto"
+                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-sm w-full sm:w-auto h-9"
                     >
                       <BrainCircuit className="h-4 w-4 mr-2" />
                       Yapay Zekaya Sor

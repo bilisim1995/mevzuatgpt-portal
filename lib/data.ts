@@ -24,6 +24,7 @@ export interface Institution {
   documentCount: number;
   category: 'ministry' | 'agency' | 'municipality' | 'regulatory';
   logo: string;
+  detsis?: string;
 }
 
 export interface Regulation {
@@ -34,6 +35,8 @@ export interface Regulation {
   institutionId: string;
   institutionName: string;
   institutionLogo?: string;
+  kurum_aciklama?: string;
+  detsis?: string;
   publishDate: string;
   effectiveDate: string;
   category: string;

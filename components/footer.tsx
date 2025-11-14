@@ -22,6 +22,7 @@ export function Footer() {
                 className="h-8 w-auto dark:hidden"
                 width={179}
                 height={32}
+                style={{ width: 'auto', height: 'auto' }}
               />
               <Image 
                 src="/mevzuat-logo-siyah.png" 
@@ -29,6 +30,7 @@ export function Footer() {
                 className="h-8 w-auto hidden dark:block"
                 width={179}
                 height={32}
+                style={{ width: 'auto', height: 'auto' }}
               />
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">

@@ -1,9 +1,15 @@
 // Fallback API URLs - birincisi çalışmazsa diğerini dene
 const API_URLS = [
+  'https://portalapi.mevzuatgpt.org', 
+];
+
+/*
+const API_URLS = [
   'https://portalapi.mevzuatgpt.org',
   'https://27897322-76a4-44ee-9eae-a025f2ec0048-00-5kgsvegbsnnj.kirk.replit.dev',
-  'http://localhost:8000', // Local development fallback
+  'http://localhost:5006', // Local development fallback
 ];
+*/
 
 let currentApiIndex = 0;
 
@@ -14,6 +20,7 @@ export interface ApiInstitution {
   kurum_logo: string;
   kurum_aciklama: string;
   count: number;
+  detsis?: string;
 }
 
 export interface ApiRegulation {
@@ -130,14 +137,15 @@ async function apiFetch(endpoint: string, options?: RequestInit): Promise<Respon
           'Content-Type': 'application/json',
           ...options?.headers,
         },
-        signal: AbortSignal.timeout(15000), // 15 saniye timeout
+        signal: AbortSignal.timeout(30000), // 30 saniye timeout (artırıldı)
         cache: 'no-store', // Cache'i devre dışı bırak
         ...options,
       });
 
       if (!response.ok) {
         // Sunucudan 4xx veya 5xx gibi bir hata kodu geldiyse
-        const error = new Error(`API Hatası: ${response.status} - ${url}`);
+        const errorText = await response.text().catch(() => '');
+        const error = new Error(`API Hatası: ${response.status} - ${url}${errorText ? ` - ${errorText.substring(0, 100)}` : ''}`);
         (error as any).status = response.status;
         throw error;
       }
@@ -146,28 +154,24 @@ async function apiFetch(endpoint: string, options?: RequestInit): Promise<Respon
       return response;
 
     } catch (error) {
-      console.warn(`API çağrısı başarısız (${url}):`, error);
       lastError = error as Error;
 
       // Bir sonraki API URL'sini dene
       currentApiIndex = (currentApiIndex + 1) % API_URLS.length;
-      if (attempt < maxRetries - 1) {
-        console.log(`Farklı bir sunucu ile yeniden deneniyor... (${attempt + 1}/${maxRetries})`);
-      }
     }
   }
 
   // Tüm denemeler başarısız olduysa, son hatayı daha anlamlı bir mesajla sarmalayarak fırlat
   if (lastError) {
     if (lastError instanceof TypeError && lastError.message.includes('fetch')) {
-      throw new Error(`API sunucularına bağlanılamıyor. Lütfen daha sonra tekrar deneyin.`);
+      throw new Error(`API sunucularına bağlanılamıyor. URL: ${API_URLS[currentApiIndex]}${endpoint}. Lütfen API sunucusunun çalıştığından emin olun.`);
     }
-    if (lastError.name === 'TimeoutError') {
-      throw new Error(`API çağrısı zaman aşımına uğradı. Sunucular yavaş yanıt veriyor.`);
+    if (lastError.name === 'TimeoutError' || (lastError as any).name === 'AbortError') {
+      throw new Error(`API çağrısı zaman aşımına uğradı. URL: ${API_URLS[currentApiIndex]}${endpoint}. Sunucu yavaş yanıt veriyor veya erişilemiyor.`);
     }
   }
   
-  throw new Error('Tüm API sunucuları kullanılamıyor. Lütfen daha sonra tekrar deneyin.');
+  throw new Error(`Tüm API sunucuları kullanılamıyor. Son denenen URL: ${API_URLS[currentApiIndex]}${endpoint}`);
 }
 
 /**
@@ -487,5 +491,41 @@ export async function fetchRecentRegulations(options: {
   } catch (error) {
     console.error('Son mevzuatlar çekilemedi:', error);
     return [];
+  }
+}
+
+// İstatistikler için interface
+export interface BelgeTuruIstatistik {
+  belge_turu: string;
+  count: number;
+}
+
+export interface StatisticsData {
+  total_kurumlar: number;
+  total_belgeler: number;
+  belge_turu_istatistik: BelgeTuruIstatistik[];
+  [key: string]: any; // API'den gelecek diğer veriler için esnek yapı
+}
+
+export interface StatisticsResponse {
+  success: boolean;
+  data: StatisticsData;
+  message: string;
+}
+
+// İstatistikleri çek
+export async function fetchStatistics(): Promise<StatisticsData | null> {
+  try {
+    const response = await apiFetch('/api/v1/statistics');
+    const result: StatisticsResponse = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.message || 'İstatistikler çekilemedi');
+    }
+
+    return result.data || null;
+  } catch (error) {
+    console.error('İstatistikler çekilemedi:', error);
+    return null;
   }
 }

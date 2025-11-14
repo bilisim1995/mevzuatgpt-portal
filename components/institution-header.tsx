@@ -132,40 +132,34 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
               <div className="flex flex-row items-center justify-between space-x-4 sm:space-x-6">
                 {/* Logo - Her zaman solda */}
             <div className="relative flex-shrink-0">
-      {/* Glow efekti */}
-
-      {/* Ana container */}
-      
-        {/* Logo için çember background */}
-        <div className="relative p-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-inner">
-          <div className="bg-white rounded-full p-0.5 shadow-sm">
-            {institution.logo && institution.logo.trim() !== '' ? (
-              <Image 
-                src={institution.logo}
-                alt={`${institution.name} logosu`}
-                width={60}
-                height={60}
-                className="h-16 w-16 sm:h-10 sm:w-10 lg:h-14 lg:w-14 object-contain drop-shadow-sm"
-                loading="eager"
-                unoptimized={true}
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  const parent = target.parentElement;
-                  if (parent) {
-                    parent.innerHTML = '<svg class="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/></svg>';
-                  }
-                }}
-                onLoad={() => {
-                  // Başarılı yükleme durumunda herhangi bir işlem yapma
-                }}
-              />
-            ) : (
-              <Building className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 text-gray-600" />
-            )}
-          </div>
-        </div>
-      </div>
+              {/* Logo için dikdörtgen background */}
+              <div className="bg-white rounded-lg p-2 shadow-md border border-gray-200">
+                {institution.logo && institution.logo.trim() !== '' ? (
+                  <Image 
+                    src={institution.logo}
+                    alt={`${institution.name} logosu`}
+                    width={60}
+                    height={60}
+                    className="h-16 w-16 sm:h-10 sm:w-10 lg:h-14 lg:w-14 object-contain"
+                    loading="eager"
+                    unoptimized={true}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = '<svg class="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-gray-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/></svg>';
+                      }
+                    }}
+                    onLoad={() => {
+                      // Başarılı yükleme durumunda herhangi bir işlem yapma
+                    }}
+                  />
+                ) : (
+                  <Building className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 text-gray-600" />
+                )}
+              </div>
+            </div>
 
                 
                 {/* Content - Her zaman sağda */}
@@ -179,9 +173,16 @@ export function InstitutionHeader({ institution, regulations, loading = false }:
                   </h1>
                   
                   {/* Açıklama */}
-                  <p className="text-xs sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-tight">
-                    {institution.name} yüklü belgeler
-                  </p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-xs sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 leading-tight">
+                      {institution.kurum_aciklama}
+                    </p>
+                    {institution.detsis && (
+                      <Badge variant="outline" className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600">
+                        DETSİS: {institution.detsis}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
               </div>
               

@@ -67,7 +67,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://portalapi.mevzuatgpt.org https://www.google-analytics.com https://mc.yandex.ru https://api.qrserver.com",
+              "connect-src 'self' https://portalapi.mevzuatgpt.org https://www.google-analytics.com https://mc.yandex.ru https://mc.yandex.com wss://mc.yandex.com https://api.qrserver.com http://localhost:5006",
               "frame-src 'self' https://www.google.com",
               "object-src 'none'",
               "base-uri 'self'",
