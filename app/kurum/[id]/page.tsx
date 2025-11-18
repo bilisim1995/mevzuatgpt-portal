@@ -24,28 +24,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  // Description için documentCount kullan
+  // Description için documentCount ve DETSİS kullan
   const documentCount = institution.documentCount || 0;
+  const detsisInfo = institution.detsis ? ` DETSİS: ${institution.detsis}.` : '';
   const description = documentCount > 0
-    ? `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${documentCount} adet güncel mevzuat metni. ${institution.description || ''}`
-    : `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${institution.description || ''}`;
+    ? `${institution.name} genelge, yönetmelik ve mevzuat metinleri. ${documentCount} adet güncel mevzuat metni.${detsisInfo} ${institution.kurum_aciklama || institution.description || ''} Türkiye kamu kurumu mevzuat arşivi.`
+    : `${institution.name} genelge, yönetmelik ve mevzuat metinleri.${detsisInfo} ${institution.kurum_aciklama || institution.description || ''} Türkiye kamu kurumu mevzuat arşivi.`;
+
+  const seoDescription = description.length > 160 ? description.substring(0, 157) + '...' : description;
+  const ogDescription = description.length > 200 ? description.substring(0, 197) + '...' : description;
 
   return {
-    title: `${institution.name} Mevzuatı`,
-    description: description.length > 160 ? description.substring(0, 157) + '...' : description,
+    title: `${institution.name} Mevzuatı | Mevzuat GPT`,
+    description: seoDescription,
     keywords: [
       institution.name,
       institution.shortName,
+      institution.detsis ? `DETSİS ${institution.detsis}` : '',
       'genelge',
       'yönetmelik',
+      'tebliğ',
       'mevzuat',
       'resmi gazete',
       'hukuki düzenlemeler',
-      institution.category === 'ministry' ? 'bakanlık' : 'kurum'
-    ],
+      'kamu kurumu',
+      'Türkiye mevzuat',
+      'mevzuat arşivi',
+      institution.category === 'ministry' ? 'bakanlık' : institution.category === 'agency' ? 'kurum' : institution.category === 'municipality' ? 'belediye' : 'düzenleyici kurul',
+      institution.kurum_aciklama || ''
+    ].filter(Boolean),
     openGraph: {
       title: `${institution.name} Mevzuatı | Mevzuat GPT`,
-      description: description.length > 200 ? description.substring(0, 197) + '...' : description,
+      description: ogDescription,
       type: 'website',
       url: `https://mevzuatgpt.org/kurum/${params.id}`,
       siteName: 'Mevzuat GPT',
@@ -53,16 +63,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: institution.logo || 'https://mevzuatgpt.org/mevzuat-logo-beyaz.png',
-          width: 179,
-          height: 32,
+          width: institution.logo ? 60 : 179,
+          height: institution.logo ? 60 : 32,
           alt: `${institution.name} Logo`,
         }
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${institution.name} Mevzuatı`,
-      description: description.length > 200 ? description.substring(0, 197) + '...' : description,
+      title: `${institution.name} Mevzuatı | Mevzuat GPT`,
+      description: ogDescription,
       images: [institution.logo || 'https://mevzuatgpt.org/mevzuat-logo-beyaz.png'],
       creator: '@mevzuatportal',
       site: '@mevzuatportal',
@@ -85,6 +95,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       'article:author': institution.name,
       'article:section': institution.category,
       'article:tag': institution.name,
+      'og:locale': 'tr_TR',
+      'og:type': 'website',
+      'og:site_name': 'Mevzuat GPT',
+      'twitter:domain': 'mevzuatgpt.org',
+      'twitter:url': `https://mevzuatgpt.org/kurum/${params.id}`,
+      ...(institution.detsis && { 'organization:detsis': institution.detsis }),
     },
   };
 }
@@ -144,8 +160,10 @@ export default async function InstitutionPage({ params }: Props) {
             "@context": "https://schema.org",
             "@type": "GovernmentOrganization",
             "name": institution.name,
-            "description": institution.description || `${institution.name} kamu kurumu`,
+            "alternateName": institution.shortName,
+            "description": institution.kurum_aciklama || institution.description || `${institution.name} kamu kurumu`,
             "url": `https://mevzuatgpt.org/kurum/${params.id}`,
+            ...(institution.detsis && { "identifier": `DETSİS:${institution.detsis}` }),
             "logo": institution.logo ? {
               "@type": "ImageObject",
               "url": institution.logo,

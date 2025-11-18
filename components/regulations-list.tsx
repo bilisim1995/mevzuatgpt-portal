@@ -809,20 +809,26 @@ export function RegulationsList({ institutionId }: Props) {
               </div>
             ) : currentRegulations.length > 0 ? (
               <>
-                <div className="space-y-4 mb-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
                   {currentRegulations.map((regulation, index) => (
-                    <div key={regulation.id}>
-                      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 group hover:shadow-xl transition-all duration-200">
-                        <CardHeader className="pb-4">
-                          <div className="space-y-3">
-                            <div className="space-y-3">
+                    <div key={regulation.id} className="flex flex-col">
+                      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 group hover:shadow-xl transition-all duration-200 flex flex-col h-full relative">
+                        <CardHeader className="pb-4 flex-1 flex flex-col">
+                          {/* Tarih - Sağ üst köşe */}
+                          <div className="absolute top-4 right-4 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                            <Calendar className="h-3 w-3 mr-1" />
+                            <span>{new Date(regulation.publishDate).toLocaleDateString('tr-TR')}</span>
+                          </div>
+                          
+                          <div className="space-y-3 flex-1 flex flex-col">
+                            <div className="space-y-3 flex-1 flex flex-col">
                               
                               <Link href={`/mevzuat/${regulation.id}`}>
-                                <CardTitle className="text-lg sm:text-xl text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer hover:underline mt-2 leading-tight">
+                                <CardTitle className="text-lg sm:text-xl text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer hover:underline mt-2 leading-tight pr-20">
                                   {isSearchMode && searchQuery ? highlightSearchTerm(regulation.title, searchQuery) : regulation.title}
                                 </CardTitle>
                               </Link>
-                              <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed pt-1 line-clamp-3">
+                              <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed pt-1 line-clamp-3 min-h-[4.5rem]">
                                 {(() => {
                                   const displayText = isSearchMode && (regulation as any).contentPreview 
                                     ? (regulation as any).contentPreview 
@@ -830,12 +836,14 @@ export function RegulationsList({ institutionId }: Props) {
                                   return isSearchMode && searchQuery ? highlightSearchTerm(displayText, searchQuery) : displayText;
                                 })()}
                               </CardDescription>
+                            </div>
+                          </div>
 
-                              {/* Separator */}
-                              <hr className="border-gray-200 dark:border-gray-600 my-4" />
+                          {/* Separator */}
+                          <hr className="border-gray-200 dark:border-gray-600 my-4" />
 
-                              {/* Meta info and buttons on same level */}
-                              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                          {/* Meta info and buttons on same level - Alt kısımda sabit */}
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-auto">
                                 {/* Meta information */}
                                 <div className="flex flex-wrap items-center gap-1.5 text-xs">
                                   <Badge variant="secondary" className="text-xs">
@@ -864,10 +872,6 @@ export function RegulationsList({ institutionId }: Props) {
                                   <Badge variant="outline" className="text-xs hidden sm:inline-flex">
                                     {regulation.documentNumber}
                                   </Badge>
-                                  <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                                    <Calendar className="h-4 w-4 mr-1" />
-                                    <span>{new Date(regulation.publishDate).toLocaleDateString('tr-TR')}</span>
-                                  </div>
                                   
                                   {/* Tags - Mobilde göster */}
                                   {regulation.tags && regulation.tags.length > 0 && (
@@ -948,51 +952,8 @@ export function RegulationsList({ institutionId }: Props) {
                                   )}
                                 </div>
                               </div>
-                            </div>
-                          </div>
                         </CardHeader>
                       </Card>
-                      
-                      {/* Sponsorlu İçerik - 3. yazıdan sonra */}
-                      {index === 2 && (
-                        <div className="mt-4">
-                          <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-2 border-amber-200 dark:border-amber-800 shadow-lg">
-                            <CardHeader className="pb-3">
-                              <CardTitle className="flex items-center space-x-2 text-lg text-gray-900 dark:text-gray-100">
-                                <div className="w-7 h-7 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
-                                  <span className="text-white font-bold text-xs">SP</span>
-                                </div>
-                                <span>Sponsorlu İçerik</span>
-                              </CardTitle>
-                            </CardHeader>
-                            <CardContent className="pt-0 pb-4">
-                              <div className="space-y-3">
-                                <p className="text-sm text-gray-700 dark:text-gray-300">
-                                  Bu alan sponsorlu içerik için ayrılmıştır. Ürün veya hizmetinizi burada tanıtmak isterseniz bizimle iletişime geçebilirsiniz.
-                                </p>
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-                                  <a
-                                    href="mailto:reklam@mevzuatgpt.org"
-                                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white rounded-lg text-sm font-medium transition-colors shadow-md hover:shadow-lg"
-                                  >
-                                    <span>Reklam İçin İletişime Geçin</span>
-                                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
-                                  </a>
-                                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                                    <strong className="text-gray-900 dark:text-gray-100">E-posta:</strong>{' '}
-                                    <a 
-                                      href="mailto:reklam@mevzuatgpt.org" 
-                                      className="text-amber-700 dark:text-amber-300 hover:underline"
-                                    >
-                                      reklam@mevzuatgpt.org
-                                    </a>
-                                  </p>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>

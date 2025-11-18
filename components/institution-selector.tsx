@@ -256,35 +256,37 @@ export function InstitutionSelector({ institutions, loading = false }: Props) {
                           >
                             <div className="flex items-center justify-between w-full">
                               <div className="flex items-center space-x-4 flex-1">
-                                <div className="w-14 h-14 flex items-center justify-center">
-                                  {institution.logo && institution.logo.trim() !== '' ? (
-                                    <Image
-                                      src={institution.logo}
-                                      alt={`${institution.name} logosu`}
-                                      width={32}
-                                      height={32}
-                                      className="w-16 h-16 object-contain rounded"
-                                      loading="lazy"
-                                      unoptimized={true}
-                                      onError={(e) => {
-                                        const target = e.target as HTMLImageElement;
-                                        target.src = '/kurum.gif';
-                                      }}
-                                      onLoad={() => {
-                                        // Başarılı yükleme durumunda herhangi bir işlem yapma
-                                      }}
-                                    />    
-                                  ) : (
-                                    <Image
-                                      src="/kurum.gif"
-                                      alt="Kurum"
-                                      width={32}
-                                      height={32}
-                                      className="w-16 h-16 object-contain rounded"
-                                      loading="lazy"
-                                      unoptimized={true}
-                                    />
-                                  )}
+                                <div className="w-20 h-14 flex items-center justify-center">
+                                  <div className="bg-white rounded p-2 shadow-md border border-gray-200 dark:border-gray-300 w-full h-full flex items-center justify-center">
+                                    {institution.logo && institution.logo.trim() !== '' ? (
+                                      <Image
+                                        src={institution.logo}
+                                        alt={`${institution.name} logosu`}
+                                        width={64}
+                                        height={48}
+                                        className="w-full h-full object-contain"
+                                        loading="lazy"
+                                        unoptimized={true}
+                                        onError={(e) => {
+                                          const target = e.target as HTMLImageElement;
+                                          target.src = '/kurum.gif';
+                                        }}
+                                        onLoad={() => {
+                                          // Başarılı yükleme durumunda herhangi bir işlem yapma
+                                        }}
+                                      />    
+                                    ) : (
+                                      <Image
+                                        src="/kurum.gif"
+                                        alt="Kurum"
+                                        width={64}
+                                        height={48}
+                                        className="w-full h-full object-contain"
+                                        loading="lazy"
+                                        unoptimized={true}
+                                      />
+                                    )}
+                                  </div>
                                 </div>
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-2">

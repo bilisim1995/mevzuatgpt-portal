@@ -1045,22 +1045,22 @@ export function RegulationContent({ regulationId, initialData }: Props) {
                 </div>
               </div>
             ) : (
-              <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+              <div className="mt-6 p-5 sm:p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                   <div className="flex-1 text-center sm:text-left">
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                    <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
                       Okumaya vaktin yok mu?
                     </h4>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                       Bu mevzuat hakkında yapay zekaya sorularını sor
                     </p>
                   </div>
                   <a href="https://uygulama.mevzuatgpt.org" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                     <Button 
-                      size="sm"
-                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-sm w-full sm:w-auto h-9"
+                      size="default"
+                      className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-sm w-full sm:w-auto h-11 text-base"
                     >
-                      <BrainCircuit className="h-4 w-4 mr-2" />
+                      <BrainCircuit className="h-5 w-5 mr-2" />
                       Yapay Zekaya Sor
                     </Button>
                   </a>
