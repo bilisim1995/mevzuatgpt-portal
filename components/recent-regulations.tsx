@@ -300,7 +300,7 @@ export function RecentRegulations() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentRegulations.map((regulation, index) => (
-            <Link key={regulation.id} href={`/mevzuat/${regulation.id}`}>
+            <Link key={`${regulation.id}-${startIndex + index}`} href={`/mevzuat/${regulation.id}`}>
               <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 h-full group cursor-pointer shadow-sm hover:shadow-lg transition-all duration-200">
                 <CardHeader className="pb-4">
                   <div className="flex items-center justify-between mb-3">

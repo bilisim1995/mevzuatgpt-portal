@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import PulsingBorderShader from '@/components/pulsing-border-shader';
 
 // SEO Metadata for Homepage
 export const metadata: Metadata = {
@@ -362,15 +363,9 @@ export default function HomePage() {
                     {/* Sağ Taraf - Görsel/İkon */}
                     <div className="flex justify-center lg:justify-end">
                       <div className="relative">
-                        {/* YZ SVG Görseli */}
+                        {/* PulsingBorderShader - Yuvarlak Dönen Animasyon */}
                         <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-[28rem] lg:h-[28rem] flex items-center justify-center">
-                          <Image 
-                            src="/yz.svg" 
-                            alt="MevzuatGPT Yapay Zeka" 
-                            width={448}
-                            height={448}
-                            className="w-full h-full object-contain"
-                          />
+                          <PulsingBorderShader />
                         </div>
                       </div>
                     </div>

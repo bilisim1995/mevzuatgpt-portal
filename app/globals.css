@@ -914,3 +914,50 @@ textarea::placeholder {
     animation: none;
   }
 }
+
+/* Yuvarlak dönen animasyon - PulsingBorderShader için */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+  will-change: transform;
+}
+
+/* Logo fade animasyonu - PulsingBorderShader için (hafif efekt) */
+@keyframes logo-fade {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.logo-fade-animation {
+  animation: logo-fade 3s ease-in-out;
+  will-change: opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow {
+    animation: none;
+  }
+  
+  .logo-fade-animation {
+    animation: none;
+    opacity: 1;
+  }
+}
