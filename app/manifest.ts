@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
+    name: 'Mevzuat GPT',
     short_name: 'Mevzuat GPT',
     description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform. Yapay zeka destekli arama ile hızlı erişim.',
     start_url: '/',
@@ -18,7 +18,19 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/android-chrome-192x192.png',
         sizes: '192x192',
         type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: '/android-chrome-192x192.png',
+        sizes: '192x192',
+        type: 'image/png',
         purpose: 'maskable',
+      },
+      {
+        src: '/android-chrome-512x512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'any',
       },
       {
         src: '/android-chrome-512x512.png',
@@ -53,20 +65,20 @@ export default function manifest(): MetadataRoute.Manifest {
         url: '/?action=search-institution',
         icons: [
           {
-            src: '/favicon-192x192.png',
+            src: '/android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
         ],
       },
       {
-        name: 'AI Asistan',
-        short_name: 'AI Asistan',
-        description: 'Yapay zeka asistanı ile mevzuat analizi',
-        url: 'https://uygulama.mevzuatgpt.org',
+        name: 'Mevzuat Listesi',
+        short_name: 'Mevzuat',
+        description: 'Tüm mevzuat listesini görüntüle',
+        url: '/mevzuat',
         icons: [
           {
-            src: '/favicon-192x192.png',
+            src: '/android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },

@@ -33,6 +33,9 @@ const ChevronRight = dynamic(() => import('lucide-react').then(mod => ({ default
 const Clock = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Clock })), { ssr: false });
 const X = dynamic(() => import('lucide-react').then(mod => ({ default: mod.X })), { ssr: false });
 const ArrowRight = dynamic(() => import('lucide-react').then(mod => ({ default: mod.ArrowRight })), { ssr: false });
+const LayoutGrid = dynamic(() => import('lucide-react').then(mod => ({ default: mod.LayoutGrid })), { ssr: false });
+const ListIcon = dynamic(() => import('lucide-react').then(mod => ({ default: mod.List })), { ssr: false });
+const Filter = dynamic(() => import('lucide-react').then(mod => ({ default: mod.Filter })), { ssr: false });
 
 // Types
 interface Regulation {
@@ -105,6 +108,7 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
   const [searchTotalCount, setSearchTotalCount] = useState(0);
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   // Filtre state'leri
   const [selectedCategory, setSelectedCategory] = useState<string>('Tümü');
@@ -602,13 +606,13 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
                 
               </div>
               
-              {/* Filtreler */}
+              {/* Filtreler ve Görünüm Seçimi */}
               {!loading && regulations.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-3 justify-center">
+                <div className="mt-4 flex flex-row sm:flex-row gap-2 sm:gap-3 justify-center items-center">
                   {/* Kategori Filtresi */}
                   <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-[calc(50%-6px)] sm:w-auto sm:min-w-[180px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
-                      <span className="flex-1 text-left">
+                    <SelectTrigger className="flex-1 sm:w-[180px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+                      <span className="flex-1 text-left truncate">
                         {selectedCategory}
                       </span>
                     </SelectTrigger>
@@ -631,8 +635,8 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
                   {/* Kaynak Filtresi */}
                   {uniqueSources.length > 0 && (
                     <Select value={selectedSource} onValueChange={setSelectedSource}>
-                      <SelectTrigger className="w-[calc(50%-6px)] sm:w-auto sm:min-w-[140px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
-                        <span className="flex-1 text-left">
+                      <SelectTrigger className="flex-1 sm:w-[140px] h-10 text-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+                        <span className="flex-1 text-left truncate">
                           {selectedSource}
                         </span>
                       </SelectTrigger>
@@ -652,6 +656,28 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
                       </SelectContent>
                     </Select>
                   )}
+
+                  {/* Görünüm Değiştirici - Sadece Masaüstünde Görünür */}
+                  <div className="hidden sm:flex items-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setViewMode('grid')}
+                      className={`h-8 w-8 p-0 rounded-md ${viewMode === 'grid' ? 'bg-gray-100 dark:bg-gray-700 text-blue-600 dark:text-blue-400' : 'text-gray-500'}`}
+                      aria-label="Grid Görünümü"
+                    >
+                      <LayoutGrid className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                      className={`h-8 w-8 p-0 rounded-md ${viewMode === 'list' ? 'bg-gray-100 dark:bg-gray-700 text-blue-600 dark:text-blue-400' : 'text-gray-500'}`}
+                      aria-label="Liste Görünümü"
+                    >
+                      <ListIcon className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               )}
 
@@ -816,15 +842,96 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
               </div>
             ) : currentRegulations.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div className={viewMode === 'grid' ? "grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8" : "flex flex-col gap-4 mb-8"}>
                   {currentRegulations.map((regulation, index) => {
                     // Status renkleri
-                    const statusColors = {
+                    const statusColors: Record<'active' | 'amended' | 'repealed', string> = {
                       active: 'bg-green-500',
                       amended: 'bg-yellow-500',
                       repealed: 'bg-red-500'
                     };
                     
+                    // Liste görünümü için farklı kart tasarımı
+                    if (viewMode === 'list') {
+                      return (
+                        <div key={regulation.id} className="group relative">
+                          <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 group-hover:border-blue-300 dark:group-hover:border-blue-600 hover:shadow-md transition-all duration-200 overflow-hidden">
+                            {/* Sol status çizgisi */}
+                            <div className={`absolute left-0 top-0 bottom-0 w-1 ${
+                              regulation.status === 'active' ? 'bg-green-500' : 
+                              regulation.status === 'amended' ? 'bg-yellow-500' : 'bg-red-500'
+                            }`}></div>
+                            
+                            <div className="p-4 pl-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                              {/* Sol Taraf: İçerik */}
+                              <div className="flex-1 min-w-0 space-y-2">
+                                <div className="flex items-center flex-wrap gap-2">
+                                  <Badge variant="secondary" className="text-xs font-semibold bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300 border-blue-100 dark:border-blue-800">
+                                    {regulation.category}
+                                  </Badge>
+                                  <span className="text-xs text-gray-400 flex items-center">
+                                    <Calendar className="w-3 h-3 mr-1" />
+                                    {new Date(regulation.publishDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                  </span>
+                          </div>
+                          
+                                <Link href={`/mevzuat/${regulation.id}`} className="block">
+                                  <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+                                    {isSearchMode && searchQuery ? highlightSearchTerm(regulation.title, searchQuery) : regulation.title}
+                                  </h3>
+                                </Link>
+                                
+                                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1 sm:line-clamp-2">
+                                  {(() => {
+                                    const displayText = isSearchMode && (regulation as any).contentPreview 
+                                      ? (regulation as any).contentPreview 
+                                      : regulation.summary;
+                                    return isSearchMode && searchQuery ? highlightSearchTerm(displayText, searchQuery) : displayText;
+                                  })()}
+                                </p>
+
+                                {/* Etiketler - Tek satırda */}
+                                {regulation.tags && regulation.tags.length > 0 && (
+                                  <div className="flex flex-wrap gap-1.5 pt-1">
+                                    {regulation.tags.slice(0, 4).map((tag: string) => (
+                                      <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                        #{tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Sağ Taraf: Aksiyonlar */}
+                              <div className="flex items-center gap-2 w-full sm:w-auto sm:flex-col sm:justify-center border-t sm:border-t-0 sm:border-l border-gray-100 dark:border-gray-700 pt-3 sm:pt-0 sm:pl-4 mt-2 sm:mt-0">
+                                <Button 
+                                  size="sm" 
+                                  className="flex-1 sm:flex-none w-full justify-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white dark:text-white shadow-md hover:shadow-lg transition-all duration-200 font-medium"
+                                  onClick={() => handleQuickNavigate(regulation.id)}
+                                >
+                                  <Eye className="h-4 w-4 mr-1.5" />
+                                  <span className="text-xs font-medium">Görüntüle</span>
+                                </Button>
+                                
+                                {regulation.pdfUrl && (
+                                  <a href={regulation.pdfUrl} target="_blank" rel="noopener noreferrer" className="flex-1 sm:flex-none w-full">
+                                    <Button 
+                                      size="sm" 
+                                      variant="outline"
+                                      className="w-full justify-center border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 shadow-sm hover:shadow-md transition-all duration-200 font-medium"
+                                    >
+                                      <Download className="h-4 w-4 mr-1.5" />
+                                      <span className="text-xs font-medium">PDF</span>
+                                    </Button>
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          </Card>
+                        </div>
+                      );
+                    }
+
                     return (
                       <div key={regulation.id} className="flex flex-col group">
                         <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 group-hover:border-blue-300 dark:group-hover:border-blue-600 group-hover:shadow-2xl transition-all duration-300 flex flex-col h-full relative overflow-hidden">
@@ -833,7 +940,7 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
                           
                           {/* Status indicator - sol üst köşe */}
                           <div className="absolute top-2 left-2 z-10">
-                            <div className={`w-2 h-2 rounded-full ${statusColors[regulation.status] || statusColors.active} shadow-sm`} 
+                            <div className={`w-2 h-2 rounded-full ${statusColors[regulation.status as keyof typeof statusColors] || statusColors.active} shadow-sm`} 
                                  title={regulation.status === 'active' ? 'Aktif' : regulation.status === 'amended' ? 'Değiştirilmiş' : 'Yürürlükten Kaldırılmış'}></div>
                           </div>
                           
@@ -842,20 +949,20 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
                               <div className="space-y-3 flex-1 flex flex-col">
                                 <Link href={`/mevzuat/${regulation.id}`} className="block">
                                   <CardTitle className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors cursor-pointer leading-snug line-clamp-2 hover:underline">
-                                    {isSearchMode && searchQuery ? highlightSearchTerm(regulation.title, searchQuery) : regulation.title}
-                                  </CardTitle>
-                                </Link>
+                                  {isSearchMode && searchQuery ? highlightSearchTerm(regulation.title, searchQuery) : regulation.title}
+                                </CardTitle>
+                              </Link>
                                 
                                 <CardDescription className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed pt-1 line-clamp-3 min-h-[4.5rem]">
-                                  {(() => {
-                                    const displayText = isSearchMode && (regulation as any).contentPreview 
-                                      ? (regulation as any).contentPreview 
-                                      : regulation.summary;
-                                    return isSearchMode && searchQuery ? highlightSearchTerm(displayText, searchQuery) : displayText;
-                                  })()}
-                                </CardDescription>
-                              </div>
+                                {(() => {
+                                  const displayText = isSearchMode && (regulation as any).contentPreview 
+                                    ? (regulation as any).contentPreview 
+                                    : regulation.summary;
+                                  return isSearchMode && searchQuery ? highlightSearchTerm(displayText, searchQuery) : displayText;
+                                })()}
+                              </CardDescription>
                             </div>
+                          </div>
 
                             {/* Geliştirilmiş Separator - Tarih ile */}
                             <div className="relative my-5">
@@ -874,57 +981,57 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
                             <div className="flex flex-col gap-4 mt-auto">
                               {/* Meta information - Geliştirilmiş */}
                               <div className="flex flex-wrap items-center gap-2 text-xs">
-                                {isSearchMode && (regulation as any).matchType && (
+                                  {isSearchMode && (regulation as any).matchType && (
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <Badge variant="outline" className="text-xs px-2.5 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border-blue-200 dark:border-blue-700/50 shadow-sm font-medium">
-                                      {(() => {
-                                        const matchType = (regulation as any).matchType;
-                                        const types = [];
-                                        if (matchType.includes('title')) types.push('📋 Başlık');
-                                        if (matchType.includes('content')) types.push('📄 İçerik');
-                                        if (matchType.includes('keywords')) types.push('🏷️ Etiket');
-                                        if (matchType.includes('kurum')) types.push('🏢 Kurum');
-                                        return types.join(', ') || matchType;
-                                      })()}
-                                    </Badge>
-                                    {(regulation as any).matchCount && (
-                                      <Badge variant="outline" className="text-xs px-2.5 py-1 bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-700/50 shadow-sm font-medium">
-                                        🔍 {(regulation as any).matchCount} eşleşme
+                                        {(() => {
+                                          const matchType = (regulation as any).matchType;
+                                          const types = [];
+                                          if (matchType.includes('title')) types.push('📋 Başlık');
+                                          if (matchType.includes('content')) types.push('📄 İçerik');
+                                          if (matchType.includes('keywords')) types.push('🏷️ Etiket');
+                                          if (matchType.includes('kurum')) types.push('🏢 Kurum');
+                                          return types.join(', ') || matchType;
+                                        })()}
                                       </Badge>
-                                    )}
-                                  </div>
-                                )}
-                                
-                                {isSearchMode && (regulation as any).relevancePercentage && (
+                                      {(regulation as any).matchCount && (
+                                      <Badge variant="outline" className="text-xs px-2.5 py-1 bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300 border-green-200 dark:border-green-700/50 shadow-sm font-medium">
+                                          🔍 {(regulation as any).matchCount} eşleşme
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  )}
+                                  
+                                  {isSearchMode && (regulation as any).relevancePercentage && (
                                   <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/50">
                                     <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
-                                      Alakalılık:
-                                    </span>
+                                        Alakalılık:
+                                      </span>
                                     <div className="flex items-center gap-1.5">
                                       <div className="relative w-5 h-5">
                                         <svg className="w-5 h-5 transform -rotate-90" viewBox="0 0 24 24">
-                                          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-gray-200 dark:text-gray-700" />
-                                          <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="2.5"
-                                            fill="none"
-                                            strokeDasharray={`${2 * Math.PI * 10}`}
-                                            strokeDashoffset={`${2 * Math.PI * 10 * (1 - (regulation as any).relevancePercentage / 100)}`}
-                                            className="text-yellow-500 dark:text-yellow-400 transition-all duration-500"
-                                            strokeLinecap="round"
-                                          />
-                                        </svg>
-                                      </div>
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-gray-200 dark:text-gray-700" />
+                                            <circle
+                                              cx="12"
+                                              cy="12"
+                                              r="10"
+                                              stroke="currentColor"
+                                              strokeWidth="2.5"
+                                              fill="none"
+                                              strokeDasharray={`${2 * Math.PI * 10}`}
+                                              strokeDashoffset={`${2 * Math.PI * 10 * (1 - (regulation as any).relevancePercentage / 100)}`}
+                                              className="text-yellow-500 dark:text-yellow-400 transition-all duration-500"
+                                              strokeLinecap="round"
+                                            />
+                                          </svg>
+                                        </div>
                                       <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
-                                        {(regulation as any).relevancePercentage}%
-                                      </span>
+                                          {(regulation as any).relevancePercentage}%
+                                        </span>
+                                      </div>
                                     </div>
-                                  </div>
-                                )}
-                              </div>
+                                  )}
+                                </div>
 
                               {/* Belge Tipi ve Etiketler - Butonların hemen üstünde */}
                               <div className="flex flex-wrap items-center gap-2 pb-2">
@@ -959,26 +1066,26 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
 
                               {/* Action buttons - Geliştirilmiş */}
                               <div className="flex gap-2.5 w-full">
-                                <Button 
-                                  size="sm" 
+                                  <Button 
+                                    size="sm" 
                                   className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white dark:text-white shadow-md hover:shadow-lg transition-all duration-200 font-medium"
-                                  onClick={() => handleQuickNavigate(regulation.id)}
-                                  disabled={navigatingTo === regulation.id}
-                                >
-                                  {navigatingTo === regulation.id ? (
-                                    <>
+                                    onClick={() => handleQuickNavigate(regulation.id)}
+                                    disabled={navigatingTo === regulation.id}
+                                  >
+                                    {navigatingTo === regulation.id ? (
+                                      <>
                                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                      <span>Yükleniyor...</span>
-                                    </>
-                                  ) : (
-                                    <>
+                                        <span>Yükleniyor...</span>
+                                      </>
+                                    ) : (
+                                      <>
                                       <Eye className="h-4 w-4 mr-2" />
-                                      <span>Görüntüle</span>
-                                    </>
-                                  )}
-                                </Button>
-
-                                {regulation.pdfUrl && (
+                                        <span>Görüntüle</span>
+                                      </>
+                                    )}
+                                  </Button>
+                                  
+                                  {regulation.pdfUrl && (
                                   <a href={regulation.pdfUrl} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
                                     <Button 
                                       size="sm" 
@@ -987,14 +1094,14 @@ export function RegulationsList({ institutionId, initialRegulations = [] }: Prop
                                     >
                                       <Download className="h-4 w-4 mr-2" />
                                       <span className="hidden sm:inline">PDF</span>
-                                    </Button>
-                                  </a>
-                                )}
+                                      </Button>
+                                    </a>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          </CardHeader>
-                        </Card>
-                      </div>
+                        </CardHeader>
+                      </Card>
+                    </div>
                     );
                   })}
                 </div>

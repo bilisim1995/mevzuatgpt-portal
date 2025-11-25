@@ -12,6 +12,7 @@ const PWAInstallPrompt = dynamic(() => import('@/components/pwa-install-prompt')
 const OfflineIndicator = dynamic(() => import('@/components/offline-indicator').then(mod => ({ default: mod.OfflineIndicator })), { ssr: false });
 const CookieBanner = dynamic(() => import('@/components/cookie-banner').then(mod => ({ default: mod.CookieBanner })), { ssr: false });
 const SkipToContent = dynamic(() => import('@/components/skip-to-content').then(mod => ({ default: mod.SkipToContent })), { ssr: false });
+const ServiceWorkerRegister = dynamic(() => import('@/components/service-worker-register').then(mod => ({ default: mod.ServiceWorkerRegister })), { ssr: false });
 
 const baseUrl = process.env.NODE_ENV === 'production' 
   ? 'https://mevzuatgpt.org' 
@@ -52,6 +53,12 @@ export const metadata: Metadata = {
         width: 179,
         height: 32,
         alt: 'Mevzuat GPT Logo',
+      },
+      {
+        url: '/og-image.png', // Önerilen: 1200x630 boyutunda OG image
+        width: 1200,
+        height: 630,
+        alt: 'Mevzuat GPT - Güncel Genelgeler ve Mevzuat Metinleri',
       }
     ],
   },
@@ -61,7 +68,7 @@ export const metadata: Metadata = {
     description: 'Kamu kurumlarının güncel genelge, yönetmelik ve mevzuat metinlerine ulaşabileceğiniz resmi platform.',
     creator: '@mevzuatportal',
     site: '@mevzuatportal',
-    images: ['/mevzuat-logo-beyaz.png'],
+    images: ['/og-image.png', '/mevzuat-logo-beyaz.png'],
   },
   verification: {
     google: 'google-site-verification-code',
@@ -89,13 +96,16 @@ export default function RootLayout({
         {/* PWA Meta Tags */}
         <meta name="application-name" content="Mevzuat GPT" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Mevzuat GPT" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <meta name="msapplication-TileColor" content="#3b82f6" />
         <meta name="msapplication-tap-highlight" content="no" />
+        {/* Theme color for light and dark mode */}
+        <meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1e3a8a" media="(prefers-color-scheme: dark)" />
         
         {/* Preload critical images - optimized sizes */}
         {/* Favicon preload removed - favicons are loaded automatically */}
@@ -157,9 +167,8 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#3b82f6" />
         <meta name="color-scheme" content="light dark" />
         
         {/* Preload fonts */}
@@ -275,6 +284,7 @@ export default function RootLayout({
           <PWAInstallPrompt />
           <OfflineIndicator />
           <CookieBanner />
+          <ServiceWorkerRegister />
         </ThemeProvider>
       </body>
     </html>

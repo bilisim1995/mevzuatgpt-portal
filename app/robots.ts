@@ -13,7 +13,8 @@ export default function robots(): MetadataRoute.Robots {
           '/_next/',
           '/static/',
           '/*.json$',
-          '/*?*', // Query parametreli URL'leri engelle
+          // Query parametreli URL'ler sadece gereksiz olanlar için engellenmeli
+          // Önemli sayfalar için query parametreleri kullanılıyor (filtreleme, arama vb.)
         ],
       },
       {
