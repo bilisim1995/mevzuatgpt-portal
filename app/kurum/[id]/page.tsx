@@ -107,7 +107,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function InstitutionPage({ params }: Props) {
   const institution = await getInstitutionById(params.id);
+  let initialRegulations: Regulation[] = [];
   
+  if (institution) {
+    try {
+      initialRegulations = await getRegulationsByInstitutionSlug(params.id);
+    } catch (error) {
+      console.error('Mevzuat verisi yüklenirken hata:', error);
+    }
+  }
 
   if (!institution) {
     return (
@@ -297,8 +305,8 @@ export default async function InstitutionPage({ params }: Props) {
         tabIndex={-1}
         aria-label={`${institution.name} mevzuat sayfası`}
       >
-        <InstitutionHeader institution={institution} regulations={[]} />
-        <RegulationsList institutionId={params.id} />
+        <InstitutionHeader institution={institution} regulations={initialRegulations} />
+        <RegulationsList institutionId={params.id} initialRegulations={initialRegulations} />
       </main>
       
       <Footer />
